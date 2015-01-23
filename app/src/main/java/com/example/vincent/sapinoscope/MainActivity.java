@@ -4,7 +4,13 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Bundle;
+import android.app.Activity;
+import android.content.Context;
+import android.util.Log;
 
 public class MainActivity extends ActionBarActivity {
 
