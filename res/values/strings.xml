@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Sapinoscope</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="capture">Capture de Sapin</string>
+    <string name="analyse">Analyse</string>
+    <string name="synchronisation">Synchronisation</string>
+    <string name="title_activity_parcelle">ParcelleActivity</string>
+    <string name="parcelle">Parcelle :</string>
+    <string name="choix">Choix :</string>
+    <string name="newParcelle">Nouvelle Parcelle :</string>
+    <string name="ok">Ok</string>
+    <string name="ajouter">Ajouter</string>
+    <string name="title_activity_secteur_activity">Secteur_activity</string>
+    <string name="title_activity_message_alerte">Message_alerteActivity</string>
+    <string name="secteur">Secteur : </string>
+    <string name="message_alerte_info">Placez vous au début du secteur.</string>
+
+</resources>

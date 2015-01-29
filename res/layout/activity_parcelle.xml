@@ -1,0 +1,111 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.ostermann.sapinoscope.Parcelle_activity" >
+
+    <TableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_margin="20dp"
+        android:layout_marginBottom="20dp" >
+
+        <TableRow
+            android:id="@+id/tableRow1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp" >
+
+            <TextView
+                android:id="@+id/text_sect_parcelle_select_name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="@string/parcelle"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="@dimen/titre_20" />
+
+        </TableRow>
+
+        <TextView
+            android:id="@+id/text_sect_choix_titre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/choix" />
+
+        <TableRow
+            android:id="@+id/tableRow2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <Spinner
+                    android:id="@+id/Spin_sect_select_secteur"
+                    android:layout_width="137dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.94" />
+
+                <Button
+                    android:id="@+id/Bt_parcelle_choix_parcelle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/ok" />
+
+            </LinearLayout>
+
+        </TableRow>
+
+        <TableRow
+            android:id="@+id/tableRow3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp" >
+
+        </TableRow>
+
+        <TextView
+            android:id="@+id/text_sect_new_parcelle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/newParcelle" />
+
+        <TableRow
+            android:id="@+id/tableRow4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <EditText
+                    android:id="@+id/textEdit_new_parcelle"
+                    android:layout_width="153dp"
+                    android:layout_height="wrap_content"
+                    android:ems="10" android:inputType="">
+
+                    <requestFocus />
+                </EditText>
+
+                <Button
+                    android:id="@+id/Bt_parcelle_new_parcelle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/ajouter" />
+
+            </LinearLayout>
+
+        </TableRow>
+    </TableLayout>
+
+</RelativeLayout>
