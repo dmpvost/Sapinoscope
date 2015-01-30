@@ -17,5 +17,6 @@
     <string name="title_activity_message_alerte">Message_alerteActivity</string>
     <string name="secteur">Secteur : </string>
     <string name="message_alerte_info">Placez vous au début du secteur.</string>
+    <string name="title_activity_ajout_sapin">Ajout_sapin</string>
 
 </resources>
