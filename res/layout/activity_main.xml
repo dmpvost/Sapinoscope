@@ -27,21 +27,21 @@
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <Button
-            android:id="@+id/capture"
+            android:id="@+id/button_capture"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:text="@string/capture" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/button_analyse"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:text="@string/analyse" />
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/button_syncrho"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"

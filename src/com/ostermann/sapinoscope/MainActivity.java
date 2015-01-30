@@ -3,7 +3,10 @@ package com.ostermann.sapinoscope;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,17 +15,20 @@ import android.widget.Button;
 
 public class MainActivity extends Activity 
 {
-Context contexte = this;
-	
-
+	private Context contexte = this;
+	private DataBaseHelper dbHelper; 
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
 	{  
 		super.onCreate(savedInstanceState);
+		Log.i("Activity", "lancement du menu principal");
+		dbHelper = new DataBaseHelper(contexte);
+		
 		setContentView(R.layout.activity_main);
 		
-		Button captureButton = (Button) findViewById(R.id.capture);
+		// Bouton capture de sapin
+		Button captureButton = (Button) findViewById(R.id.button_capture);
 		captureButton.setOnClickListener(new OnClickListener() 
 		{
 			
@@ -33,6 +39,25 @@ Context contexte = this;
 				startActivity(intent);
 			}
 		});
+		
+		// Bouton Analyse (juste pour le test pour le moment)
+				Button analyseButton = (Button) findViewById(R.id.button_analyse);
+				analyseButton.setOnClickListener(new OnClickListener() 
+				{
+					
+					@Override
+					public void onClick(View v) 
+					{
+						SQLiteDatabase db = dbHelper.getReadableDatabase();
+						try{
+							db.execSQL("select * from sapin;");
+							Log.i("DB", "test select sans errors");
+						}catch(SQLException e)
+						{
+							e.printStackTrace();
+						}
+					}
+				});
 	}
 
 	@Override
