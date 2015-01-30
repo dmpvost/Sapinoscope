@@ -34,81 +34,122 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     private SQLiteDatabase myDataBase;
       
     private final Context myContext;
-     
+    
+    private static final String CREATE_TABLE_EQUA =
+      "CREATE TABLE IF NOT EXISTS EQUA"
+	+ "(EQUA_ID BIGINT(4) NOT NULL  ,"
+	+ "EQUA_X DECIMAL(10,2) NOT NULL,"
+	+ "EQUA_Y DECIMAL(10,2) NULL  ,"
+	+ "EQUA_Z DECIMAL(10,2) NULL  ,"
+	+ "EQUA_L DECIMAL(10,2) NULL  ,"
+    + "EQUA_M DECIMAL(10,2) NULL  ,"  
+    + " PRIMARY KEY (EQUA_ID));";
+    
+    private static final String CREATE_TABLE_ANNEE =
+	  "CREATE TABLE IF NOT EXISTS ANNEE"
+	+ "(ANN_ID DATE NOT NULL,"  
+    + "PRIMARY KEY (ANN_ID));";
+    
+    private static final String CREATE_TABLE_PARCELLE =
+	  "CREATE TABLE IF NOT EXISTS PARCELLE"
+	+ "(PARC_ID BIGINT(4) NOT NULL  ,"
+	+ "PARC_N CHAR(32) NOT NULL  ,"
+	+ "PARC_DESC CHAR(32) NULL  ,"
+	+ "PARC_COEF DECIMAL(10,2) NOT NULL"  
+	+ ", PRIMARY KEY (PARC_ID));";
+	
+	private static final String CREATE_TABLE_SECTEUR =
+	  "CREATE TABLE IF NOT EXISTS SECTEUR"
+	+ "(SEC_ID BIGINT(4) NOT NULL  ,"
+	+ "PARC_ID BIGINT(4) NOT NULL  ,"
+	+ "SEC_N CHAR(32) NOT NULL  ,"
+	+ "SEC_ANGLE DECIMAL(10,2) NULL  ,"
+	+ "SEC_CROIS DECIMAL(10,2) NULL  ," 
+	+ "PRIMARY KEY (SEC_ID) ,"
+	+ "FOREIGN KEY (PARC_ID)"
+	+ "REFERENCES PARCELLE (PARC_ID));";
+	
+	private static final String CREATE_TABLE_VARIETE =
+	  "CREATE TABLE IF NOT EXISTS VARIETE"
+	+ "(VAR_ID BIGINT(2) NOT NULL  ,"
+	+ "VAR_NOM CHAR(32) NOT NULL  ,"
+	+ "VAR_POUSSE DECIMAL(10,2) NOT NULL"  
+	+ ", PRIMARY KEY (VAR_ID));"; 
+	 
+	private static final String CREATE_TABLE_COORDONNEE =
+	  "CREATE TABLE IF NOT EXISTS COORDONNEE"
+	+ "(COORD_ID CHAR(32) NOT NULL  ,"
+	+ "COORD_LAT DECIMAL(20,10) NOT NULL  ,"
+	+ "COORD_LON DECIMAL(20,10) NOT NULL"  
+	+ ", PRIMARY KEY (COORD_ID));";
+	
+	private static final String CREATE_TABLE_INFO_SECTEUR =
+	  "CREATE TABLE IF NOT EXISTS INFO_SECTEUR"
+	+ "(INF_SEC_ID BIGINT(4) NOT NULL  ,"
+	+ "SEC_ID BIGINT(4) NOT NULL  ,"
+	+ "ANN_ID DATE NOT NULL  ,"
+	+ "INF_SEC_COEF_GEL DECIMAL(10,2) NULL," 
+	+ "PRIMARY KEY (INF_SEC_ID),"
+	+ "FOREIGN KEY (SEC_ID)"
+	+ "REFERENCES SECTEUR (SEC_ID),"
+	+ "FOREIGN KEY (ANN_ID)"
+	+ "REFERENCES ANNEE (ANN_ID));";	  
+	
+	private static final String CREATE_TABLE_SAPIN =
+	  "CREATE TABLE IF NOT EXISTS SAPIN"
+    + "(SAP_ID BIGINT(5) NOT NULL  ,"
+    + "VAR_ID BIGINT(2) NOT NULL  ,"
+    + "SEC_ID BIGINT(4) NOT NULL  ,"
+	+ "SAP_LIG BIGINT(4) NOT NULL  ,"
+	+ "SAP_COL BIGINT(4) NOT NULL  ,"
+	+ "SAP_PHO LONGBLOB NULL  ,"
+	+ "SAP_STATUS BIGINT(1) NOT NULL  ," 
+	+ "PRIMARY KEY (SAP_ID) ,"
+	+ "FOREIGN KEY (VAR_ID)"
+	+ "REFERENCES VARIETE (VAR_ID),"
+	+ "FOREIGN KEY (SEC_ID)"
+	+ "REFERENCES SECTEUR (SEC_ID));";
+	
+	private static final String CREATE_TABLE_INFO_SAPIN =
+	  "CREATE TABLE IF NOT EXISTS INFO_SAPIN"
+	+ "(INF_SAP_ID BIGINT(4) NOT NULL  ,"
+	+ "ANN_ID DATE NOT NULL  ,"
+	+ "SAP_ID BIGINT(5) NOT NULL  ,"
+	+ "INF_SAP_TAIL DECIMAL(10,2) NOT NULL  ," 
+	+ "PRIMARY KEY (INF_SAP_ID) ,"
+	+ "FOREIGN KEY (ANN_ID)"
+	+ "REFERENCES ANNEE (ANN_ID) ,"
+	+ "FOREIGN KEY (SAP_ID)"
+	+ "REFERENCES SAPIN (SAP_ID));";
+	
+	private static final String CREATE_TABLE_CROISSANCE =
+	  "CREATE TABLE IF NOT EXISTS CROISSANCE"
+	+ "(CROIS_ID BIGINT(4) NOT NULL  ,"
+	+ "CROIS_B_INF DECIMAL(10,2) NOT NULL  ,"
+	+ "CROIS_B_SUP DECIMAL(10,2) NOT NULL"  
+	+ ", PRIMARY KEY (CROIS_ID));";
+	
+	private static final String CREATE_TABLE_SEC_COORDONNEE =
+	  "CREATE TABLE IF NOT EXISTS SEC_COORD"
+	+ "(COORD_ID CHAR(32) NOT NULL  ,"
+	+ "SEC_ID BIGINT(4) NOT NULL   ," 
+	+ "PRIMARY KEY (COORD_ID,SEC_ID) ,"
+	+ "FOREIGN KEY (COORD_ID)"
+	+ "REFERENCES COORDONNEE (COORD_ID) ,"
+	+ "FOREIGN KEY (SEC_ID)"
+	+ "REFERENCES SECTEUR (SEC_ID));";
+    
     /**
       * Constructor
       * Takes and keeps a reference of the passed context in order to access to the application assets and resources.
       * @param context
       */
     public DataBaseHelper(Context context) {
-      
-    super(context, DB_NAME, null, 1);
-    this.myContext = context;
+    	super(context, DB_NAME, null, 2);
+    	this.myContext = context;
     }  
+         
      
-     /**
-      * Creates a empty database on the system and rewrites it with your own database.
-      * */
-    public void createDataBase() throws IOException{
-         
-        boolean isdbExist = checkDataBase();
-         
-        if(!isdbExist){
-            try{
-                this.getReadableDatabase();
-                copyDataBase();
-            }
-            catch(IOException e){
-                throw new Error("Probleme de copie de la base de donnÃ©es");
-            }
-        }
-         
-    }
-      
- 
-    /**
-      * Check if the database already exist to avoid re-copying the file each time you open the application.
-      * @return true if it exists, false if it doesn't
-      */
-    private boolean checkDataBase() {
-        // TODO Auto-generated method stub
-        SQLiteDatabase db = null;
-        try{
-            db = SQLiteDatabase.openDatabase(path, null, SQLiteDatabase.OPEN_READWRITE);
-            if (db != null)
-                db.close();
-        }
-        catch(SQLiteException e){
-            e.printStackTrace();
-        }
-         
-        return db!=null?true:false;
-    }
-     
-    /**
-      * Copies your database from your local assets-folder to the just created empty database in the
-      * system folder, from where it can be accessed and handled.
-      * This is done by transfering bytestream.
-      * */
-     private void copyDataBase() throws IOException{
-        // TODO Auto-generated method stub
-        InputStream inputStream = myContext.getAssets().open(DB_NAME);
-        OutputStream outputStream = new FileOutputStream(path);
-         
-        byte[] buffer = new byte[1024];
-        int length;
-        while((length = inputStream.read(buffer))>0){
-            outputStream.write(buffer, 0, length);
-        }
-        outputStream.flush();
-        outputStream.close();
-        inputStream.close();
-    }
-      
-     public void openDataBase() throws SQLException{
-         myDataBase = SQLiteDatabase.openDatabase(path, null, SQLiteDatabase.OPEN_READWRITE);
-     }
-      
      @Override
      public synchronized void close(){
           
@@ -125,9 +166,19 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     	Log.i("DB","onCreate fonction");
     	try 
     	{
-    		String creationScript =  myContext.getResources().getString(R.string.scipt_generation_db);
-    		db.execSQL(creationScript);
-    		db.close();
+    		db.execSQL(CREATE_TABLE_EQUA);
+    		db.execSQL(CREATE_TABLE_ANNEE);
+    		db.execSQL(CREATE_TABLE_PARCELLE);
+    		db.execSQL(CREATE_TABLE_SECTEUR);
+    		db.execSQL(CREATE_TABLE_VARIETE);
+    		db.execSQL(CREATE_TABLE_COORDONNEE);
+    		db.execSQL(CREATE_TABLE_INFO_SECTEUR);
+    		db.execSQL(CREATE_TABLE_SAPIN);
+    		db.execSQL(CREATE_TABLE_INFO_SAPIN);
+    		db.execSQL(CREATE_TABLE_CROISSANCE);
+    		db.execSQL(CREATE_TABLE_SEC_COORDONNEE); 
+    		db.execSQL(CREATE_TABLE_ANNEE);
+    		Log.i("DB", "Creation de la base sans erreurs!");
     	}
     	catch(NotFoundException e)
     	{
@@ -137,17 +188,35 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     	catch (SQLException e) {
     		Log.e("DB", "Error lors de la creation de la base!");
     		e.printStackTrace();
+    		if(myContext.deleteDatabase(DB_NAME))
+    			Log.w("DB", "Suppression de la base de donnée réussi");
+    		else
+    			Log.e("DB", "Echec de la suppression de la base de donnée, etat indéfini!");
+    		
 		}
-    	finally
-    	{
-    		Log.i("DB", "Creation de la base sans erreurs!");
-    	}
     }
  
     @Override
-    public void onUpgrade(SQLiteDatabase arg0, int oldVersion, int newVersion) {
-        // TODO Auto-generated method stub
- 
-    }
- 
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    	try{
+		Log.i("DB", "Mise à jours de la base de donnée de la version "+oldVersion+" vers la version "+newVersion);
+    	db.execSQL("DROP TABLE IF EXISTS EQUA");
+		db.execSQL("DROP TABLE IF EXISTS ANNEE");
+		db.execSQL("DROP TABLE IF EXISTS PARCELLE");
+		db.execSQL("DROP TABLE IF EXISTS SECTEUR");
+		db.execSQL("DROP TABLE IF EXISTS VARIETE");
+		db.execSQL("DROP TABLE IF EXISTS COORDONNEE");
+		db.execSQL("DROP TABLE IF EXISTS INFO_SECTEUR");
+		db.execSQL("DROP TABLE IF EXISTS SAPIN");
+		db.execSQL("DROP TABLE IF EXISTS INFO_SAPIN");
+		db.execSQL("DROP TABLE IF EXISTS CROISSANCE");
+		db.execSQL("DROP TABLE IF EXISTS SEC_COORDONNEE"); 
+		db.execSQL("DROP TABLE IF EXISTS ANNEE");
+    	}
+    	catch(SQLException e)
+    	{
+    		Log.e("DB", "Echec de la mise à jours");
+    		e.printStackTrace();
+    	}
+    } 
 }
