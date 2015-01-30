@@ -14,6 +14,8 @@ public class MainActivity extends Activity
 {
 Context contexte = this;
 	
+
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
 	{  
