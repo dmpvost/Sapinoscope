@@ -51,21 +51,25 @@ public class MainActivity extends Activity
 			{
 				// Exemple de select avec plusieur ligne :
 				SQLiteDatabase db = dbHelper.getReadableDatabase();
-				try{
+				try
+				{
 					String selectQuery = "SELECT * FROM PARCELLE";
 					Cursor c = db.rawQuery(selectQuery, null);
-					if(c.moveToFirst()){
+					if(c.moveToFirst())
+					{
 			            do{
 			               //assing values 
+			               String column0 = c.getString(c.getColumnIndex("PARC_ID"));
 			               String column1 = c.getString(c.getColumnIndex("PARC_N"));
 			               String column2 = c.getString(c.getColumnIndex("PARC_DESC"));
 			               String column3 = c.getString(c.getColumnIndex("PARC_COEF")); 
-			               Log.i("testDB", "n:"+column1+" desc:"+column2+" coef:"+column3);
+			               Log.i("DB print","ID:"+column0+" n:"+column1+" desc:"+column2+" coef:"+column3);
 
 			            }while(c.moveToNext());
 			        }
 					Log.i("testDB", "test select sans errors");
-				}catch(SQLException e)
+				}
+				catch(SQLException e)
 				{
 					e.printStackTrace();
 				}
@@ -83,7 +87,7 @@ public class MainActivity extends Activity
 				// Exemple d'insert
 				SQLiteDatabase db = dbHelper.getWritableDatabase();
 				try{
-					db.execSQL("INSERT INTO PARCELLE VALUES('1','0','ParcelleTest','0.2')");
+					db.execSQL("INSERT INTO PARCELLE VALUES('2','colroy','colory desc','1')");
 					Log.i("testDB", "test insert sans errors");
 				}catch(SQLException e)
 				{

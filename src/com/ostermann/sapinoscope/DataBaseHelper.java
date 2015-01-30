@@ -161,8 +161,8 @@ public class DataBaseHelper extends SQLiteOpenHelper {
       
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // cette fonction est appellé lorsque la base de données est créé pour la premiere fois, 
-    	// on va donc lancer le script de création de base :
+        // cette fonction est appelle lorsque la base de donnees est cree pour la premiere fois, 
+    	// on va donc lancer le script de creation de base :
     	Log.i("DB","onCreate fonction");
     	try 
     	{
@@ -182,16 +182,16 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     	}
     	catch(NotFoundException e)
     	{
-    		Log.e("DB", "Impossible de charger le script de génération de base!");
+    		Log.e("DB", "Impossible de charger le script de generation de base!");
     		e.printStackTrace();
 		}
     	catch (SQLException e) {
     		Log.e("DB", "Error lors de la creation de la base!");
     		e.printStackTrace();
     		if(myContext.deleteDatabase(DB_NAME))
-    			Log.w("DB", "Suppression de la base de donnée réussi");
+    			Log.w("DB", "Suppression de la base de donnee reussi");
     		else
-    			Log.e("DB", "Echec de la suppression de la base de donnée, etat indéfini!");
+    			Log.e("DB", "Echec de la suppression de la base de donnee, etat indefini!");
     		
 		}
     }
@@ -199,7 +199,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
     	try{
-		Log.i("DB", "Mise à jours de la base de donnée de la version "+oldVersion+" vers la version "+newVersion);
+		Log.i("DB", "Mise a jours de la base de donnee de la version "+oldVersion+" vers la version "+newVersion);
     	db.execSQL("DROP TABLE IF EXISTS EQUA");
 		db.execSQL("DROP TABLE IF EXISTS ANNEE");
 		db.execSQL("DROP TABLE IF EXISTS PARCELLE");
@@ -215,7 +215,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     	}
     	catch(SQLException e)
     	{
-    		Log.e("DB", "Echec de la mise à jours");
+    		Log.e("DB", "Echec de la mise ï¿½ jours");
     		e.printStackTrace();
     	}
     } 

@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 
 public class Parcelle_activity extends Activity {
 	Context contexte = this; // 
@@ -37,6 +39,9 @@ public class Parcelle_activity extends Activity {
 			@Override
 			public void onClick(View v) 
 			{
+				EditText nouvelle_parcelle = (EditText) findViewById (R.id.textEdit_new_parcelle);
+				Log.i("Parcelle", "Nouvelle parcelle : "+nouvelle_parcelle.getText());
+				
 				Intent intent = new Intent(contexte, Secteur_activity.class);
 				startActivity(intent);
 			}
