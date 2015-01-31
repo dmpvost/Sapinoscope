@@ -16,15 +16,13 @@ import android.widget.Button;
 
 public class MainActivity extends Activity 
 {
-	private Context contexte = this;
-	private DataBaseHelper dbHelper; 
+	private Context contexte = this; 
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) 
 	{  
 		super.onCreate(savedInstanceState);
 		Log.i("Activity", "lancement du menu principal");
-		dbHelper = new DataBaseHelper(contexte);
 
 		setContentView(R.layout.activity_main);
 
@@ -50,7 +48,7 @@ public class MainActivity extends Activity
 			public void onClick(View v) 
 			{
 				// Exemple de select avec plusieur ligne :
-				SQLiteDatabase db = dbHelper.getReadableDatabase();
+				SQLiteDatabase db = Sapinoscope.getDataBaseHelper().getReadableDatabase();
 				try
 				{
 					String selectQuery = "SELECT * FROM PARCELLE";
@@ -85,7 +83,7 @@ public class MainActivity extends Activity
 			public void onClick(View v) 
 			{
 				// Exemple d'insert
-				SQLiteDatabase db = dbHelper.getWritableDatabase();
+				SQLiteDatabase db = Sapinoscope.getDataBaseHelper().getWritableDatabase();
 				try{
 					db.execSQL("INSERT INTO PARCELLE VALUES('2','colroy','colory desc','1')");
 					Log.i("testDB", "test insert sans errors");

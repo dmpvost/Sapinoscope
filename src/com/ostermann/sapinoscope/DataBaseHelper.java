@@ -21,15 +21,12 @@ import android.util.Log;
  
  
  
-public class DataBaseHelper extends SQLiteOpenHelper {
- 
-    //The Android's default system path of your application database.
-    private static String DB_PATH = Sapinoscope.getAppContext().getPackageName()+"/databases/";
-    //private static String DB_PATH = "/data/data/votre_package_name/databases/";
+public class DataBaseHelper extends SQLiteOpenHelper 
+{
       
     private static String DB_NAME = "Sapin_DB";
-     
-    private static String path = DB_PATH+DB_NAME;
+    
+    private static int DB_VERSION = 2;
      
     private SQLiteDatabase myDataBase;
       
@@ -145,7 +142,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
       * @param context
       */
     public DataBaseHelper(Context context) {
-    	super(context, DB_NAME, null, 2);
+    	super(context, DB_NAME, null, DB_VERSION);
     	this.myContext = context;
     }  
          
