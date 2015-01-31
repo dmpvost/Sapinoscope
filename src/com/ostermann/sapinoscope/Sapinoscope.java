@@ -7,6 +7,7 @@ public class Sapinoscope extends Application{
 
     private static Context context;
     private static DataBaseHelper dbHelper;
+    private static Location_helper locationHelper; 
 
     public void onCreate(){
         super.onCreate();
@@ -21,5 +22,10 @@ public class Sapinoscope extends Application{
     public static DataBaseHelper getDataBaseHelper()
     {
     	return dbHelper;
+    }
+    
+    public static Location_helper getLocationHelper()
+    {
+    	return locationHelper;
     }
 }

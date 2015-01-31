@@ -1,11 +1,16 @@
 package com.ostermann.sapinoscope;
 
+import java.io.IOException;
+
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.location.Location;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -13,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class MainActivity extends Activity 
 {
@@ -33,17 +39,76 @@ public class MainActivity extends Activity
 
 			@Override
 			public void onClick(View v) 
-			{
+			{				
 				Intent intent = new Intent(contexte, Parcelle_activity.class);
 				startActivity(intent);
 			}
 		});
 
+		
 		// Bouton Analyse (juste pour le test pour le moment)
 		Button analyseButton = (Button) findViewById(R.id.button_analyse);
 		analyseButton.setOnClickListener(new OnClickListener() 
 		{
 
+			/*
+			@Override
+			public void onClick(View v) 
+			{
+				// test de recuperation de donnee GPS :
+				Log.d("LocTEST", "Tentative de wait good location");
+				
+				
+				class LocationProgressDialog extends AsyncTask<Context, Void, Void>
+				{
+				    private final ProgressDialog dialog = new ProgressDialog();
+
+				    protected void onPreExecute()
+				    {
+				        this.dialog.setMessage("Determining your location...");
+				        this.dialog.show();
+				    }
+
+				    protected Void doInBackground(Context... params)
+				    {
+				        LocationHelper location = new LocationHelper();
+
+				        location.getLocation(params[0], locationResult);
+
+				        return null;
+				    }
+
+				    protected void onPostExecute(final Void unused)
+				    {
+				        if(this.dialog.isShowing())
+				        {
+				            this.dialog.dismiss();
+				        }
+
+				        useLocation(); //does the stuff that requires current location
+				    }
+
+				}
+				
+				
+				
+				ProgressDialog dialog = ProgressDialog.show(v.getContext(), "","Calcul de la meilleur position...", true);
+				dialog.show();
+				Sapinoscope.getLocationHelper().setGoodLocationListerner(3, new GoodLocationListener() {
+					
+					@Override
+					public void goodLocationFound(Location goodLocation) {
+						Log.i("LocTEST", "");
+						Log.i("LocTEST", "Position trouvee :" + goodLocation.getLatitude() + " " + goodLocation.getLongitude());
+						Toast.makeText(contexte, "Position trouvee :" + goodLocation.getLatitude() + " " + goodLocation.getLongitude(), Toast.LENGTH_SHORT).show();
+					}
+				});
+				Location goodLocation = Sapinoscope.getLocationHelper().waitGoodLocation(3);
+				
+				Log.d("LocTEST", "good location : " +goodLocation.getLatitude()+ " " + goodLocation.getLongitude()  );
+			}
+
+			*/
 			@Override
 			public void onClick(View v) 
 			{
