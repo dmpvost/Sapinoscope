@@ -138,6 +138,7 @@ public class Ajout_sapin extends Activity implements SurfaceHolder.Callback {
 		Point2D stop = null;
 		Point2D firstPoint = null;
 		paint.setColor(Color.BLUE);
+		paint.setStrokeWidth(5);
 		for (Point2D p : graham.hull())
 		{
 			if(start == null)
