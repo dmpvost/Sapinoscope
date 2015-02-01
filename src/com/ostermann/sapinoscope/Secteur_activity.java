@@ -18,6 +18,18 @@ public class Secteur_activity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_secteur);
 		
+		// BOUTON OK SECTEUR
+		Button bt_ok_secteur = (Button) findViewById(R.id.Bt_secteur_OK);
+		bt_ok_secteur.setOnClickListener(new OnClickListener() 
+		{
+			@Override
+			public void onClick(View v) 
+			{
+				Intent intent = new Intent(contexte, Ajout_sapin.class);
+				startActivity(intent);
+			}
+		});	
+		
 		// BOUTON CREE NOUVEAU SECTEUR
 		Button bt_create_secteur = (Button) findViewById(R.id.Bt_sect_new_secteur);
 		bt_create_secteur.setOnClickListener(new OnClickListener() 

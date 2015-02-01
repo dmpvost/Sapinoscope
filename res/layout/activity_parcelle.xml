@@ -56,7 +56,7 @@
                     android:layout_weight="0.94" />
 
                 <Button
-                    android:id="@+id/Bt_parcelle_choix_parcelle"
+                    android:id="@+id/Bt_parcelle_OK"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/ok" />
@@ -89,10 +89,10 @@
                 android:layout_height="wrap_content" >
 
                 <EditText
-                    android:id="@+id/textEdit_new_parcelle"
-                    android:layout_width="153dp"
+                    android:id="@+id/editText1"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:ems="10" android:inputType="">
+                    android:layout_weight="1" >
 
                     <requestFocus />
                 </EditText>

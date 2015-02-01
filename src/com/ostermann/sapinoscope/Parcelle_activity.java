@@ -21,7 +21,7 @@ public class Parcelle_activity extends Activity {
 		setContentView(R.layout.activity_parcelle);
 		
 		// BOUTON PARCELLE CHOIX PARCELLE
-		Button bt_choix_parcelle = (Button) findViewById(R.id.Bt_parcelle_choix_parcelle);
+		Button bt_choix_parcelle = (Button) findViewById(R.id.Bt_parcelle_OK);
 		bt_choix_parcelle.setOnClickListener(new OnClickListener() 
 		{
 			@Override

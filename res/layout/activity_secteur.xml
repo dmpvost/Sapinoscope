@@ -60,7 +60,7 @@
                     android:layout_height="wrap_content" />
 
                 <Button
-                    android:id="@+id/Bt_secteur_choix_secteur"
+                    android:id="@+id/Bt_secteur_OK"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.94"

@@ -13,6 +13,7 @@ public class Sapinoscope extends Application{
         super.onCreate();
         Sapinoscope.context = getApplicationContext();
         dbHelper = new DataBaseHelper(context);
+        locationHelper = new Location_helper();
     }
 
     public static Context getAppContext() {

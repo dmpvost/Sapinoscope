@@ -41,11 +41,15 @@ public class Location_helper {
 		// Define a listener that responds to location updates
 		locationListener = new LocationListener() 
 		{
-			public synchronized void onLocationChanged(Location location) 
+			public void onLocationChanged(Location location) 
 			{
+				Log.i("Location", "Nouveau point trouvé!");
 				// Called when a new location is found by the network location provider.
 				if ( isBetterLocation(location, currentBestLocation) )
+				{
 					currentBestLocation = location;
+					Log.i("Location", "Nouveau point trouvé et validé!");
+				}
 			}
 
 			@Override
@@ -135,14 +139,28 @@ public class Location_helper {
 		return provider1.equals(provider2);
 	}
 
-	public synchronized void startRecherche()
+	public synchronized boolean startRecherche()
 	{		
 		Log.i("GPS", "Lancement de la recherche...");
 		// Register the listener with the Location Manager to receive location updates
-		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+		boolean launched = false;
+		try{
+			locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+			launched = true;
+		}catch(Exception e)
+		{
+			Log.i("GPS", "NETWORK_PROVIDER non disponible");
+		}
+		try{
+			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+			launched = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);;
+		}catch(Exception e)
+		{
+			Log.i("GPS", "GPS_PROVIDER non disponible");
+		}
 		
 		rechercheEnCours = true;
+		return launched;
 	}
 	
 	public synchronized void stopRecherche()
