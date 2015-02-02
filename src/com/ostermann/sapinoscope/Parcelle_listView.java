@@ -36,8 +36,12 @@ import android.graphics.drawable.Drawable;
 
 public class Parcelle_listView extends Activity {
 
+	private Context contexte = this;
 	private AlertDialog.Builder dialogBuilder;
 	private ListView liste_parcelle;
+	
+	private String[] mes_parcelles = null;
+	private Object_parcelle[] tab_parcelle = null;
 	
 	// Creation de l'interface
 	protected void onCreate(Bundle savedInstanceState) 
@@ -93,8 +97,7 @@ public class Parcelle_listView extends Activity {
 	//**************************************************************************//
 	private void parcelle_listview(ListView liste_parcelle) 
 	{
-		String[] mes_parcelles = null;
-		Object_parcelle[] tab_parcelle = null;
+		
 		
 		// Exemple de select avec plusieur ligne :
 		SQLiteDatabase db = Sapinoscope.getDataBaseHelper().getReadableDatabase();
@@ -119,6 +122,12 @@ public class Parcelle_listView extends Activity {
 	                Log.i("DB print","ID:"+tab_parcelle[i].getId()+" nom:"+tab_parcelle[i].getName()+" desc:"+tab_parcelle[i].getDescription()+" coef:"+tab_parcelle[i].getCoef());
 	                i++;
 	            }while(c.moveToNext());
+	            
+	    		// crée une liste d'item
+	    		// Build adapter
+	    		ArrayAdapter<Object_parcelle> adapter = new ArrayAdapter<Object_parcelle>(this,R.layout.parcelle_texte,tab_parcelle); 
+	    		// Configure the listview
+	    		liste_parcelle.setAdapter(adapter);
 	        }
 			Log.i("testDB", "test select sans errors");
 		}
@@ -127,11 +136,7 @@ public class Parcelle_listView extends Activity {
 			e.printStackTrace();
 		}
 		
-		// crée une liste d'item
-		// Build adapter
-		ArrayAdapter<Object_parcelle> adapter = new ArrayAdapter<Object_parcelle>(this,R.layout.parcelle_texte,tab_parcelle); 
-		// Configure the listview
-		liste_parcelle.setAdapter(adapter);
+
 		
 	}
 
@@ -145,8 +150,13 @@ public class Parcelle_listView extends Activity {
 			public void onItemClick(AdapterView<?> parent, View viewClicked, int position, long id) 
 			{
 				TextView ma_parcelle = (TextView) viewClicked;
-				String message = "Clic sur #" + position + " texte:" + ma_parcelle.getText().toString();
-				Toast.makeText(Parcelle_listView.this, message, Toast.LENGTH_SHORT).show();	
+				//String message = "Clic sur #" + position + " texte:" + ma_parcelle.getText().toString();
+				//Toast.makeText(Parcelle_listView.this, message, Toast.LENGTH_SHORT).show();	
+				
+				Intent intent_secteur = new Intent(contexte, Secteur_activity.class);
+				intent_secteur.putExtra("id", tab_parcelle[position].getId());
+				intent_secteur.putExtra("name", tab_parcelle[position].getName());
+				startActivity(intent_secteur);
 			}
 		});
 	}

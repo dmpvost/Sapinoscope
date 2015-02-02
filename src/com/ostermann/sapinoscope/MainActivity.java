@@ -50,7 +50,7 @@ public class MainActivity extends Activity
 		{
 			public void onClick(View v) 
 			{
-				Intent intent = new Intent(contexte, Parcelle_activity.class);
+				Intent intent = new Intent(contexte, Ajout_sapin.class);
 				startActivity(intent);
 			}
 		});

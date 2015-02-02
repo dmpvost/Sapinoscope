@@ -122,7 +122,7 @@ public class Ajout_sapin extends Activity implements SurfaceHolder.Callback {
 		canvas.drawColor(Color.BLACK);
 		Random random = new Random();
 		
-		int N = 25;
+		int N = 50;
 		Point2D[] points = new Point2D[N];
 		
 		for(int i=0;i<N;i++)

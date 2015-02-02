@@ -89,7 +89,7 @@
                 android:layout_height="wrap_content" >
 
                 <EditText
-                    android:id="@+id/editText1"
+                    android:id="@+id/editText_add_secteur"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1" >

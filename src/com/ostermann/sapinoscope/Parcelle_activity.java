@@ -39,11 +39,11 @@ public class Parcelle_activity extends Activity {
 			@Override
 			public void onClick(View v) 
 			{
-				EditText nouvelle_parcelle = (EditText) findViewById (R.id.textEdit_new_parcelle);
+				/*EditText nouvelle_parcelle = (EditText) findViewById (R.id.textEdit_new_parcelle);
 				Log.i("Parcelle", "Nouvelle parcelle : "+nouvelle_parcelle.getText());
 				
 				Intent intent = new Intent(contexte, Secteur_activity.class);
-				startActivity(intent);
+				startActivity(intent);*/
 			}
 		});
 		
