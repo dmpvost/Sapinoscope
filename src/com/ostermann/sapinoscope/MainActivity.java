@@ -36,11 +36,9 @@ public class MainActivity extends Activity
 		Button captureButton = (Button) findViewById(R.id.button_capture);
 		captureButton.setOnClickListener(new OnClickListener() 
 		{
-
-			@Override
 			public void onClick(View v) 
-			{				
-				Intent intent = new Intent(contexte, Parcelle_activity.class);
+			{
+				Intent intent = new Intent(contexte, Parcelle_listView.class);
 				startActivity(intent);
 			}
 		});
@@ -48,6 +46,17 @@ public class MainActivity extends Activity
 		
 		// Bouton Analyse (juste pour le test pour le moment)
 		Button analyseButton = (Button) findViewById(R.id.button_analyse);
+		analyseButton.setOnClickListener(new OnClickListener() 
+		{
+			public void onClick(View v) 
+			{
+				Intent intent = new Intent(contexte, Parcelle_activity.class);
+				startActivity(intent);
+			}
+		});
+		
+		// Bouton Analyse (juste pour le test pour le moment)
+		/*Button analyseButton = (Button) findViewById(R.id.button_analyse);
 		analyseButton.setOnClickListener(new OnClickListener() 
 		{
 
@@ -109,8 +118,8 @@ public class MainActivity extends Activity
 			}
 
 			*/
-			@Override
-			public void onClick(View v) 
+			
+			/*public void onClick(View v) 
 			{
 				// Exemple de select avec plusieur ligne :
 				SQLiteDatabase db = Sapinoscope.getDataBaseHelper().getReadableDatabase();
@@ -135,9 +144,9 @@ public class MainActivity extends Activity
 				catch(SQLException e)
 				{
 					e.printStackTrace();
-				}
+				}	
 			}
-		});
+		});*/
 
 		// Bouton Analyse (juste pour le test pour le moment)
 		Button syncButton = (Button) findViewById(R.id.button_syncrho);
@@ -160,28 +169,8 @@ public class MainActivity extends Activity
 		});
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) 
-	{
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
-	}
 
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) 
-	{
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) 
-		{
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
-
+	
 
 
 }

@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
+
+
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ostermann.sapinoscope"
     android:versionCode="1"
@@ -40,6 +41,10 @@
         <activity
             android:name=".Ajout_sapin"
             android:label="@string/title_activity_ajout_sapin" >
+        </activity>
+        <activity
+            android:name=".Parcelle_listView"
+            android:label="@string/title_activity_parcelle_list_view" >
         </activity>
     </application>
 
