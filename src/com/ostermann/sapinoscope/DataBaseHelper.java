@@ -26,7 +26,7 @@ public class DataBaseHelper extends SQLiteOpenHelper
       
     private static String DB_NAME = "Sapin_DB";
     
-    private static int DB_VERSION = 2;
+    private static int DB_VERSION = 3;
      
     private SQLiteDatabase myDataBase;
       
@@ -202,12 +202,14 @@ public class DataBaseHelper extends SQLiteOpenHelper
 		db.execSQL("DROP TABLE IF EXISTS CROISSANCE");
 		db.execSQL("DROP TABLE IF EXISTS SEC_COORDONNEE"); 
 		db.execSQL("DROP TABLE IF EXISTS ANNEE");
+		db.execSQL("DROP TABLE IF EXISTS SEC_COORDONNEE");
     	}
     	catch(SQLException e)
     	{
     		Log.e("DB", "Echec de la mise a jours");
     		e.printStackTrace();
     	}
+    	onCreate(db);
     } 
     
     

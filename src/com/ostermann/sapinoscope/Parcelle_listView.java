@@ -43,6 +43,8 @@ public class Parcelle_listView extends Activity {
 	private String[] mes_parcelles = null;
 	private Object_parcelle[] tab_parcelle = null;
 	
+	private int item_listview_select = 0;
+	
 	// Creation de l'interface
 	protected void onCreate(Bundle savedInstanceState) 
 	{
@@ -59,35 +61,12 @@ public class Parcelle_listView extends Activity {
 		Button add_parcelle = (Button) findViewById(R.id.bt_add_parcelle);
 		add_parcelle.setOnClickListener(new OnClickListener() 
 		{
-
 			public void onClick(View v) 
 			{
-				
-				//popup_parcelle();
-				
-				EditText add_parcelle = (EditText) findViewById(R.id.editText_add_parcelle);
-				String name_parcelle = add_parcelle.getText().toString();
-				Log.i("testDB", "parcelle:"+name_parcelle);
-				
-				SQLiteDatabase db = Sapinoscope.getDataBaseHelper().getWritableDatabase();
-				try
-				{
-					String req = "INSERT INTO PARCELLE ('PARC_N','PARC_DESC','PARC_COEF') VALUES ('"+name_parcelle+"','"+name_parcelle+"',1)";
-					Log.i("testDB", req);
-					db.execSQL(req);
-					Log.i("testDB", "test insert sans errors");
-				}
-				catch(SQLException e)
-				{
-					e.printStackTrace();
-				}
-				
-				
-				add_parcelle.setText(""); //vide le champ de saisie
-				parcelle_listview(liste_parcelle) ; // refresh de l'affichage
-				// fermer le clavier
-				InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-				imm.hideSoftInputFromWindow(add_parcelle.getWindowToken(), 0);
+				EditText edt_add_parcelle = (EditText) findViewById(R.id.editText_add_parcelle);
+				String name_parcelle = edt_add_parcelle.getText().toString();
+				edt_add_parcelle.setText(""); //vide le champ de saisie
+				start_activity_parcelle_modification(0,name_parcelle,"",1,1); // AJOUT
 			}
 		});
 		
@@ -118,7 +97,7 @@ public class Parcelle_listView extends Activity {
 	            	tab_parcelle[i].setName(c.getString(c.getColumnIndex("PARC_N")));
 	            	mes_parcelles[i]=tab_parcelle[i].getName();
 	            	tab_parcelle[i].setDescription(c.getString(c.getColumnIndex("PARC_DESC")));
-	            	tab_parcelle[i].setCoef(Integer.parseInt(c.getString(c.getColumnIndex("PARC_COEF"))));
+	            	tab_parcelle[i].setCoef(Float.parseFloat(c.getString(c.getColumnIndex("PARC_COEF"))));
 	                Log.i("DB print","ID:"+tab_parcelle[i].getId()+" nom:"+tab_parcelle[i].getName()+" desc:"+tab_parcelle[i].getDescription()+" coef:"+tab_parcelle[i].getCoef());
 	                i++;
 	            }while(c.moveToNext());
@@ -136,8 +115,6 @@ public class Parcelle_listView extends Activity {
 			e.printStackTrace();
 		}
 		
-
-		
 	}
 
 	
@@ -150,9 +127,6 @@ public class Parcelle_listView extends Activity {
 			public void onItemClick(AdapterView<?> parent, View viewClicked, int position, long id) 
 			{
 				TextView ma_parcelle = (TextView) viewClicked;
-				//String message = "Clic sur #" + position + " texte:" + ma_parcelle.getText().toString();
-				//Toast.makeText(Parcelle_listView.this, message, Toast.LENGTH_SHORT).show();	
-				
 				Intent intent_secteur = new Intent(contexte, Secteur_activity.class);
 				intent_secteur.putExtra("id", tab_parcelle[position].getId());
 				intent_secteur.putExtra("name", tab_parcelle[position].getName());
@@ -170,12 +144,12 @@ public class Parcelle_listView extends Activity {
 	    	    ListView lv = (ListView) v;
 	    	    AdapterView.AdapterContextMenuInfo acmi = (AdapterContextMenuInfo) menuInfo;
 	    	    Object obj = lv.getItemAtPosition(acmi.position);
-	    	    int b = acmi.position;
+	    	    item_listview_select = acmi.position;
 
-	    	    menu.add("One");
-	    	    menu.add("Two");
-	    	    menu.add("Three");
-	    	    menu.add(b+" "+obj.toString());
+	    	    menu.add("Edition");
+	    	    menu.add("Supprimer");
+	    	    //menu.add("Three");
+	    	    //menu.add(b+" "+obj.toString());
     	}
 			     
 	}
@@ -183,8 +157,10 @@ public class Parcelle_listView extends Activity {
 	//**************************************************************************//	
 	public boolean onContextItemSelected(MenuItem item) 
 	{
-		   if (item.getTitle() == "One") {
-		      Toast.makeText(this, "Action 1 invoked", Toast.LENGTH_SHORT).show();
+			
+		
+		   if (item.getTitle() == "Edition") {
+			   start_activity_parcelle_modification(tab_parcelle[item_listview_select].getId(),tab_parcelle[item_listview_select].getName(),tab_parcelle[item_listview_select].getDescription(),tab_parcelle[item_listview_select].getCoef(),0); //ACION UPDATE
 		   }
 		   else if (item.getTitle() == "Two") {
 		      Toast.makeText(this, "Action 2 invoked", Toast.LENGTH_SHORT).show();
@@ -199,38 +175,9 @@ public class Parcelle_listView extends Activity {
 	}
 	
 	
-	//**************************************************************************//	
-	/*public int select_max_id(String table, String colonne)
-	{
-		int value=0;
-		String txt="";
-		
-		SQLiteDatabase db = Sapinoscope.getDataBaseHelper().getReadableDatabase();
-		try
-		{
-			String selectQuery = "SELECT MAX("+colonne+") FROM "+table;
-			Log.i("requette",selectQuery);
-			Cursor c = db.rawQuery(selectQuery, null);
-			if(c.moveToFirst())
-			{
-	            do{
-	               //assing values 
-	               txt = c.getString(c.getColumnIndex(colonne));
-	               Log.i("DB print","ID:"+txt);
-	            }while(c.moveToNext());
-	        }
-			Log.i("testDB", "test select sans errors");
-		}
-		catch(SQLException e)
-		{
-			e.printStackTrace();
-		}
-		value = Integer.valueOf(txt);
-		return value;
-	}*/
-	
+
 //**************************************************************************//
-	private void popup_parcelle()
+	/*private void popup_parcelle()
 	{
 		//variable
 		dialogBuilder = new AlertDialog.Builder(this);
@@ -271,7 +218,21 @@ public class Parcelle_listView extends Activity {
 		// Output
 		AlertDialog popup_parcelle = dialogBuilder.create();
 		popup_parcelle.show();
-	}
+	}*/
 	
+	public void start_activity_parcelle_modification(int id, String name,String desc,float coef, int add_or_modify)
+	{
+		//  add_or_modify
+		//  1 : ADD  
+		//  0 : UPDATE
+		
+		Intent intent_parc_add = new Intent(contexte, Parcelle_modification.class);
+		intent_parc_add.putExtra("id", id);
+		intent_parc_add.putExtra("name", name);
+		intent_parc_add.putExtra("desc", desc);
+		intent_parc_add.putExtra("coef", coef);
+		intent_parc_add.putExtra("add", add_or_modify);
+		startActivity(intent_parc_add);
+	}
 	
 }

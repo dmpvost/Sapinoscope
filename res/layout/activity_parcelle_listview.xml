@@ -37,7 +37,7 @@
         android:layout_alignTop="@+id/bt_add_parcelle"
         android:layout_toLeftOf="@+id/bt_add_parcelle"
         android:ems="10"
-        android:hint="Nouveau" >
+        android:hint="Nouvelle Parcelle" >
 
     </EditText>
 

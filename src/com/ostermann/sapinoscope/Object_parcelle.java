@@ -5,7 +5,7 @@ public class Object_parcelle {
 	private int id;
 	private String name;
 	private String description;
-	private int coef;
+	private float coef;
 	
 	public Object_parcelle() {
 		id=0;
@@ -45,11 +45,11 @@ public class Object_parcelle {
 		this.description = description;
 	}
 
-	public int getCoef() {
+	public float getCoef() {
 		return coef;
 	}
 
-	public void setCoef(int coef) {
+	public void setCoef(float coef) {
 		this.coef = coef;
 	}
 	

@@ -28,7 +28,19 @@
     </string-array>
 
     <string name="title_activity_parcelle_list_view">Parcelle</string>
-
     <string name="Parcelle">parcelle_titre</string>
+    <string name="title_activity_parcelle_modification">Ajout d une Parcelle</string>
+    
+    <string-array name="tab_coef_croissance">android:hint="Nouveau"android:hint="Nouveau"
+        <item >1</item>
+        <item >0.9</item>
+        <item >0.8</item>
+        <item >0.7</item>
+        <item >0.6</item>
+        <item >0.5</item>
+        <item >0.4</item>
+        <item >0.3</item>
+        <item >0.2</item>
+    </string-array>
 
 </resources>
