@@ -156,15 +156,7 @@ public class MainActivity extends Activity
 			@Override
 			public void onClick(View v) 
 			{
-				// Exemple d'insert
-				SQLiteDatabase db = Sapinoscope.getDataBaseHelper().getWritableDatabase();
-				try{
-					db.execSQL("INSERT INTO PARCELLE VALUES('2','colroy','colory desc','1')");
-					Log.i("testDB", "test insert sans errors");
-				}catch(SQLException e)
-				{
-					e.printStackTrace();
-				}
+
 			}
 		});
 	}

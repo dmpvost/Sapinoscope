@@ -49,6 +49,10 @@
             android:name=".Parcelle_modification"
             android:label="@string/title_activity_parcelle_modification" >
         </activity>
+        <activity
+            android:name=".Secteur_modification"
+            android:label="@string/title_activity_secteur_modification" >
+        </activity>
     </application>
 
 </manifest>

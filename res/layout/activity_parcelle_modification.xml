@@ -22,7 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/txt_parcelle_modif_title"
+        android:layout_below="@+id/txt_secteur_modif_title"
         android:layout_marginTop="64dp"
         android:text="Nom" />
 
@@ -34,7 +34,7 @@
         android:layout_alignParentRight="true"
         android:layout_below="@+id/textView2"
         android:ems="10"
-        android:hint="Nom" >
+        android:hint="Nom parcelle" >
 
     </EditText>
 
@@ -72,8 +72,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/textView_parcelle_coef"
-        android:entries="@array/tab_coef_croissance" />
+        android:layout_below="@+id/textView_parcelle_coef" />
 
     <Button
         android:id="@+id/bt_parcelle_modif_add"
@@ -84,7 +83,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
         android:minHeight="70dip"
-        android:text="Ajouter une parcelle"
+        android:text="Valider"
         android:textSize="20sp" />
 
 </RelativeLayout>

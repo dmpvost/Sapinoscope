@@ -66,7 +66,7 @@ public class Object_secteur {
 	
 	
 	public String toString() {
-        return this.id + ". " + this.name + " [" + this.coef_croissance + "]";
+        return this.name + " [" + this.coef_croissance + "]";
     }
 	
 }

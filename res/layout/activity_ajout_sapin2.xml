@@ -4,7 +4,7 @@
     android:layout_height="match_parent" >
 
     <TextView
-        android:id="@+id/txt_parcelle_modif_title"
+        android:id="@+id/txt_secteur_modif_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
@@ -32,7 +32,7 @@
         android:text="Taille" />
 
     <Spinner
-        android:id="@+id/spinner2"
+        android:id="@+id/spinner_coef_gel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -47,12 +47,12 @@
         android:layout_below="@+id/textView3" />
 
     <Button
-        android:id="@+id/bt_parcelle_modif_add"
+        android:id="@+id/bt_secteur_modif_add"
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/spinner2"
+        android:layout_below="@+id/spinner_coef_gel"
         android:layout_marginTop="20dp"
         android:layout_toLeftOf="@+id/spinner3"
         android:minHeight="75dip"
@@ -65,7 +65,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignRight="@+id/button2"
-        android:layout_below="@+id/bt_parcelle_modif_add"
+        android:layout_below="@+id/bt_secteur_modif_add"
         android:layout_marginTop="20dp"
         android:text="Souche" />
 
@@ -84,8 +84,8 @@
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/bt_parcelle_modif_add"
-        android:layout_alignBottom="@+id/bt_parcelle_modif_add"
+        android:layout_alignBaseline="@+id/bt_secteur_modif_add"
+        android:layout_alignBottom="@+id/bt_secteur_modif_add"
         android:layout_alignLeft="@+id/spinner3"
         android:layout_alignParentRight="true"
         android:text="Nouveau plant" />
@@ -94,7 +94,7 @@
         android:id="@+id/spinner3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/bt_parcelle_modif_add"
+        android:layout_above="@+id/bt_secteur_modif_add"
         android:layout_alignLeft="@+id/textView5" />
 
     <TextView
@@ -110,7 +110,7 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/txt_parcelle_modif_title"
+        android:layout_below="@+id/txt_secteur_modif_title"
         android:layout_centerHorizontal="true"
         android:text="SecteurName"
         android:textAppearance="?android:attr/textAppearanceMedium" />

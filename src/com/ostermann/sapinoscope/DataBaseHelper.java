@@ -26,7 +26,7 @@ public class DataBaseHelper extends SQLiteOpenHelper
       
     private static String DB_NAME = "Sapin_DB";
     
-    private static int DB_VERSION = 3;
+    private static int DB_VERSION = 4;
      
     private SQLiteDatabase myDataBase;
       
@@ -61,7 +61,7 @@ public class DataBaseHelper extends SQLiteOpenHelper
 	+ "SEC_ANGLE DECIMAL(10,2) NULL  ,"
 	+ "SEC_CROIS DECIMAL(10,2) NULL  ," 
 	+ "FOREIGN KEY (PARC_ID)"
-	+ "REFERENCES PARCELLE (PARC_ID));";
+	+ "REFERENCES PARCELLE (PARC_ID)) ;";
 	
 	private static final String CREATE_TABLE_VARIETE =
 	  "CREATE TABLE IF NOT EXISTS VARIETE"
@@ -84,9 +84,9 @@ public class DataBaseHelper extends SQLiteOpenHelper
 	+ "ANN_ID DATE NOT NULL  ,"
 	+ "INF_SEC_COEF_GEL DECIMAL(10,2) NULL," 
 	+ "FOREIGN KEY (SEC_ID)"
-	+ "REFERENCES SECTEUR (SEC_ID),"
+	+ "REFERENCES SECTEUR (SEC_ID) ,"
 	+ "FOREIGN KEY (ANN_ID)"
-	+ "REFERENCES ANNEE (ANN_ID));";	  
+	+ "REFERENCES ANNEE (ANN_ID)) ;";	  
 	
 	private static final String CREATE_TABLE_SAPIN =
 	  "CREATE TABLE IF NOT EXISTS SAPIN"
@@ -98,9 +98,9 @@ public class DataBaseHelper extends SQLiteOpenHelper
 	+ "SAP_PHO LONGBLOB NULL  ,"
 	+ "SAP_STATUS BIGINT(1) NOT NULL  ," 
 	+ "FOREIGN KEY (VAR_ID)"
-	+ "REFERENCES VARIETE (VAR_ID),"
+	+ "REFERENCES VARIETE (VAR_ID) ,"
 	+ "FOREIGN KEY (SEC_ID)"
-	+ "REFERENCES SECTEUR (SEC_ID));";
+	+ "REFERENCES SECTEUR (SEC_ID)) ;";
 	
 	private static final String CREATE_TABLE_INFO_SAPIN =
 	  "CREATE TABLE IF NOT EXISTS INFO_SAPIN"
@@ -111,7 +111,7 @@ public class DataBaseHelper extends SQLiteOpenHelper
 	+ "FOREIGN KEY (ANN_ID)"
 	+ "REFERENCES ANNEE (ANN_ID) ,"
 	+ "FOREIGN KEY (SAP_ID)"
-	+ "REFERENCES SAPIN (SAP_ID));";
+	+ "REFERENCES SAPIN (SAP_ID)) ;";
 	
 	private static final String CREATE_TABLE_CROISSANCE =
 	  "CREATE TABLE IF NOT EXISTS CROISSANCE"
@@ -124,10 +124,10 @@ public class DataBaseHelper extends SQLiteOpenHelper
 	+ "(COORD_ID BIGINT(5) NOT NULL  ,"
 	+ "SEC_ID BIGINT(5) NOT NULL  ," 
 	+ "PRIMARY KEY (COORD_ID,SEC_ID) ,"
-	+ "FOREIGN KEY (COORD_ID)"
+	+ "FOREIGN KEY (COORD_ID) "
 	+ "REFERENCES COORDONNEE (COORD_ID) ,"
 	+ "FOREIGN KEY (SEC_ID)"
-	+ "REFERENCES SECTEUR (SEC_ID));";
+	+ "REFERENCES SECTEUR (SEC_ID)) ;";
     
     /**
       * Constructor
@@ -150,7 +150,8 @@ public class DataBaseHelper extends SQLiteOpenHelper
      
       
     @Override
-    public void onCreate(SQLiteDatabase db) {
+    public void onCreate(SQLiteDatabase db) 
+    {
         // cette fonction est appelle lorsque la base de donnees est cree pour la premiere fois, 
     	// on va donc lancer le script de creation de base :
     	Log.i("DB","onCreate fonction");
@@ -184,6 +185,7 @@ public class DataBaseHelper extends SQLiteOpenHelper
     			Log.e("DB", "Echec de la suppression de la base de donnee, etat indefini!");
     		
 		}
+    	init_db_value(db);
     }
  
     @Override
@@ -206,13 +208,33 @@ public class DataBaseHelper extends SQLiteOpenHelper
     	}
     	catch(SQLException e)
     	{
-    		Log.e("DB", "Echec de la mise a jours");
+    		Log.e("DB-INIT", "Echec de la mise a jours");
     		e.printStackTrace();
     	}
     	onCreate(db);
+    	init_db_value(db);
     } 
     
-    
+    public void init_db_value(SQLiteDatabase db)
+    {
+    	try{
+    		Log.i("DB-INIT", "Init des valeurs par défauts");
+        	db.execSQL("INSERT INTO VARIETE ('VAR_NOM','VAR_POUSSE') VALUES ('Nordmann',1)  ");
+        	db.execSQL("INSERT INTO VARIETE ('VAR_NOM','VAR_POUSSE') VALUES ('Nobilis',0.8)  ");
+        	db.execSQL("INSERT INTO VARIETE ('VAR_NOM','VAR_POUSSE') VALUES ('Epicea',1.3)  ");
+        	db.execSQL("INSERT INTO VARIETE ('VAR_NOM','VAR_POUSSE') VALUES ('Sapin Bleu',1)  ");
+        	for (int i = 2015; i<30; i++) 
+        	{
+        		db.execSQL("INSERT INTO ANNEE ('ANN_ID') VALUES ("+i+")  ");
+        		Log.i("DB-INIT", "add "+i);
+			}
+    	}
+    	catch(SQLException e)
+    	{
+    		Log.e("DB-INIT", "ECHEC de l'init");
+    		e.printStackTrace();
+    	}
+    }
 
     
 }

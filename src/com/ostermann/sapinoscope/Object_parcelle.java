@@ -54,7 +54,7 @@ public class Object_parcelle {
 	}
 	
 	public String toString() {
-        return this.id + ". " + this.name + " [" + this.description + "]";
+        return this.name + " [" + this.description + "]";
     }
 	
 	
