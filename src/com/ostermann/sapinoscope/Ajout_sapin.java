@@ -5,6 +5,9 @@ import java.util.Random;
 import java.util.Vector;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -21,27 +24,56 @@ import android.view.View.OnClickListener;
 import android.view.ViewTreeObserver.OnDrawListener;
 import android.widget.Button;
 
-public class Ajout_sapin extends Activity implements SurfaceHolder.Callback {
+public class Ajout_sapin extends Activity {
 
 	private int positionX;
 	private int positionY;
 	
+	private int secteurID;
+	private int parcelleID;
+	
 	private Vector<Location> registredLocations;
+	
+	public enum STATUS_SAPIN {
+		VIDE(0),
+		NOUVEAU(1),
+		OK(2),
+		TOC(3);
+	    private final int code;
+
+	    private STATUS_SAPIN(int code) {
+	        this.code = code;
+	    }
+
+	    public int toInt() {
+	        return code;
+	    }
+
+	    public String toString() {
+	        return String.valueOf(code);
+	    }
+	}
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_ajout_sapin);
+		setContentView(R.layout.activity_ajout_sapin2);
 		
-		positionX = 0;
-		positionY = 0;
+		Log.i("ajoutSapinAct","Initialisation de l'ajout de sapin...");
+		
+		Intent intentAjoutSapin = getIntent();
+		secteurID  = intentAjoutSapin.getIntExtra("sect_id", -1);
+		parcelleID = intentAjoutSapin.getIntExtra("parc_id", -1);
+		if(secteurID == -1 || parcelleID == -1)
+			Log.e("ajoutSapinAct","Impossible de récupérer les informations de l'intent, etat indetermine...");
+		
+		Log.i("ajoutSapinAct","Ajout prévue pour le secteur "+ secteurID +" de la parcelle "+parcelleID);
+		
+		getMaxXYsapinPosFromDB(positionX, positionY, secteurID);
 		
 		registredLocations = new Vector<Location>();
 		
 		Sapinoscope.getLocationHelper().startRecherche();
-		
-		SurfaceView surfaceView = (SurfaceView) findViewById(R.id.surfaceView1);
-		surfaceView.getHolder().addCallback(this);
 		
 		Button addSapinBtn = (Button) findViewById(R.id.buttonAjoutSapin);
 		addSapinBtn.setOnClickListener(new OnClickListener() 
@@ -65,43 +97,6 @@ public class Ajout_sapin extends Activity implements SurfaceHolder.Callback {
 				registredLocations.add(Sapinoscope.getLocationHelper().getLocation());
 			}
 		});
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.ajout_sapin, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
-		int id = item.getItemId();
-		if (id == R.id.action_settings) {
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
-
-	@Override
-	public void surfaceChanged(SurfaceHolder holder, int format, int width,
-			int height) {
-		tryDrawing(holder);
-		
-	}
-
-	@Override
-	public void surfaceCreated(SurfaceHolder holder) {
-		tryDrawing(holder);
-		
-	}
-
-	@Override
-	public void surfaceDestroyed(SurfaceHolder holder) {
-		
 	}
 	
 	private void tryDrawing(SurfaceHolder holder) {
@@ -155,5 +150,81 @@ public class Ajout_sapin extends Activity implements SurfaceHolder.Callback {
 		}
 		canvas.drawLine((float)start.x(), (float)start.y(), (float)firstPoint.x(), (float)firstPoint.y(), paint);
     }
-	
+
+    private int insertCoord(Location location) throws Exception
+    {
+    	SQLiteDatabase db = Sapinoscope.getDataBaseHelper().getWritableDatabase();
+    	
+    	String reqSelectID = "SELECT COORD_ID FROM SECTEUR WHERE(COORD_LAT= '"+location.getLatitude()+"' AND COORD_LON ='"+location.getLongitude()+";";
+    	Cursor c = db.rawQuery(reqSelectID, null);
+    	if (c.getCount() != 0)
+    	{
+    		c.moveToFirst();
+    		return c.getInt(c.getColumnIndex("COORD_ID"));
+    	}
+    	
+    	String reqInsert = "INSERT INTO SECTEUR ('COORD_LAT','COORD_LON') VALUES ('"+location.getLatitude()+"','"+location.getLongitude()+"')";
+		Log.i("testDB", reqInsert);
+		db.execSQL(reqInsert);
+		
+		c = db.rawQuery(reqSelectID, null);
+		if (c.getCount() == 0)
+		{
+			throw new Exception("Erreur lors de l'insertion des coordonnées :"+location.getLatitude()+", "+location.getLongitude());
+		}
+		else
+		{
+			c.moveToFirst();
+    		return c.getInt(c.getColumnIndex("COORD_ID"));
+		}
+    }
+    
+    private boolean getMaxXYsapinPosFromDB(int x, int y, final int idSecteur)
+    {
+    	String reqSelectMaxX = "SELECT MAX(SAP_LIG) FROM SAPIN WHERE SEC_ID='"+idSecteur+"';";
+    	String reqSelectMaxY = "SELECT MAX(SAP_COL) FROM SAPIN WHERE SEC_ID='"+idSecteur+"';";
+    	
+    	SQLiteDatabase db = Sapinoscope.getDataBaseHelper().getReadableDatabase();
+    	
+    	Cursor cursorX = db.rawQuery(reqSelectMaxX, null);
+    	Cursor cursorY = db.rawQuery(reqSelectMaxY, null);
+    	
+    	if(cursorX.getCount() == 0 || cursorY.getCount() == 0)
+    	{
+    		Log.i("ajoutSapinAct","pas encore de sapin enregistré pour cette parcelle, debut à 0,0");
+    		x=0;
+    		y=0;
+    		return false;
+    	}
+    	
+    	x = cursorX.getInt(0);
+    	y = cursorY.getInt(0);
+    	Log.i("ajoutSapinAct","Sapins trouves pour ce secteur, debut à "+ x +","+y);
+    	
+    	return true;
+    }
+    
+    private void addSapinInDbAtCurrentPos(final STATUS_SAPIN status, final int secteurID, final int x, final int y, final int variete)
+    {
+    	int idCoord = -1;
+    	try 
+    	{
+    		idCoord = insertCoord(Sapinoscope.getLocationHelper().getLocation());
+		} catch (Exception e) 
+    	{
+			e.printStackTrace();
+			Log.w("ajoutSapinAct", "Impossible de sauvegarder la position, sauvegarde du sapin sans position...");
+		}
+    	String requetteAjout;
+    	
+    	if(idCoord == -1)// on enregistre pas les coordonnes
+    		requetteAjout = "INSERT INTO SAPIN ('VAR_ID',			'SEC_ID',			'SAP_LIG',	'SAP_COL',	'SAP_STATUS')"
+		+"VALUES(								'"+ variete +"',	'"+secteurID+"',	'"+x+"',	'"+y+"',	'"+status.toInt()+");";
+    	else// on enregistre les coordonnés du sapin
+    		requetteAjout = "INSERT INTO SAPIN ('VAR_ID',		'SEC_ID',		'SAP_LIG',	'SAP_COL',	'SAP_STATUS', 			'COORD_ID')"
+    								+"VALUES(	'"+ variete +"','"+secteurID+"','"+x+"',	'"+y+"',	'"+status.toInt()+"',	'"+idCoord+"');";
+    	
+    	SQLiteDatabase db = Sapinoscope.getDataBaseHelper().getReadableDatabase();
+    	db.execSQL(requetteAjout);
+    }
 }

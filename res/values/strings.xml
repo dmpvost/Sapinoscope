@@ -31,5 +31,6 @@
     <string name="Parcelle">parcelle_titre</string>
     <string name="title_activity_parcelle_modification">Parcelle</string>
     <string name="title_activity_secteur_modification">Secteur</string>
+    <string name="title_activity_ajout_sapin3">Ajout_sapin3</string>
 
 </resources>

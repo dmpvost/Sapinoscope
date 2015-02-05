@@ -23,12 +23,12 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/textView2"
+        android:layout_below="@+id/txt_addsap_secteur_titre"
         android:ems="10"
         android:hint="Nom secteur" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/txt_addsap_secteur_titre"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/editText_secteur_modif_nom"
@@ -70,7 +70,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/textView1"
+        android:layout_below="@+id/txt_addsap_parcelle_titre"
         android:layout_toRightOf="@+id/textView_secteur_coef" />
 
     <Spinner
@@ -82,7 +82,7 @@
         android:layout_alignTop="@+id/spinner_coef_gel" />
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/txt_addsap_parcelle_titre"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/spinner_annee"
@@ -94,7 +94,7 @@
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/textView1"
+        android:layout_alignBottom="@+id/txt_addsap_parcelle_titre"
         android:layout_toRightOf="@+id/spinner_annee"
         android:text="Gel(%)" />
 

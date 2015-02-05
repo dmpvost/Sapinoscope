@@ -26,82 +26,82 @@
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/spin_parcelle_modif"
+        android:layout_alignBottom="@+id/spinner_variete"
         android:layout_alignParentLeft="true"
         android:padding="2dp"
         android:text="Taille" />
 
     <Spinner
-        android:id="@+id/spinner_coef_gel"
+        android:id="@+id/spinner_taille"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/textView4"
-        android:layout_toLeftOf="@+id/spinner3" />
+        android:layout_toLeftOf="@+id/spinner_nb_identique" />
 
     <Spinner
-        android:id="@+id/spin_parcelle_modif"
+        android:id="@+id/spinner_variete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/textView3" />
 
     <Button
-        android:id="@+id/bt_secteur_modif_add"
+        android:id="@+id/bt_sapin_existant"
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/spinner_coef_gel"
+        android:layout_below="@+id/spinner_taille"
         android:layout_marginTop="20dp"
-        android:layout_toLeftOf="@+id/spinner3"
+        android:layout_toLeftOf="@+id/spinner_nb_identique"
         android:minHeight="75dip"
         android:text="Sapin Existant"
         android:textSize="20sp" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/button_souche"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_alignRight="@+id/button2"
-        android:layout_below="@+id/bt_secteur_modif_add"
+        android:layout_alignRight="@+id/button_existant"
+        android:layout_below="@+id/bt_sapin_existant"
         android:layout_marginTop="20dp"
         android:text="Souche" />
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/button_nouvelle_ligne"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/button3"
-        android:layout_alignRight="@+id/button3"
-        android:layout_below="@+id/button3"
+        android:layout_alignLeft="@+id/button_souche"
+        android:layout_alignRight="@+id/button_souche"
+        android:layout_below="@+id/button_souche"
         android:layout_marginTop="21dp"
         android:text="Nouvelle Ligne" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/button_existant"
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/bt_secteur_modif_add"
-        android:layout_alignBottom="@+id/bt_secteur_modif_add"
-        android:layout_alignLeft="@+id/spinner3"
+        android:layout_alignBaseline="@+id/bt_sapin_existant"
+        android:layout_alignBottom="@+id/bt_sapin_existant"
+        android:layout_alignLeft="@+id/spinner_nb_identique"
         android:layout_alignParentRight="true"
         android:text="Nouveau plant" />
 
     <Spinner
-        android:id="@+id/spinner3"
+        android:id="@+id/spinner_nb_identique"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/bt_secteur_modif_add"
+        android:layout_above="@+id/bt_sapin_existant"
         android:layout_alignLeft="@+id/textView5" />
 
     <TextView
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/spinner3"
+        android:layout_above="@+id/spinner_nb_identique"
         android:layout_alignParentRight="true"
         android:layout_marginRight="48dp"
         android:text="Nb Identiques" />
