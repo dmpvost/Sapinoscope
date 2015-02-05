@@ -1,5 +1,7 @@
 package com.ostermann.sapinoscope;
 
+import java.util.Vector;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -32,7 +34,7 @@ public class Secteur_activity extends Activity {
 	private ListView liste_secteur;
 	
 	private String[] mes_secteurs = null;
-	private Object_secteur[] tab_secteur = null;
+	private Vector<Object_secteur> tab_secteur;
 	
 	private int item_listview_select = 0;
 	private String parcelle_select="";
@@ -45,18 +47,18 @@ public class Secteur_activity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_secteur);
 		liste_secteur = (ListView) findViewById(R.id.listView_secteur);
-		Log.i(log_name_activity, "----NOUVELLE ACTIVITE----");
+		Log.i(log_name_activity+"/onCreate", "----NOUVELLE ACTIVITE----");
 		
 		// Reception INTENT
 		Intent intent_secteur = getIntent();
 		final int parcelle_id = intent_secteur.getIntExtra("id", 1);
 		
-		
+
 		SQLiteDatabase db = Sapinoscope.getDataBaseHelper().getReadableDatabase();
 		try
 		{
 			String selectQuery = "SELECT * FROM PARCELLE WHERE PARC_ID="+parcelle_id;
-			Log.i(log_name_activity,selectQuery);
+			Log.i(log_name_activity+"/onCreate",selectQuery);
 			Cursor c = db.rawQuery(selectQuery, null);
 			int nb_row = c.getCount();
 			if(c.moveToFirst() && nb_row>0)
@@ -72,7 +74,7 @@ public class Secteur_activity extends Activity {
 			e.printStackTrace();
 		}
 		
-		Log.i(log_name_activity,"INTENT GET : PARC_ID:"+parcelle_id);
+		Log.i(log_name_activity+"/onCreate","INTENT GET : PARC_ID:"+parcelle_id);
 		
 		
 		TextView txt_parcelle = (TextView) findViewById(R.id.txt_secteur_select_parcelle_titre);
@@ -89,7 +91,7 @@ public class Secteur_activity extends Activity {
 		{
 			public void onClick(View v) 
 			{
-				Log.i(log_name_activity, "clic boutton ajout secteur");
+				Log.i(log_name_activity+"/onCreate/onClick", "clic boutton ajout secteur");
 				EditText edt_add_secteur = (EditText) findViewById(R.id.editText_add_secteur);
 				String name_secteur = edt_add_secteur.getText().toString();
 				edt_add_secteur.setText(""); //vide le champ de saisie
@@ -102,7 +104,11 @@ public class Secteur_activity extends Activity {
 	//**************************************************************************//	
 	private void secteur_listview(ListView liste_secteur,int parcelle_id) 
 	{
-		SQLiteDatabase db = Sapinoscope.getDataBaseHelper().getReadableDatabase();
+		tab_secteur =  Object_secteur.createListOfSecteur(parcelle_id);
+		ArrayAdapter<Object_secteur> adapter_secteur = new ArrayAdapter<Object_secteur>(this,R.layout.secteur_texte,tab_secteur); 
+		liste_secteur.setAdapter(adapter_secteur);	
+		
+		/*SQLiteDatabase db = Sapinoscope.getDataBaseHelper().getReadableDatabase();
 		try
 		{
 			String selectQuery = "SELECT * FROM SECTEUR WHERE PARC_ID="+parcelle_id;
@@ -135,7 +141,7 @@ public class Secteur_activity extends Activity {
 		{
 			e.printStackTrace();
 			Log.i(log_name_activity, "Sortie en erreur");
-		}
+		}*/
 		
 	}
 
@@ -149,11 +155,10 @@ public class Secteur_activity extends Activity {
 			public void onItemClick(AdapterView<?> parent, View viewClicked, int position, long id) 
 			{
 				// Selection d'un SECTEUR -- GO to ADD SAPIN / put parc_id,sect_id
-				//TextView ma_parcelle = (TextView) viewClicked;
 				Intent intent_addsapin = new Intent(contexte, Message_alerte_activity.class);
-				intent_addsapin.putExtra("sect_id", tab_secteur[position].getId());
-				intent_addsapin.putExtra("parc_id", tab_secteur[position].getId_parc());
-				Log.i(log_name_activity,"INTENT SET : PARC_ID:"+tab_secteur[position].getId_parc()+" SECT_N:"+tab_secteur[position].getId());
+				intent_addsapin.putExtra("sect_id", tab_secteur.get(position).getId());
+				intent_addsapin.putExtra("parc_id", tab_secteur.get(position).getId_parc());
+				Log.i(log_name_activity+"/secteur_ClickCallBack","INTENT SET : PARC_ID:"+tab_secteur.get(position).getId_parc()+" SECT_N:"+tab_secteur.get(position).getId());
 				startActivity(intent_addsapin);
 			}
 		});
@@ -178,11 +183,11 @@ public class Secteur_activity extends Activity {
 		{
 			   if (item.getTitle() == "Edition") 
 			   {
-				   start_activity_secteur_modification(tab_secteur[item_listview_select], 0);
+				   start_activity_secteur_modification(tab_secteur.get(item_listview_select), 0);
 			   }
 			   else if (item.getTitle() == "Supprimer") 
 			   {
-				   secteur_delete(tab_secteur[item_listview_select]);
+				   secteur_delete(tab_secteur.get(item_listview_select));
 			   }
 			   else 
 			   {
@@ -212,7 +217,7 @@ public class Secteur_activity extends Activity {
 						db.execSQL(req);
 						Toast.makeText(getApplicationContext(), "Suppression de "+secteur.getName(), Toast.LENGTH_SHORT).show();
 						secteur_listview(liste_secteur,secteur.getId_parc());
-						Log.i(log_name_activity,req);
+						Log.i(log_name_activity+"/secteur_delete",req);
 					}
 					catch(SQLException e)
 					{
@@ -244,13 +249,13 @@ public class Secteur_activity extends Activity {
 		//  add_or_modify
 		//  1 : ADD  
 		//  0 : UPDATE
-		Log.i(log_name_activity, "start_activity_secteur_modification");
+		Log.i(log_name_activity+"/start_activity_secteur_modification", "start_activity_secteur_modification");
 		Intent intent_sect_add = new Intent(contexte, Secteur_modification.class);
 		intent_sect_add.putExtra("sec_id", secteur.getId());
 		intent_sect_add.putExtra("parc_id", secteur.getId_parc());
 		intent_sect_add.putExtra("name", secteur.getName());
 		intent_sect_add.putExtra("add", add_or_modify);
-		Log.i(log_name_activity,"INTENT GET : PARC_ID:"+secteur.getId_parc()+" SECT_N:"+secteur.getName()+"SECT_ID:"+secteur.getId());
+		Log.i(log_name_activity+"start_activity_secteur_modification","INTENT GET : PARC_ID:"+secteur.getId_parc()+" SECT_N:"+secteur.getName()+"SECT_ID:"+secteur.getId());
 		startActivity(intent_sect_add);
 		finish();
 	}

@@ -63,7 +63,7 @@ public class Secteur_modification extends Activity
 			try
 			{
 				String selectQuery = "SELECT * FROM SECTEUR WHERE SEC_ID="+sect_id;
-				Log.i("requette",selectQuery);
+				Log.i("log_name_activity",selectQuery);
 				Cursor c = db.rawQuery(selectQuery, null);
 				int nb_row = c.getCount();
 				if(c.moveToFirst() && nb_row>0)

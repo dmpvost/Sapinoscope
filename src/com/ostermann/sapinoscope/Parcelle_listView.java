@@ -1,6 +1,7 @@
 package com.ostermann.sapinoscope;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -41,7 +42,7 @@ public class Parcelle_listView extends Activity {
 	private ListView liste_parcelle;
 	
 	private String[] mes_parcelles = null;
-	private Object_parcelle[] tab_parcelle = null;
+	private Vector<Object_parcelle> tab_parcelle = null;
 	
 	private int item_listview_select = 0;
 	
@@ -77,10 +78,12 @@ public class Parcelle_listView extends Activity {
 	//**************************************************************************//
 	private void parcelle_listview(ListView liste_parcelle) 
 	{
-		
+		tab_parcelle =  Object_parcelle.createListOfAllParcelle();
+		ArrayAdapter<Object_parcelle> adapter = new ArrayAdapter<Object_parcelle>(this,R.layout.parcelle_texte,tab_parcelle); 
+		liste_parcelle.setAdapter(adapter);
 		
 		// Exemple de select avec plusieur ligne :
-		SQLiteDatabase db = Sapinoscope.getDataBaseHelper().getReadableDatabase();
+		/*SQLiteDatabase db = Sapinoscope.getDataBaseHelper().getReadableDatabase();
 		try
 		{
 			String selectQuery = "SELECT * FROM PARCELLE";
@@ -115,7 +118,7 @@ public class Parcelle_listView extends Activity {
 		catch(SQLException e)
 		{
 			e.printStackTrace();
-		}
+		}*/
 		
 	}
 
@@ -130,9 +133,9 @@ public class Parcelle_listView extends Activity {
 			{
 				//TextView ma_parcelle = (TextView) viewClicked;
 				Intent intent_secteur = new Intent(contexte, Secteur_activity.class);
-				intent_secteur.putExtra("id", tab_parcelle[position].getId());
+				intent_secteur.putExtra("id", tab_parcelle.get(position).getId());
 				//Toast.makeText(getApplicationContext(), tab_parcelle[position].getName(), Toast.LENGTH_SHORT).show();
-				intent_secteur.putExtra("name", tab_parcelle[position].getName());
+				intent_secteur.putExtra("name", tab_parcelle.get(position).getName());
 				startActivity(intent_secteur);
 			}
 		});
@@ -157,10 +160,10 @@ public class Parcelle_listView extends Activity {
 	{
 		
 		   if (item.getTitle() == "Edition") {
-			   start_activity_parcelle_modification(tab_parcelle[item_listview_select].getId(),tab_parcelle[item_listview_select].getName(),tab_parcelle[item_listview_select].getDescription(),tab_parcelle[item_listview_select].getCoef(),0); //ACION UPDATE
+			   start_activity_parcelle_modification(tab_parcelle.get(item_listview_select).getId(),tab_parcelle.get(item_listview_select).getName(),tab_parcelle.get(item_listview_select).getDescription(),tab_parcelle.get(item_listview_select).getCoef(),0); //ACION UPDATE
 		   }
 		   else if (item.getTitle() == "Supprimer") {
-			   parcelle_delete(tab_parcelle[item_listview_select].getId(),tab_parcelle[item_listview_select].getName());
+			   parcelle_delete(tab_parcelle.get(item_listview_select).getId(),tab_parcelle.get(item_listview_select).getName());
 		   }
 		   else {
 		      return false;
