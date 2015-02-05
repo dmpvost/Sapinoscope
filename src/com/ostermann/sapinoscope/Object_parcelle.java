@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 
 public class Object_parcelle {
 
@@ -106,7 +105,32 @@ public class Object_parcelle {
 	}
 
 	public String toString() {
-		return this.name + " [" + this.description + "]";
+		return this.name + " , " + this.description + " ["+getCountSecteur()+"]";
+	}
+	
+	
+	public int getCountSecteur()
+	{
+		int value=0;
+		SQLiteDatabase db = Sapinoscope.getDataBaseHelper().getReadableDatabase();
+		try
+		{
+			String selectQuery = "SELECT COUNT(*) AS A FROM SECTEUR WHERE PARC_ID="+this.id;
+			Log.i("requette",selectQuery);
+			Cursor c = db.rawQuery(selectQuery, null);
+			int nb_row = c.getCount();
+			if(c.moveToFirst() && nb_row>0)
+			{
+				value=c.getInt(0);
+				Log.i("DB requette","ID:"+this.id);
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return value;
+			
 	}
 
 	public static Vector<Object_parcelle> createListOfAllParcelle()
