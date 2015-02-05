@@ -29,7 +29,7 @@ public class Secteur_modification extends Activity
 	private Context contexte = this;
 
 	private String log_name_activity = "SECTEUR_MODIFICATION";
-	private Object_secteur secteur_select;
+	private Object_secteur secteur;
 
 	private TextView txt_sect;
 	private EditText ed_sect_desc = null;
@@ -50,7 +50,7 @@ public class Secteur_modification extends Activity
 		spin_sect_crois = (Spinner) findViewById(R.id.spinner_coef_croissance);
 		spin_sect_gel = (Spinner) findViewById(R.id.spinner_coef_gel);
 		spin_sect_annee = (Spinner) findViewById(R.id.spinner_annee);
-		
+
 		// Reception INTENT
 		Intent intent_sect_modif = getIntent();
 		int sec_id = 	intent_sect_modif.getIntExtra("sec_id", -1);
@@ -59,13 +59,8 @@ public class Secteur_modification extends Activity
 		sect_add = 		intent_sect_modif.getIntExtra("add", -1); 		// bool = 1 : ADD  // 0 : update
 
 
-<<<<<<< HEAD
-		// on récupère le texte de l'activite si c'est une nouvelle parcelle
-		if( sect_add == -1)
-=======
 		// on recupere le texte de l'activite si c'est une nouvelle parcelle
-		if ( sect_add == 1)
->>>>>>> FETCH_HEAD
+		if ( sect_add == -1)
 		{
 			Log.e(log_name_activity, "Impossible d'initialiser, sect_add est introuvable");
 		}
@@ -75,83 +70,27 @@ public class Secteur_modification extends Activity
 				Log.e(log_name_activity, "Impossible d'initialiser via parc_id");
 
 			Log.i(log_name_activity,"->Ajout d'un nouveau secteur");
-			secteur_select = new Object_secteur(0, parc_id, name, 0, 0);
-
-<<<<<<< HEAD
-			//secteur_select.setName(name);
-			//secteur_select.setId_parc(parc_id);
-=======
-		// Creation du spinner croissance
-		List<String> list_coef_crois = new ArrayList<String>();
-		if ( sect_coef_crois != 0)
-		{
-			list_coef_crois.add(""+sect_coef_crois);
->>>>>>> FETCH_HEAD
+			secteur = new Object_secteur(0, parc_id, name, 0, 0);
 		}
 		else // sinon SELECT
 		{
 			Log.i(log_name_activity,"->Modification d'un secteur");
-			secteur_select = new Object_secteur(intent_sect_modif.getIntExtra("sec_id", 1), Source.sec_id);
+			secteur = new Object_secteur(intent_sect_modif.getIntExtra("sec_id", 1), Source.sec_id);
 		}
 
-<<<<<<< HEAD
-		Log.i(log_name_activity,"INTENT GET : PARC_ID:"+secteur_select.getId_parc()+"  SECT_N:"+secteur_select.getName()+"  SECT_ID:"+secteur_select.getId());
-=======
-		//String year = (String) android.text.format.DateFormat.format("yyyy", date);
 
-		// Creation du spinner annee
-		List<String> list_annee = new ArrayList<String>();
-		Calendar c = Calendar.getInstance();
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
-		String strDate = sdf.format(c.getTime());
-		list_annee.add(""+strDate);
-		int a=2014;
-		while ( a < 2025 )
-		{
-			if( Integer.parseInt(strDate) != a )
-			{
-				list_annee.add(""+a);
-			}
-			a++;
-		}
-		ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list_annee);
-		adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		spin_sect_annee.setAdapter(adapter2);
-
-		// Creation du spinner coef_gel
-		List<String> list_coef_gel = new ArrayList<String>();
-		if ( sect_coef_crois != 0)
-		{
-			list_coef_gel.add(""+sect_coef_gel);
-		}
-		i=1;
-		while ( i > 0.1 )
-		{
-			if (i != sect_coef_gel)
-			{
-				list_coef_gel.add(""+i);
-			}
-			i = (double)Math.round((i - 0.1)*100)/100 ;			
-		}
-		ArrayAdapter<String> adapter3 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list_coef_gel);
-		adapter3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		spin_sect_gel.setAdapter(adapter3);
->>>>>>> FETCH_HEAD
+		Log.i(log_name_activity,"INTENT GET : PARC_ID:"+secteur.getId_parc()+"  SECT_N:"+secteur.getName()+"  SECT_ID:"+secteur.getId());
 
 
 		// INITIALISAION
-		txt_sect.setText("Secteur : "+secteur_select.getName());
-		ed_sect_desc.setText(secteur_select.getName());		
+		txt_sect.setText("Secteur : "+secteur.getName());
+		ed_sect_desc.setText(secteur.getName());		
 		init_spinner_coef_croissance();
 		init_spinner_annee();
 		init_spinner_coef_gel();
 
-
-<<<<<<< HEAD
-		// INSERT/UPDATE SECTEUR -- ON CLIC
-=======
 		// INSERT UPDATE PARCELLE -- ON CLIC     (Bouton "VALIDER")
->>>>>>> FETCH_HEAD
+
 		Button bt_add_secteur = (Button) findViewById(R.id.bt_secteur_modif_add);
 		bt_add_secteur.setOnClickListener(new OnClickListener() 
 		{
@@ -172,7 +111,7 @@ public class Secteur_modification extends Activity
 					SQLiteDatabase db = Sapinoscope.getDataBaseHelper().getWritableDatabase();
 					try
 					{
-						String req_secteur = "UPDATE SECTEUR SET SEC_N='"+sect_name+"' , SEC_CROIS='"+spin_crois+"' WHERE SEC_ID="+secteur_select.getId() ;
+						String req_secteur = "UPDATE SECTEUR SET SEC_N='"+sect_name+"' , SEC_CROIS='"+spin_crois+"' WHERE SEC_ID="+secteur.getId() ;
 						db.execSQL(req_secteur);
 						Log.i(log_name_activity, "req_secteur");
 					}
@@ -188,7 +127,7 @@ public class Secteur_modification extends Activity
 					SQLiteDatabase db = Sapinoscope.getDataBaseHelper().getWritableDatabase();
 					try
 					{
-						String req_secteur = "INSERT into SECTEUR (PARC_ID,SEC_N,SEC_ANGLE,SEC_CROIS)  VALUES ( "+secteur_select.getId_parc()+",'"+sect_name+"', 0 , "+spin_crois+" ) ;" ;
+						String req_secteur = "INSERT into SECTEUR (PARC_ID,SEC_N,SEC_ANGLE,SEC_CROIS)  VALUES ( "+secteur.getId_parc()+",'"+sect_name+"', 0 , "+spin_crois+" ) ;" ;
 						db.execSQL(req_secteur);
 						Log.i(log_name_activity, "req_secteur");
 					}
@@ -217,8 +156,8 @@ public class Secteur_modification extends Activity
 				}
 
 				Intent intent_secteur_liste = new Intent(contexte, Secteur_activity.class);
-				intent_secteur_liste.putExtra("id", secteur_select.getId_parc());
-				Log.i(log_name_activity,"INTENT SET : PARC_ID:"+secteur_select.getId_parc()+" SECT_N:"+sect_name+"SECT_ID:"+secteur_select.getId());
+				intent_secteur_liste.putExtra("id", secteur.getId_parc());
+				Log.i(log_name_activity,"INTENT SET : PARC_ID:"+secteur.getId_parc()+" SECT_N:"+sect_name+"SECT_ID:"+secteur.getId());
 				startActivity(intent_secteur_liste);
 				finish();
 
@@ -305,11 +244,11 @@ public class Secteur_modification extends Activity
 	{
 		// Création du spinner croissance
 		List<String> list_coef_crois = new ArrayList<String>();
-		/*if ( sect_coef_crois != 0)
+		if ( secteur.getCoef_croissance() != 0)
 		{
-			list_coef_crois.add(""+sect_coef_crois);
-		}*/
-		double i=1;
+			list_coef_crois.add(""+secteur.getCoef_croissance());
+		}
+		double i=1.6;
 		while ( i > 0.1 )
 		{
 			//if (i != sect_coef_crois)

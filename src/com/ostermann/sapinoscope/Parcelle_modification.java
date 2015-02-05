@@ -46,7 +46,6 @@ public class Parcelle_modification extends Activity {
 		// Reception INTENT
 		Intent intent_parc_modif = getIntent();
 		parcelle_id = intent_parc_modif.getIntExtra("id", 1);
-
 		final int parcelle_add = intent_parc_modif.getIntExtra("add", 1); 
 		
 		// on récupère le txte de l'activite si c'est une nouvelle parcelle
