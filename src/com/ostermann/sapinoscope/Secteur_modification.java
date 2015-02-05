@@ -59,8 +59,13 @@ public class Secteur_modification extends Activity
 		sect_add = 		intent_sect_modif.getIntExtra("add", -1); 		// bool = 1 : ADD  // 0 : update
 
 
+<<<<<<< HEAD
 		// on récupère le texte de l'activite si c'est une nouvelle parcelle
 		if( sect_add == -1)
+=======
+		// on recupere le texte de l'activite si c'est une nouvelle parcelle
+		if ( sect_add == 1)
+>>>>>>> FETCH_HEAD
 		{
 			Log.e(log_name_activity, "Impossible d'initialiser, sect_add est introuvable");
 		}
@@ -72,8 +77,16 @@ public class Secteur_modification extends Activity
 			Log.i(log_name_activity,"->Ajout d'un nouveau secteur");
 			secteur_select = new Object_secteur(0, parc_id, name, 0, 0);
 
+<<<<<<< HEAD
 			//secteur_select.setName(name);
 			//secteur_select.setId_parc(parc_id);
+=======
+		// Creation du spinner croissance
+		List<String> list_coef_crois = new ArrayList<String>();
+		if ( sect_coef_crois != 0)
+		{
+			list_coef_crois.add(""+sect_coef_crois);
+>>>>>>> FETCH_HEAD
 		}
 		else // sinon SELECT
 		{
@@ -81,7 +94,49 @@ public class Secteur_modification extends Activity
 			secteur_select = new Object_secteur(intent_sect_modif.getIntExtra("sec_id", 1), Source.sec_id);
 		}
 
+<<<<<<< HEAD
 		Log.i(log_name_activity,"INTENT GET : PARC_ID:"+secteur_select.getId_parc()+"  SECT_N:"+secteur_select.getName()+"  SECT_ID:"+secteur_select.getId());
+=======
+		//String year = (String) android.text.format.DateFormat.format("yyyy", date);
+
+		// Creation du spinner annee
+		List<String> list_annee = new ArrayList<String>();
+		Calendar c = Calendar.getInstance();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy");
+		String strDate = sdf.format(c.getTime());
+		list_annee.add(""+strDate);
+		int a=2014;
+		while ( a < 2025 )
+		{
+			if( Integer.parseInt(strDate) != a )
+			{
+				list_annee.add(""+a);
+			}
+			a++;
+		}
+		ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list_annee);
+		adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spin_sect_annee.setAdapter(adapter2);
+
+		// Creation du spinner coef_gel
+		List<String> list_coef_gel = new ArrayList<String>();
+		if ( sect_coef_crois != 0)
+		{
+			list_coef_gel.add(""+sect_coef_gel);
+		}
+		i=1;
+		while ( i > 0.1 )
+		{
+			if (i != sect_coef_gel)
+			{
+				list_coef_gel.add(""+i);
+			}
+			i = (double)Math.round((i - 0.1)*100)/100 ;			
+		}
+		ArrayAdapter<String> adapter3 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list_coef_gel);
+		adapter3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spin_sect_gel.setAdapter(adapter3);
+>>>>>>> FETCH_HEAD
 
 
 		// INITIALISAION
@@ -92,7 +147,11 @@ public class Secteur_modification extends Activity
 		init_spinner_coef_gel();
 
 
+<<<<<<< HEAD
 		// INSERT/UPDATE SECTEUR -- ON CLIC
+=======
+		// INSERT UPDATE PARCELLE -- ON CLIC     (Bouton "VALIDER")
+>>>>>>> FETCH_HEAD
 		Button bt_add_secteur = (Button) findViewById(R.id.bt_secteur_modif_add);
 		bt_add_secteur.setOnClickListener(new OnClickListener() 
 		{
