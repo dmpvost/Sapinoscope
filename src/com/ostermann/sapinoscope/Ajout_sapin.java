@@ -1,6 +1,5 @@
 package com.ostermann.sapinoscope;
 
-import java.util.List;
 import java.util.Random;
 import java.util.Vector;
 
@@ -14,11 +13,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.SurfaceHolder;
-import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewTreeObserver.OnDrawListener;
 import android.widget.Button;
 
 public class Ajout_sapin extends Activity implements SurfaceHolder.Callback {

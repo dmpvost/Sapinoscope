@@ -31,33 +31,44 @@ public class Object_parcelle {
 		this.coef=coef;
 	}
 
-	public Object_parcelle(int parc_id)
-	{
-		Object_parcelle parcelle = new Object_parcelle();
 
+	enum Source{
+		parc_id("PARC_ID");
+		private final String n;
+		Source(String name){
+			n=name;
+		}
+		public String toString()
+		{
+			return n;
+		}
+	}
+
+	public Object_parcelle(int id, Source S)
+	{
 		SQLiteDatabase db = Sapinoscope.getDataBaseHelper().getReadableDatabase();
 		try
 		{
-			String selectQuery = "SELECT * FROM PARCELLE WHERE PARC_ID="+parc_id;
-			Log.i(log_name_activity+"/Object_parcelle(int parc_id)",selectQuery);
+			String selectQuery = "SELECT * FROM PARCELLE WHERE "+S+"="+id;
+			Log.i(log_name_activity+"/Object_parcelle(id,Source)",selectQuery);
 			Cursor c = db.rawQuery(selectQuery, null);
 			int nb_row = c.getCount();
 			if(c.moveToFirst() && nb_row>0)
 			{
 				do{
-					parcelle.setId(Integer.parseInt(c.getString(c.getColumnIndex("PARC_ID"))));
-					parcelle.setName(c.getString(c.getColumnIndex("PARC_N")));
-					parcelle.setDescription(c.getString(c.getColumnIndex("PARC_DESC")));
-					parcelle.setCoef(Float.parseFloat(c.getString(c.getColumnIndex("PARC_COEF"))));
-					Log.i(log_name_activity+"/Object_parcelle(int parc_id)","ID:"+parcelle.getId()+" nom:"+parcelle.getName()+" desc:"+parcelle.getDescription()+" coef:"+parcelle.getCoef());
+					this.setId(Integer.parseInt(c.getString(c.getColumnIndex("PARC_ID"))));
+					this.setName(c.getString(c.getColumnIndex("PARC_N")));
+					this.setDescription(c.getString(c.getColumnIndex("PARC_DESC")));
+					this.setCoef(Float.parseFloat(c.getString(c.getColumnIndex("PARC_COEF"))));
+					Log.i(log_name_activity+"/Object_parcelle(id,Source)","ID:"+this.getId()+" nom:"+this.getName()+" desc:"+this.getDescription()+" coef:"+this.getCoef());
 				}while(c.moveToNext());
 			}
-			Log.i(log_name_activity+"/Object_parcelle(int parc_id)", "Create : "+selectQuery);
+			Log.i(log_name_activity+"/Object_parcelle(id,Source)", "Create : "+selectQuery);
 		}
 		catch(SQLException e)
 		{
 			e.printStackTrace();
-			Log.i(log_name_activity+"/Object_parcelle(int parc_id)", "Sortie en erreur");
+			Log.i(log_name_activity+"/Object_parcelle(id,Source)", "Sortie en erreur");
 		}
 
 	}
@@ -110,17 +121,17 @@ public class Object_parcelle {
 			int nb_row = c.getCount();
 			if(c.moveToFirst() && nb_row>=0)
 			{
-	            do
-	            {
-	            	Object_parcelle parcelle= new Object_parcelle();
-	            	parcelle.setId(Integer.parseInt(c.getString(c.getColumnIndex("PARC_ID"))));
-	            	parcelle.setName(c.getString(c.getColumnIndex("PARC_N")));
-	            	parcelle.setDescription(c.getString(c.getColumnIndex("PARC_DESC")));
-	            	parcelle.setCoef(Float.parseFloat(c.getString(c.getColumnIndex("PARC_COEF"))));
-	            	liste.add(parcelle);
-	                Log.i(log_name_activity+"/createListOfAllParcelle","ID:"+parcelle.getId()+" nom:"+parcelle.getName()+" desc:"+parcelle.getDescription()+" coef:"+parcelle.getCoef());
-	            }while(c.moveToNext());
-	        }
+				do
+				{
+					Object_parcelle parcelle= new Object_parcelle();
+					parcelle.setId(Integer.parseInt(c.getString(c.getColumnIndex("PARC_ID"))));
+					parcelle.setName(c.getString(c.getColumnIndex("PARC_N")));
+					parcelle.setDescription(c.getString(c.getColumnIndex("PARC_DESC")));
+					parcelle.setCoef(Float.parseFloat(c.getString(c.getColumnIndex("PARC_COEF"))));
+					liste.add(parcelle);
+					Log.i(log_name_activity+"/createListOfAllParcelle","ID:"+parcelle.getId()+" nom:"+parcelle.getName()+" desc:"+parcelle.getDescription()+" coef:"+parcelle.getCoef());
+				}while(c.moveToNext());
+			}
 		}
 		catch(SQLException e)
 		{

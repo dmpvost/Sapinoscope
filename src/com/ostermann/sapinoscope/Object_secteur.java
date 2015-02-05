@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-import android.widget.ArrayAdapter;
 
 public class Object_secteur {
 
@@ -33,36 +32,52 @@ public class Object_secteur {
 		this.coef_croissance=coef_croissance;
 	}
 
-	public Object_secteur(int parcelle_id)
+	enum Source{
+		sec_id("SEC_ID"),
+		parc_id("PARC_ID");
+		
+		private final String n;
+		
+		Source(String name){
+			n=name;
+		}
+		
+		public String toString()
+		{
+			return n;
+		}
+	}
+	
+	public Object_secteur(int id,Source S)
 	{
-		Object_secteur secteur = new Object_secteur();
 		SQLiteDatabase db = Sapinoscope.getDataBaseHelper().getReadableDatabase();
 		try
 		{
 
-			String selectQuery = "SELECT * FROM SECTEUR WHERE PARC_ID="+parcelle_id;
+			String selectQuery = "SELECT * FROM SECTEUR WHERE "+S.toString()+"="+id;
 			Cursor c = db.rawQuery(selectQuery, null);
 			int nb_row = c.getCount();
 			if(c.moveToFirst() && nb_row>0)
 			{
 				do{
-					secteur.setId(Integer.parseInt(c.getString(c.getColumnIndex("SEC_ID"))));
-					secteur.setId_parc(Integer.parseInt(c.getString(c.getColumnIndex("PARC_ID"))));
-					secteur.setName(c.getString(c.getColumnIndex("SEC_N")));
-					secteur.setAngle(Float.parseFloat(c.getString(c.getColumnIndex("SEC_ANGLE"))));
-					secteur.setCoef_croissance(Float.parseFloat(c.getString(c.getColumnIndex("SEC_CROIS"))));
+					this.setId(c.getInt(c.getColumnIndex("SEC_ID")));
+					this.setId_parc(c.getInt(c.getColumnIndex("PARC_ID")));
+					this.setName(c.getString(c.getColumnIndex("SEC_N")));
+					this.setAngle(c.getFloat(c.getColumnIndex("SEC_ANGLE")));
+					this.setCoef_croissance(c.getFloat(c.getColumnIndex("SEC_CROIS")));
 				}while(c.moveToNext());
 			}
-			Log.i(log_name_activity+"/Object_secteur(int parcelle_id)", "Create : "+selectQuery);
+			else
+			{
+				Log.e(log_name_activity+"/Object_secteur", "Impossible nb_row:"+nb_row+" Colonne:"+S.toString()+" ID:"+id);
+			}
+			Log.i(log_name_activity+"/Object_secteur", "Create : "+selectQuery);
 		}
 		catch(SQLException e)
 		{
 			e.printStackTrace();
-			Log.i(log_name_activity+"/Object_secteur(int parcelle_id)", "Sortie en erreur");
+			Log.i(log_name_activity+"/Object_secteur", "Sortie en erreur");
 		}
-
-
-
 	}
 
 	public int getId() {
@@ -108,6 +123,7 @@ public class Object_secteur {
 	public String toString() {
 		return this.name + " [" + this.coef_croissance + "]";
 	}
+	
 	
 	public static Vector<Object_secteur> createListOfSecteur(int parc_id)
 	{
