@@ -1,6 +1,7 @@
 package com.ostermann.sapinoscope;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -9,6 +10,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -22,8 +26,10 @@ public class Message_alerte_activity extends Activity
 	private String parc_name = "";
 	private String sect_name = "";
 	
-	private Object_parcelle parcelle ;
-	private Object_secteur secteur;
+	Context contexte;
+	
+	private int secteurID;
+	private int parcelleID;
 	
 	protected void onCreate(Bundle savedInstanceState) 
 	{
@@ -31,32 +37,26 @@ public class Message_alerte_activity extends Activity
 		Log.i(log_name_activity+"/onCreate", "----NOUVELLE ACTIVITE START----");
 		setContentView(R.layout.message_alerte);
 		
-		// Reception INTENT
-		/*Intent intent_mess_alerte = getIntent();
-		sect_id = 	intent_mess_alerte.getIntExtra("sec_id", 1);
-		parc_id = 	intent_mess_alerte.getIntExtra("parc_id", 1); 	
-		Log.i(log_name_activity,"INTENT GET PARC_ID="+parc_id+" SECT_ID="+sect_id);
+		contexte = this;
 		
-		parcelle = new Object_parcelle(parc_id);
-		secteur = new Object_secteur(parc_id);
-
-		// Initialisation
-		init_windows();*/
+		Intent intent_alerte = getIntent();
+		secteurID = intent_alerte.getIntExtra("sect_id", -1);
+		parcelleID = intent_alerte.getIntExtra("parc_id", -1);
+		if(secteurID == -1 || parcelleID == -1)
+			Log.e("alerteActivity","Impossible de récupérer les informations, etat indetermine...");
+		
+		Button okButton = (Button) findViewById(R.id.bt_messageAlerte_ok);
+		okButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent intentAjoutSapin = new Intent(contexte, Ajout_sapin.class);
+				intentAjoutSapin.putExtra("sect_id", secteurID);
+				intentAjoutSapin.putExtra("parc_id", parcelleID);
+				startActivity(intentAjoutSapin);
+				finish();
+			}
+		});
 		
 	}
-
-	
-	public void init_windows()
-	{
-		TextView titre_parcelle = (TextView) findViewById(R.id.txt_addsap_parcelle_titre);
-		titre_parcelle.setText("Parcelle"+parcelle.getName());
-		TextView titre_secteur = (TextView) findViewById(R.id.txt_addsap_secteur_titre);
-		titre_secteur.setText("Secteur"+secteur.getName());
-		
-		Spinner spin_variete = (Spinner) findViewById(R.id.spin_addsap_variete);
-		//spin_variete.
-	}
-	
-	
-	
 }
