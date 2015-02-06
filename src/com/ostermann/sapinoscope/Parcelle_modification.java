@@ -3,8 +3,6 @@ package com.ostermann.sapinoscope;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.ostermann.sapinoscope.Object_parcelle.Source;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -59,7 +57,7 @@ public class Parcelle_modification extends Activity {
 		else 
 		{
 			Log.i(log_name_activity,"->UPDATE Parcelle");
-			parcelle = new Object_parcelle(parcelle_id, Source.parc_id);
+			parcelle = new Object_parcelle(parcelle_id);
 		}
 		
 		// INITIALISATION

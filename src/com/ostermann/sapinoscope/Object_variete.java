@@ -7,21 +7,21 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-public class Variete_sapin {
+public class Object_variete {
 
 	private int var_id;
 	private String var_nom;
 	private float var_coef;
 	private static String log_name_activity ="Object_Variété";
 	
-	public Variete_sapin()
+	public Object_variete()
 	{
 		var_id=0;
 		var_nom="";
 		var_coef=0;
 	}
 	
-	public Variete_sapin(int var_id,String var_nom, float var_coef)
+	public Object_variete(int var_id,String var_nom, float var_coef)
 	{
 		this.var_id = var_id;
 		this.var_nom = var_nom;
@@ -52,10 +52,15 @@ public class Variete_sapin {
 		this.var_coef = var_coef;
 	}
 	
-	
-	public static Vector<Variete_sapin> createListOfAllParcelle()
+	public String toString()
 	{
-		Vector<Variete_sapin> liste = new Vector<Variete_sapin>();
+		return var_nom+" ("+var_coef+")";
+	}
+	
+	
+	public static Vector<Object_variete> createListOfAllVariete()
+	{
+		Vector<Object_variete> liste = new Vector<Object_variete>();
 
 		SQLiteDatabase db = Sapinoscope.getDataBaseHelper().getReadableDatabase();
 		try
@@ -67,10 +72,10 @@ public class Variete_sapin {
 			{
 	            do
 	            {
-	            	Variete_sapin variete= new Variete_sapin();
-	            	variete.setVar_id(Integer.parseInt(c.getString(c.getColumnIndex("PARC_ID"))));
-	            	variete.setVar_nom(c.getString(c.getColumnIndex("PARC_N")));
-	            	variete.setVar_coef(Float.parseFloat(c.getString(c.getColumnIndex("PARC_COEF"))));
+	            	Object_variete variete= new Object_variete();
+	            	variete.setVar_id(c.getInt(c.getColumnIndex("VAR_ID")));
+	            	variete.setVar_nom(c.getString(c.getColumnIndex("VAR_NOM")));
+	            	variete.setVar_coef(c.getFloat(c.getColumnIndex("VAR_POUSSE")));
 	            	liste.add(variete);
 	                //Log.i(log_name_activity,"ID:"+parcelle.getId()+" nom:"+parcelle.getName()+" desc:"+parcelle.getDescription()+" coef:"+parcelle.getCoef());
 	            }while(c.moveToNext());
@@ -79,7 +84,7 @@ public class Variete_sapin {
 		catch(SQLException e)
 		{
 			e.printStackTrace();
-			Log.i(log_name_activity, "Sortie en erreur");
+			Log.e(log_name_activity, "Sortie en erreur");
 		}
 		return liste;
 	}

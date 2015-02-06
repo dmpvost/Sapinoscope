@@ -2,8 +2,6 @@ package com.ostermann.sapinoscope;
 
 import java.util.Vector;
 
-import com.ostermann.sapinoscope.Object_parcelle.Source;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -55,7 +53,7 @@ public class Secteur_activity extends Activity {
 			Log.e(log_name_activity+"/onCreate","Impossible de récupéré le parcelle ID");
 		}
 		
-		parcelle_recep= new Object_parcelle(parcelle_id, Source.parc_id);
+		parcelle_recep= new Object_parcelle(parcelle_id);
 	
 
 		

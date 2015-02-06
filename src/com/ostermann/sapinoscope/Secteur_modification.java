@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import com.ostermann.sapinoscope.Object_secteur.Source;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -75,7 +73,7 @@ public class Secteur_modification extends Activity
 		else // sinon SELECT
 		{
 			Log.i(log_name_activity,"->Modification d'un secteur");
-			secteur = new Object_secteur(intent_sect_modif.getIntExtra("sec_id", 1), Source.sec_id);
+			secteur = new Object_secteur(intent_sect_modif.getIntExtra("sec_id", 1));
 		}
 
 

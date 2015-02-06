@@ -15,6 +15,7 @@ public class Object_secteur {
 	private float angle;
 	private float coef_croissance;
 	private static String log_name_activity = "Object_Secteur";
+	private boolean zigzag;
 
 	public Object_secteur() {
 		id=0;
@@ -22,6 +23,7 @@ public class Object_secteur {
 		name="vide";
 		angle=0;
 		coef_croissance=1;
+		zigzag=false;
 	}
 
 	public Object_secteur(int id, int id_parc,String name,float angle, float coef_croissance) {
@@ -30,46 +32,35 @@ public class Object_secteur {
 		this.name=name;
 		this.angle=angle;
 		this.coef_croissance=coef_croissance;
-	}
-
-	enum Source{
-		sec_id("SEC_ID"),
-		parc_id("PARC_ID");
-		
-		private final String n;
-		
-		Source(String name){
-			n=name;
-		}
-		
-		public String toString()
-		{
-			return n;
-		}
+		zigzag=false;
 	}
 	
-	public Object_secteur(int id,Source S)
+	public Object_secteur(int id)
 	{
 		SQLiteDatabase db = Sapinoscope.getDataBaseHelper().getReadableDatabase();
 		try
 		{
 
-			String selectQuery = "SELECT * FROM SECTEUR WHERE "+S.toString()+"="+id;
+			String selectQuery = "SELECT * FROM SECTEUR WHERE SEC_ID="+id;
 			Cursor c = db.rawQuery(selectQuery, null);
 			int nb_row = c.getCount();
 			if(c.moveToFirst() && nb_row>0)
 			{
-				do{
-					this.setId(c.getInt(c.getColumnIndex("SEC_ID")));
-					this.setId_parc(c.getInt(c.getColumnIndex("PARC_ID")));
-					this.setName(c.getString(c.getColumnIndex("SEC_N")));
-					this.setAngle(c.getFloat(c.getColumnIndex("SEC_ANGLE")));
-					this.setCoef_croissance(c.getFloat(c.getColumnIndex("SEC_CROIS")));
-				}while(c.moveToNext());
+				this.setId(c.getInt(c.getColumnIndex("SEC_ID")));
+				this.setId_parc(c.getInt(c.getColumnIndex("PARC_ID")));
+				this.setName(c.getString(c.getColumnIndex("SEC_N")));
+				this.setAngle(c.getFloat(c.getColumnIndex("SEC_ANGLE")));
+				this.setCoef_croissance(c.getFloat(c.getColumnIndex("SEC_CROIS")));
+				try{
+            		setZigzag( c.getInt(c.getColumnIndex("SEC_ZIGZAG"))==0? false :true);
+            	}catch(Exception e)
+            	{
+            		setZigzag(false);
+            	}
 			}
 			else
 			{
-				Log.e(log_name_activity+"/Object_secteur", "Impossible nb_row:"+nb_row+" Colonne:"+S.toString()+" ID:"+id);
+				Log.e(log_name_activity+"/Object_secteur", "Impossible nb_row:"+nb_row+" ID:"+id);
 			}
 			Log.i(log_name_activity+"/Object_secteur", "Create : "+selectQuery);
 		}
@@ -119,6 +110,16 @@ public class Object_secteur {
 	public void setCoef_croissance(float coef_croissance) {
 		this.coef_croissance = coef_croissance;
 	}
+	
+	public void setZigzag(boolean b)
+	{
+		zigzag=b;
+	}
+	
+	public boolean getZigzag()
+	{
+		return zigzag;
+	}
 
 	public String toString() {
 		return this.name + " [" + this.coef_croissance + "]";
@@ -144,6 +145,12 @@ public class Object_secteur {
 	            	secteur.setName(c.getString(c.getColumnIndex("SEC_N")));
 	            	secteur.setAngle(Float.parseFloat(c.getString(c.getColumnIndex("SEC_ANGLE"))));
 	            	secteur.setCoef_croissance(Float.parseFloat(c.getString(c.getColumnIndex("SEC_CROIS"))));
+	            	try{
+	            		secteur.setZigzag( c.getInt(c.getColumnIndex("SEC_ZIGZAG"))==0? false :true);
+	            	}catch(Exception e)
+	            	{
+	            		secteur.setZigzag(false);
+	            	}
 	            	Log.i(log_name_activity+"/createListOfSecteur", "ID:"+secteur.getId()+" PARC_ID:"+secteur.getId_parc()+" NAME:"+secteur.getName());
 	            	liste.add(secteur);
 	            }while(c.moveToNext());

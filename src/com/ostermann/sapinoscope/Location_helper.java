@@ -172,9 +172,10 @@ public class Location_helper {
 		rechercheEnCours = false;
 	}
 	
-	public synchronized Location getLocation()
+	public synchronized Point2D getLocation()
 	{
-		return currentBestLocation;
+		return new Point2D(currentBestLocation.getLatitude(), 
+				currentBestLocation.getLongitude());
 	}
 	/*
 	public synchronized void setGoodLocationListerner(int metresTolere, GoodLocationListener listener)

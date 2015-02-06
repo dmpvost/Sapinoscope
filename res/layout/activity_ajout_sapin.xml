@@ -1,118 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/TableLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
 
-    <TextView
-        android:id="@+id/textView3"
+    <TableRow
+        android:id="@+id/tableRow6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/txt_addsap_secteur_titre"
-        android:layout_marginTop="24dp"
-        android:padding="0dp"
-        android:text="Variété" />
+        android:layout_gravity="fill_horizontal" >
 
-    <TextView
-        android:id="@+id/textView4"
+        <TextView
+            android:id="@+id/txt_addsap_parcelle_titre"
+            android:text="Medium Text"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/tableRow4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/txt_addsap_secteur_titre"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_weight="1"
+            android:text="SecteurName"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/tableRow1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/textView4"
+            android:text="Taille" />
+
+        <Spinner android:id="@+id/spin_addsap_taille" />
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/tableRow2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/spin_addsap_variete"
-        android:layout_alignParentLeft="true"
-        android:padding="2dp"
-        android:text="Taille" />
+        android:layout_gravity="fill_horizontal" >
 
-    <Spinner
-        android:id="@+id/spinn_addsap_taille"
+        <TextView
+            android:id="@+id/textView3"
+            android:text="Variété" />
+
+        <Spinner
+            android:id="@+id/spin_addsap_variete"
+            android:layout_marginTop="14dp" />
+    </TableRow>
+
+    <Space
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textView4"
-        android:layout_toLeftOf="@+id/spin_addsap_sap_identique" />
+        android:layout_gravity="fill_vertical" />
 
-    <Spinner
-        android:id="@+id/spin_addsap_variete"
+    <TableRow
+        android:id="@+id/tableRow5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textView3" />
+        android:layout_gravity="fill_horizontal" >
 
-    <Button
-        android:id="@+id/bt_addsap_sapin_existant"
-        style="?android:attr/buttonStyleSmall"
+        <TextView
+            android:id="@+id/textView5"
+            android:text="Nb Identiques" />
+
+        <Spinner android:id="@+id/spin_addsap_sap_identique" />
+    </TableRow>
+
+    <Space
+        android:layout_width="1dp"
+        android:layout_height="15dp" />
+
+    <TableRow
+        android:id="@+id/tableRow3"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/spinn_addsap_taille"
-        android:layout_marginTop="20dp"
-        android:layout_toLeftOf="@+id/spin_addsap_sap_identique"
-        android:minHeight="90dp"
-        android:text="Sapin Existant"
-        android:textSize="20sp" />
+        android:layout_height="wrap_content" >
 
-    <Button
-        android:id="@+id/bt_addsap_nouveau_sapin"
-        style="?android:attr/buttonStyleSmall"
+        <Button
+            android:id="@+id/bt_addsap_sapin_existant"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_marginTop="20dp"
+            android:minHeight="90dp"
+            android:text="Sapin Existant"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/bt_addsap_nouveau_sapin"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_gravity="center"
+            android:minHeight="50dp"
+            android:text="Nouveau plant" />
+
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/tableRow8"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/bt_addsap_souche"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:padding="3dp"
+            android:text="Souche" />
+
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/tableRow7"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/bt_addsap_sapin_existant"
-        android:layout_alignBottom="@+id/bt_addsap_sapin_existant"
-        android:layout_alignLeft="@+id/spin_addsap_sap_identique"
-        android:layout_alignParentRight="true"
-        android:minHeight="50dp"
-        android:text="Nouveau plant" />
+        android:layout_height="wrap_content" >
 
-    <Spinner
-        android:id="@+id/spin_addsap_sap_identique"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/bt_addsap_sapin_existant"
-        android:layout_alignLeft="@+id/textView5" />
+        <Button
+            android:id="@+id/bt_addsap_nouvelle_ligne"
+            android:layout_weight="1"
+            android:text="Nouvelle Ligne" />
 
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/spin_addsap_sap_identique"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="48dp"
-        android:text="Nb Identiques" />
+    </TableRow>
 
-    <Button
-        android:id="@+id/bt_addsap_nouvelle_ligne"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:text="Nouvelle Ligne" />
-
-    <Button
-        android:id="@+id/bt_addsap_souche"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/bt_addsap_nouvelle_ligne"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:text="Souche" />
-
-    <TextView
-        android:id="@+id/txt_addsap_secteur_titre"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:text="SecteurName"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <TextView
-        android:id="@+id/txt_addsap_parcelle_titre"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/txt_addsap_secteur_titre"
-        android:layout_alignParentTop="true"
-        android:text="Medium Text"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-</RelativeLayout>
+</TableLayout>

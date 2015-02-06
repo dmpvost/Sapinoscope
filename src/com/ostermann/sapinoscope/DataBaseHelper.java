@@ -26,7 +26,7 @@ public class DataBaseHelper extends SQLiteOpenHelper
       
     private static String DB_NAME = "Sapin_DB";
     
-    private static int DB_VERSION = 6;
+    private static int DB_VERSION = 7;
      
     private SQLiteDatabase myDataBase;
       
@@ -60,6 +60,7 @@ public class DataBaseHelper extends SQLiteOpenHelper
 	+ "SEC_N CHAR(32) NOT NULL  ,"
 	+ "SEC_ANGLE DECIMAL(10,2) NULL  ,"
 	+ "SEC_CROIS DECIMAL(10,2) NULL  ," 
+	+ "SEC_ZIGZAG INTEGER NULL,"
 	+ "FOREIGN KEY (PARC_ID)"
 	+ "REFERENCES PARCELLE (PARC_ID)) ;";
 	

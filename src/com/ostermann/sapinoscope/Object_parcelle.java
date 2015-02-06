@@ -30,37 +30,22 @@ public class Object_parcelle {
 		this.coef=coef;
 	}
 
-
-	enum Source{
-		parc_id("PARC_ID");
-		private final String n;
-		Source(String name){
-			n=name;
-		}
-		public String toString()
-		{
-			return n;
-		}
-	}
-
-	public Object_parcelle(int id, Source S)
+	public Object_parcelle(int id)
 	{
 		SQLiteDatabase db = Sapinoscope.getDataBaseHelper().getReadableDatabase();
 		try
 		{
-			String selectQuery = "SELECT * FROM PARCELLE WHERE "+S+"="+id;
+			String selectQuery = "SELECT * FROM PARCELLE WHERE PARC_ID="+id;
 			Log.i(log_name_activity+"/Object_parcelle(id,Source)",selectQuery);
 			Cursor c = db.rawQuery(selectQuery, null);
 			int nb_row = c.getCount();
 			if(c.moveToFirst() && nb_row>0)
 			{
-				do{
-					this.setId(Integer.parseInt(c.getString(c.getColumnIndex("PARC_ID"))));
-					this.setName(c.getString(c.getColumnIndex("PARC_N")));
-					this.setDescription(c.getString(c.getColumnIndex("PARC_DESC")));
-					this.setCoef(Float.parseFloat(c.getString(c.getColumnIndex("PARC_COEF"))));
-					Log.i(log_name_activity+"/Object_parcelle(id,Source)","ID:"+this.getId()+" nom:"+this.getName()+" desc:"+this.getDescription()+" coef:"+this.getCoef());
-				}while(c.moveToNext());
+				this.setId(Integer.parseInt(c.getString(c.getColumnIndex("PARC_ID"))));
+				this.setName(c.getString(c.getColumnIndex("PARC_N")));
+				this.setDescription(c.getString(c.getColumnIndex("PARC_DESC")));
+				this.setCoef(Float.parseFloat(c.getString(c.getColumnIndex("PARC_COEF"))));
+				Log.i(log_name_activity+"/Object_parcelle(id,Source)","ID:"+this.getId()+" nom:"+this.getName()+" desc:"+this.getDescription()+" coef:"+this.getCoef());
 			}
 			Log.i(log_name_activity+"/Object_parcelle(id,Source)", "Create : "+selectQuery);
 		}
