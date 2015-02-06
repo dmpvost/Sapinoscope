@@ -185,7 +185,7 @@ public class Secteur_modification extends Activity
 			if(c.moveToFirst() && nb_row>0)
 			{
 				value=c.getInt(0);
-				Log.i("DB requete","ID:"+value);
+				Log.i("DB requete","ID:"+value+" nb_row="+nb_row);
 			}
 		}
 		catch(SQLException e)
@@ -331,8 +331,8 @@ public class Secteur_modification extends Activity
 			int nb_row = c.getCount();
 			if(c.moveToFirst() && nb_row>0)
 			{
-				value=c.getInt(0);
-				Log.i("DB requete","ID:"+value);
+				value=c.getDouble(0);
+				Log.i("DB requete","ID:"+value+" nb_row="+nb_row);
 			}
 		}
 		catch(SQLException e)
