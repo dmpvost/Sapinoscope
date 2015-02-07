@@ -44,6 +44,7 @@ public class Ajout_sapin extends Activity {
 	private Object_variete varieteActuel;
 	private float tailleActuel;
 	private int nbIdentiqueActuel;
+	private int nbSapinLigne=0;
 	
 	boolean zigZag=true;
 		
@@ -58,13 +59,13 @@ public class Ajout_sapin extends Activity {
 		int secteurID  = intentAjoutSapin.getIntExtra("sect_id", -1);
 		int parcelleID = intentAjoutSapin.getIntExtra("parc_id", -1);
 		if(secteurID == -1 || parcelleID == -1)
-			Log.e("ajoutSapinAct","Impossible de récupérer les informations de l'intent, etat indetermine...");
+			Log.e("ajoutSapinAct","Impossible de rï¿½cupï¿½rer les informations de l'intent, etat indetermine...");
 		
 		secteurActuel = new Object_secteur(secteurID);
 		parcelleActuel = new Object_parcelle(parcelleID);
 		//zigZag=secteurActuel.getZigzag();
 		
-		Log.i("ajoutSapinAct","Ajout prévue pour le secteur "+ secteurID +" de la parcelle "+parcelleID);
+		Log.i("ajoutSapinAct","Ajout prï¿½vue pour le secteur "+ secteurID +" de la parcelle "+parcelleID);
 		
 		getMaxXYsapinPosFromDB(secteurID);
 		
@@ -272,7 +273,7 @@ public class Ajout_sapin extends Activity {
 		c = db.rawQuery(reqSelectID, null);
 		if (c.getCount() == 0)
 		{
-			throw new Exception("Erreur lors de l'insertion des coordonnées :"+position.x()+", "+position.y());
+			throw new Exception("Erreur lors de l'insertion des coordonnï¿½es :"+position.x()+", "+position.y());
 		}
 		else
 		{
@@ -312,11 +313,11 @@ public class Ajout_sapin extends Activity {
     	
     	if(positionX == 0 && positionY == 0)
     	{
-    		Log.i("ajoutSapinAct","pas encore de sapin enregistré pour cette parcelle, debut à 0,0");
+    		Log.i("ajoutSapinAct","pas encore de sapin enregistrï¿½ pour cette parcelle, debut ï¿½ 0,0");
     		return false;
     	}
     	else
-			Log.i("ajoutSapinAct","Sapins trouves pour ce secteur, debut à "+ positionX +","+positionY);
+			Log.i("ajoutSapinAct","Sapins trouves pour ce secteur, debut ï¿½ "+ positionX +","+positionY);
     	
     	return true;
     }
@@ -328,7 +329,7 @@ public class Ajout_sapin extends Activity {
 	    	Object_sapin sapin = new Object_sapin();
 	    	sapin.sec_id = secteurActuel.getId();
 	    	sapin.var_id = varieteActuel.getVar_id();
-	    	if(zigZag && positionY%2 == 1)//Les colonnes impaires sont décrémenté, les colonnes paire sont incrémenté
+	    	if(zigZag && positionY%2 == 1)//Les colonnes impaires sont dï¿½crï¿½mentï¿½, les colonnes paire sont incrï¿½mentï¿½
 	    		sapin.xLigne = positionX - i;
 	    	else
 	    		sapin.xLigne = positionX + i;
@@ -357,6 +358,7 @@ public class Ajout_sapin extends Activity {
     
     private void goToNextPositionX()
     {
+   	 	nbSapinLigne++;
     	if(zigZag && positionY%2 == 1)
 			setAndShowActuelPositionX(positionX-=nbIdentiqueActuel);
 		else
@@ -365,6 +367,7 @@ public class Ajout_sapin extends Activity {
     
     private void goToNextPositionY()
     {
+        nbSapinLigne=0;
     	setAndShowActuelPositionY(positionY+1);
     	if(zigZag)
     	{
@@ -379,20 +382,26 @@ public class Ajout_sapin extends Activity {
     private void setAndShowActuelPositionX(int x)
     {
     	 positionX = x;
+    	 setTextView_NbSapin_ligne(nbSapinLigne);
+        
     }
     
     private void setAndShowActuelPositionY(int y)
     {
+        // Affiche 0 lors d une nouvelle ligne
+        setTextView_NbSapin_ligne(nbSapinLigne);
     	positionY = y;
+   	 	TextView txtView_getY = (TextView) findViewById(R.id.txt_addsapin_getY);
+   	 	txtView_getY.setText("Ligne :"+y);
     }
     
     private void fillGui()
     {
     	TextView textViewParcelle = (TextView) findViewById(R.id.txt_addsap_parcelle_titre);
-    	textViewParcelle.setText(parcelleActuel.getName());
+    	textViewParcelle.setText("Parcelle : "+parcelleActuel.getName());
     	
     	TextView textViewSecteur = (TextView) findViewById(R.id.txt_addsap_secteur_titre);
-    	textViewSecteur.setText(secteurActuel.getName());
+    	textViewSecteur.setText("Secteur : "+secteurActuel.getName());
     	
     	Vector<Object_variete> varietes = Object_variete.createListOfAllVariete();
     	Spinner varieteSpinner = (Spinner) findViewById(R.id.spin_addsap_variete);
@@ -410,6 +419,7 @@ public class Ajout_sapin extends Activity {
 		nbIdentiqueSpinner.setAdapter(nbIdentiquesAdapter);
     }
     
+
     private void removeAllCoordForSecteur(int secteurID)
     {
     	String requette = "DELETE FROM SEC_COORD WHERE SEC_ID="+secteurID;
@@ -469,5 +479,12 @@ public class Ajout_sapin extends Activity {
     	{
     		insertPointSecteur(p,secteurActuel.getId());
     	}
+    }
+
+    private void setTextView_NbSapin_ligne(int x)
+    {
+   	 TextView txtView_getX = (TextView) findViewById(R.id.txt_addsapin_getX);
+   	 txtView_getX.setText("Sapin NÂ° :"+x);
+
     }
 }

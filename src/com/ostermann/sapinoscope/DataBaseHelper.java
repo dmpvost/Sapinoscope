@@ -60,7 +60,7 @@ public class DataBaseHelper extends SQLiteOpenHelper
 	+ "SEC_N CHAR(32) NOT NULL  ,"
 	+ "SEC_ANGLE DECIMAL(10,2) NULL  ,"
 	+ "SEC_CROIS DECIMAL(10,2) NULL  ," 
-	+ "SEC_ZIGZAG INTEGER NULL,"
+	+ "SEC_ZIGZAG INTEGER NULL,"  // 0:FALSE - 1:TRUE
 	+ "FOREIGN KEY (PARC_ID)"
 	+ "REFERENCES PARCELLE (PARC_ID)) ;";
 	
