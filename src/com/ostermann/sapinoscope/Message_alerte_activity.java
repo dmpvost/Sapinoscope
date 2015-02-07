@@ -21,10 +21,6 @@ public class Message_alerte_activity extends Activity
 
 	
 	private String log_name_activity ="MessageAlerte";
-	private int sect_id = 0;
-	private int parc_id = 0;
-	private String parc_name = "";
-	private String sect_name = "";
 	
 	Context contexte;
 	
@@ -40,10 +36,19 @@ public class Message_alerte_activity extends Activity
 		contexte = this;
 		
 		Intent intent_alerte = getIntent();
-		secteurID = intent_alerte.getIntExtra("sect_id", -1);
-		parcelleID = intent_alerte.getIntExtra("parc_id", -1);
+		secteurID = intent_alerte.getIntExtra("id", -1);
 		if(secteurID == -1 || parcelleID == -1)
-			Log.e("alerteActivity","Impossible de récupérer les informations, etat indetermine...");
+			Log.e("alerteActivity","Impossible de recuperer les informations, etat indetermine...");
+		
+		// Init
+		Object_secteur secteur = new Object_secteur(secteurID);
+		Object_parcelle parcelle= new Object_parcelle(secteur.getId_parc());
+		
+		TextView parcelle_txt = (TextView) findViewById(R.id.txt_messageAlerte_parcelleName_txt);
+		parcelle_txt.setText("Parcelle : "+parcelle.getName());
+
+		TextView secteur_txt = (TextView) findViewById(R.id.txt_messageAlerte_secteurName_txt);
+		secteur_txt.setText("Secteur :"+secteur.getName());
 		
 		Button okButton = (Button) findViewById(R.id.bt_messageAlerte_ok);
 		okButton.setOnClickListener(new OnClickListener() {
@@ -53,6 +58,9 @@ public class Message_alerte_activity extends Activity
 				Intent intentAjoutSapin = new Intent(contexte, Ajout_sapin.class);
 				intentAjoutSapin.putExtra("sect_id", secteurID);
 				intentAjoutSapin.putExtra("parc_id", parcelleID);
+				intentAjoutSapin.putExtra("new_secteur", 1);
+				intentAjoutSapin.putExtra("x", 0);
+				intentAjoutSapin.putExtra("y", 0);
 				startActivity(intentAjoutSapin);
 				finish();
 			}

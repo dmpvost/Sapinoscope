@@ -99,9 +99,8 @@ public class Secteur_activity extends Activity {
 			public void onItemClick(AdapterView<?> parent, View viewClicked, int position, long id) 
 			{
 				// Selection d'un SECTEUR -- GO to ADD SAPIN / put parc_id,sect_id
-				Intent intent_addsapin = new Intent(contexte, Message_alerte_activity.class);
-				intent_addsapin.putExtra("sect_id", tab_secteur.get(position).getId());
-				intent_addsapin.putExtra("parc_id", tab_secteur.get(position).getId_parc());
+				Intent intent_addsapin = new Intent(contexte, Choix_depart_sapin.class);
+				intent_addsapin.putExtra("id", tab_secteur.get(position).getId());
 				Log.i(log_name_activity+"/secteur_ClickCallBack","INTENT SET : PARC_ID:"+tab_secteur.get(position).getId_parc()+" SECT_N:"+tab_secteur.get(position).getId());
 				startActivity(intent_addsapin);
 			}

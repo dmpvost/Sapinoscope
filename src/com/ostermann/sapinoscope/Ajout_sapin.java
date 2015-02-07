@@ -60,16 +60,22 @@ public class Ajout_sapin extends Activity {
 		
 		Intent intentAjoutSapin = getIntent();
 		int secteurID  = intentAjoutSapin.getIntExtra("sect_id", -1);
+<<<<<<< Updated upstream
 		int parcelleID = intentAjoutSapin.getIntExtra("parc_id", -1);
 		
 		if(secteurID == -1 || parcelleID == -1)
 			Log.e("ajoutSapinAct","Impossible de r�cup�rer les informations de l'intent, etat indetermine...");
+=======
+		
+		if(secteurID == -1 )
+			Log.e("ajoutSapinAct","Impossible de recuperer les informations de l'intent, etat indetermine...");
+>>>>>>> Stashed changes
 		
 		secteurActuel = new Object_secteur(secteurID);
-		parcelleActuel = new Object_parcelle(parcelleID);
+		parcelleActuel = new Object_parcelle(secteurActuel.getId_parc());
 		//zigZag=secteurActuel.getZigzag();
 		
-		Log.i("ajoutSapinAct","Ajout pr�vue pour le secteur "+ secteurID +" de la parcelle "+parcelleID);
+		Log.i("ajoutSapinAct","Ajout prevue pour le secteur "+ secteurID +" de la parcelle "+secteurActuel.getId_parc());
 		
 		int newSecteur =0;// intentAjoutSapin.getIntExtra("new_secteur", -1);//TODO CHANGER CA POUR QUE CA MARCHE
 		if(newSecteur == 0)

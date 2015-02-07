@@ -59,7 +59,7 @@ public class Secteur_modification extends Activity
 		// Reception INTENT
 		Intent intent_sect_modif = getIntent();
 		int sec_id = 	intent_sect_modif.getIntExtra("sec_id", -1);
-		int parc_id =  	intent_sect_modif.getIntExtra("parc_id", -1);
+		final int parc_id =  	intent_sect_modif.getIntExtra("parc_id", -1);
 		String name =  	intent_sect_modif.getStringExtra("name");
 		sect_add = 		intent_sect_modif.getIntExtra("add", -1); 		// bool = 1 : ADD  // 0 : update
 
@@ -171,11 +171,17 @@ public class Secteur_modification extends Activity
 						}
 					}
 				}
-				Intent intent_secteur_liste = new Intent(contexte, Secteur_activity.class);
+				
+				Intent intent_addsapin = new Intent(contexte, Message_alerte_activity.class);
+				intent_addsapin.putExtra("id", secteur.getId_parc());
+				Log.i(log_name_activity+"/onClick","INTENT SET : PARC_ID:"+secteur.getId());
+				startActivity(intent_addsapin);
+				
+				/*Intent intent_secteur_liste = new Intent(contexte, Secteur_activity.class);
 				intent_secteur_liste.putExtra("id", secteur.getId_parc());
 				Log.i(log_name_activity,"INTENT SET : PARC_ID:"+secteur.getId_parc()+" SECT_N:"+sect_name+"SECT_ID:"+secteur.getId());
 				startActivity(intent_secteur_liste);
-				finish();
+				finish();*/
 			}
 		});
 
@@ -570,6 +576,14 @@ public class Secteur_modification extends Activity
 			for (int i=0;i<spin_sect_crois.getCount();i++)
 			{				
 				//On check chaque item de la liste
+<<<<<<< Updated upstream
+=======
+				//Log.i(log_name_activity, "Index for i="+i+"   : "+index_croiss+"    coeff_croiss ="+coeff_croiss);
+
+				//String a = spin_sect_crois.getItemAtPosition(i).toString();
+				//a = a.substring(0, (a.length()-1));
+				//if ( (Float.parseFloat(a)/100) == coeff_croiss)
+>>>>>>> Stashed changes
 				if ( (Float.parseFloat(spin_sect_crois.getItemAtPosition(i).toString())) == coeff_croiss)
 				{
 					spin_sect_crois.setSelection(i);

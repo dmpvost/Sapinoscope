@@ -115,6 +115,7 @@ public class Object_sapin {
 		return sap_id;
 	}
 	
+	
 	public void saveInDb(boolean saveCoordId)
 	{
 		String requette;
@@ -209,5 +210,32 @@ if(saveCoordId)requette	+=" AND COORD_ID= 	'"+ coord_id +"'";
 			Log.e("ObjectSapin", "Sortie en erreur");
 		}
 		return liste;
+	}
+	
+	
+	
+	//**************************************************************************//	
+	public static int selectMaxNbSapins( String colonne_max, String col_contrainte, int id_where)
+	{
+		int value=0;
+
+		SQLiteDatabase db = Sapinoscope.getDataBaseHelper().getReadableDatabase();
+		try
+		{
+			String selectQuery = "SELECT MAX("+colonne_max+") FROM SAPIN WHERE "+col_contrainte+"="+id_where;
+			Log.i("requete",selectQuery);
+			Cursor c = db.rawQuery(selectQuery, null);
+			int nb_row = c.getCount();
+			if(c.moveToFirst() && nb_row>0)
+			{
+				value=c.getInt(0);
+				Log.i("DB requete","ID:"+value+" nb_row="+nb_row);
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return value;
 	}
 }
