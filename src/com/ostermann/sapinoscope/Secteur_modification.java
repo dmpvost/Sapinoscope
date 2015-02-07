@@ -20,6 +20,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -37,7 +38,9 @@ public class Secteur_modification extends Activity
 	private Spinner spin_sect_crois=null;
 	private Spinner spin_sect_gel=null;
 	private Spinner spin_sect_annee=null;
-
+	private CheckBox zigzag;
+	private int zigzag_value;
+	
 	private int sect_add;
 
 	protected void onCreate(Bundle savedInstanceState) 
@@ -51,7 +54,8 @@ public class Secteur_modification extends Activity
 		spin_sect_crois = (Spinner) findViewById(R.id.spinner_coef_croissance);
 		spin_sect_gel = (Spinner) findViewById(R.id.spinner_coef_gel);
 		spin_sect_annee = (Spinner) findViewById(R.id.spinner_annee);
-
+		zigzag = (CheckBox) findViewById(R.id.chek_secteur_modification_zigzag);
+		
 		// Reception INTENT
 		Intent intent_sect_modif = getIntent();
 		int sec_id = 	intent_sect_modif.getIntExtra("sec_id", -1);
@@ -92,6 +96,10 @@ public class Secteur_modification extends Activity
 		Select_spinner_coef_croissance();
 		Select_spinner_annee();
 		Select_spinner_coef_gel();
+		if ( secteur.getZigzag())
+			zigzag.setChecked(true);
+		else
+			zigzag.setChecked(false);
 
 		//---------------------------------------------------------
 		// INSERT UPDATE PARCELLE -- ON CLIC     (Bouton "VALIDER")
@@ -102,7 +110,11 @@ public class Secteur_modification extends Activity
 
 			public void onClick(View v) 
 			{
-
+				if ( zigzag.isChecked() )
+					zigzag_value=1;
+				else
+					zigzag_value=0;
+				
 				Log.i(log_name_activity, "Clic - VALIDER");
 				String sect_name = ed_sect_desc.getText().toString();
 				String spin_annee = spin_sect_annee.getSelectedItem().toString();
@@ -116,7 +128,7 @@ public class Secteur_modification extends Activity
 					SQLiteDatabase db = Sapinoscope.getDataBaseHelper().getWritableDatabase();
 					try
 					{
-						String req_secteur = "UPDATE SECTEUR SET SEC_N='"+sect_name+"' , SEC_CROIS='"+spin_crois+"' WHERE SEC_ID="+secteur.getId() ;
+						String req_secteur = "UPDATE SECTEUR SET SEC_N='"+sect_name+"' , SEC_CROIS='"+spin_crois+"' , SEC_ZIGZAG="+zigzag_value+" WHERE SEC_ID="+secteur.getId() ;
 						db.execSQL(req_secteur);
 						Log.i(log_name_activity, "req_secteur");
 					}
@@ -132,7 +144,7 @@ public class Secteur_modification extends Activity
 					SQLiteDatabase db = Sapinoscope.getDataBaseHelper().getWritableDatabase();
 					try
 					{
-						String req_secteur = "INSERT into SECTEUR (PARC_ID,SEC_N,SEC_ANGLE,SEC_CROIS)  VALUES ( "+secteur.getId_parc()+",'"+sect_name+"', 0 , "+spin_crois+" ) ;" ;
+						String req_secteur = "INSERT into SECTEUR (PARC_ID,SEC_N,SEC_ANGLE,SEC_CROIS,SEC_ZIGZAG)  VALUES ( "+secteur.getId_parc()+",'"+sect_name+"', 0 , "+spin_crois+","+zigzag_value+" ) ;" ;
 						db.execSQL(req_secteur);
 						Log.i(log_name_activity, "req_secteur");
 					}
@@ -175,7 +187,7 @@ public class Secteur_modification extends Activity
 			public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) 
 			{
 				// TODO Auto-generated method stub
-				Log.i("onItemSelected","Entrée dans la fonction onItemSelected spinner_annee");
+				Log.i("onItemSelected","Entree dans la fonction onItemSelected spinner_annee");
 				
 				if ( sect_add == -1)	
 				{
@@ -224,7 +236,7 @@ public class Secteur_modification extends Activity
 			public void onNothingSelected(AdapterView<?> arg0) 
 			{
 				// TODO Auto-generated method stub
-				Log.i("onNothingSelected","Entrée dans la fonction onNothingSelected spinner_annee");
+				Log.i("onNothingSelected","Entree dans la fonction onNothingSelected spinner_annee");
 			}
 		});
 		
@@ -236,7 +248,7 @@ public class Secteur_modification extends Activity
 			public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) 
 			{
 				// TODO Auto-generated method stub
-				Log.i("onItemSelected","Entrée dans la fonction onItemSelected spinner_gel");
+				Log.i("onItemSelected","Entree dans la fonction onItemSelected spinner_gel");
 
 				if ( sect_add == -1)	
 				{
@@ -273,7 +285,7 @@ public class Secteur_modification extends Activity
 			public void onNothingSelected(AdapterView<?> arg0) 
 			{
 				// TODO Auto-generated method stub
-				Log.i("onNothingSelected","Entrée dans la fonction onNothingSelected spinner_gel");
+				Log.i("onNothingSelected","Entree dans la fonction onNothingSelected spinner_gel");
 			}
 		});
 
@@ -285,7 +297,7 @@ public class Secteur_modification extends Activity
 			public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) 
 			{
 				// TODO Auto-generated method stub
-				Log.i("onItemSelected","Entrée dans la fonction onItemSelected spinner_croissance");
+				Log.i("onItemSelected","Entree dans la fonction onItemSelected spinner_croissance");
 
 				if ( sect_add == -1)	
 				{
@@ -320,7 +332,7 @@ public class Secteur_modification extends Activity
 			public void onNothingSelected(AdapterView<?> arg0) 
 			{
 				// TODO Auto-generated method stub
-				Log.i("onNothingSelected","Entrée dans la fonction onNothingSelected spinner_gel");
+				Log.i("onNothingSelected","Entree dans la fonction onNothingSelected spinner_gel");
 			}
 		});
 	}
@@ -353,7 +365,7 @@ public class Secteur_modification extends Activity
 	}
 
 	//*********************************************************************************
-	//Retourne vrai si la ligne de l'année sélectionnee existe dans la table
+	//Retourne vrai si la ligne de l'annee selectionnee existe dans la table
 	public boolean Retourne_si_annee_deja_existante(int annee_voulue)
 			{
 				float value=0;
@@ -530,6 +542,17 @@ public class Secteur_modification extends Activity
 		if ( sect_add == -1)	
 		{
 			Log.e(log_name_activity, "Impossible d'initialiser, sect_add est introuvable");
+		}
+		else if (sect_add == 1 )
+		{
+			for (int i=0;i<spin_sect_crois.getCount();i++)
+			{				
+				if ( (Float.parseFloat(spin_sect_crois.getItemAtPosition(i).toString())) == 1)
+				{
+					spin_sect_crois.setSelection(i);
+					break;
+				}
+			}
 		}
 		else // bool = 0 : modification d'un secteur
 		{

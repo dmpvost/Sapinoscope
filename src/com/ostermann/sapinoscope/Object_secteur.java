@@ -23,7 +23,7 @@ public class Object_secteur {
 		name="vide";
 		angle=0;
 		coef_croissance=1;
-		zigzag=false;
+		zigzag=true;
 	}
 
 	public Object_secteur(int id, int id_parc,String name,float angle, float coef_croissance) {
@@ -32,7 +32,7 @@ public class Object_secteur {
 		this.name=name;
 		this.angle=angle;
 		this.coef_croissance=coef_croissance;
-		zigzag=false;
+		zigzag=true;
 	}
 	
 	public Object_secteur(int id)
@@ -55,7 +55,7 @@ public class Object_secteur {
             		setZigzag( c.getInt(c.getColumnIndex("SEC_ZIGZAG"))==0? false :true);
             	}catch(Exception e)
             	{
-            		setZigzag(false);
+            		setZigzag(true);
             	}
 			}
 			else
@@ -149,7 +149,7 @@ public class Object_secteur {
 	            		secteur.setZigzag( c.getInt(c.getColumnIndex("SEC_ZIGZAG"))==0? false :true);
 	            	}catch(Exception e)
 	            	{
-	            		secteur.setZigzag(false);
+	            		secteur.setZigzag(true);
 	            	}
 	            	Log.i(log_name_activity+"/createListOfSecteur", "ID:"+secteur.getId()+" PARC_ID:"+secteur.getId_parc()+" NAME:"+secteur.getName());
 	            	liste.add(secteur);
