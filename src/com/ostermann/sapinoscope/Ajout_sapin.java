@@ -294,22 +294,27 @@ public class Ajout_sapin extends Activity {
     	cursorY.moveToFirst();
     	positionY = cursorY.getInt(0);
     	
+    	String reqMinSelectX = "SELECT MIN(SAP_LIG) FROM SAPIN WHERE SEC_ID='"+idSecteur+"' AND SAP_COL='"+positionY+"'";
+    	Cursor cursorX = db.rawQuery(reqMinSelectX, null);
+    	cursorX.moveToFirst();
+    	int minX = cursorX.getInt(0);
+    	
+    	String reqMaxSelectX = "SELECT MAX(SAP_LIG) FROM SAPIN WHERE SEC_ID='"+idSecteur+"' AND SAP_COL='"+positionY+"'";
+    	cursorX = db.rawQuery(reqMaxSelectX, null);
+    	cursorX.moveToFirst();
+    	int maxX = cursorX.getInt(0);
+    	
     	if(zigZag && positionY%2 == 1) // Y est impaire et on est en mode zigzag, donc on decremente X 
     	{
-    		String reqSelectX = "SELECT MIN(SAP_LIG) FROM SAPIN WHERE SEC_ID='"+idSecteur+"' AND SAP_COL='"+positionY+"'";
-	    	Cursor cursorX = db.rawQuery(reqSelectX, null);
-	    	cursorX.moveToFirst();
-	    	int x = cursorX.getInt(0);
-	    	positionX = (x==0) ? x : x-1;
+	    	positionX = (minX==0) ? minX : minX-1;
     		
     	}else // Y est paire ou on est pas en mode zigzag, donc on incremente X
     	{
-    		String reqSelectX = "SELECT MAX(SAP_LIG) FROM SAPIN WHERE SEC_ID='"+idSecteur+"' AND SAP_COL='"+positionY+"'";
-	    	Cursor cursorX = db.rawQuery(reqSelectX, null);
-	    	cursorX.moveToFirst();
-	    	int x = cursorX.getInt(0);
-	    	positionX = (x==0) ? x : x+1;
+	    	positionX = (maxX==0) ? maxX : maxX+1;
     	}
+    	
+    	nbSapinLigne = maxX - minX;
+    	setTextView_NbSapin_ligne(nbSapinLigne);
     	
     	if(positionX == 0 && positionY == 0)
     	{
