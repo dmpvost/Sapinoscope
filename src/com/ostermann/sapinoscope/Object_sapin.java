@@ -8,9 +8,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.util.Log;
 
-
-
 public class Object_sapin {
+	
 	public enum Status_sapin {
 		INDEFINI(-1),
 		VIDE(0),
@@ -89,6 +88,26 @@ public class Object_sapin {
 		yColonne=y;
 		coord_id=-coordID;
 		coordonne=coord;
+	}
+	
+	Object_sapin(Cursor c)
+	{
+    	sap_id = c.getInt(c.getColumnIndex("SAP_ID"));
+    	var_id = c.getInt(c.getColumnIndex("VAR_ID"));
+    	sec_id = c.getInt(c.getColumnIndex("SEC_ID"));
+    	xLigne = c.getInt(c.getColumnIndex("SAP_LIG"));
+    	yColonne = c.getInt(c.getColumnIndex("SAP_COL"));
+    	try
+    	{
+    		coord_id = c.getInt(c.getColumnIndex("COORD_ID"));
+    		double lat = c.getDouble(c.getColumnIndex("COORD_LAT"));
+    		double lon = c.getDouble(c.getColumnIndex("COORD_LON"));
+    		coordonne = new Point2D(lat,lon);
+    	}
+    	catch(Exception e)
+    	{
+    		//Le sapin n'a pas de coordonne (COORD_ID==null)
+    	}
 	}
 	
 	public int getSapId()

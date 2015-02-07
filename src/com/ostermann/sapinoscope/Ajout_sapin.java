@@ -58,6 +58,7 @@ public class Ajout_sapin extends Activity {
 		Intent intentAjoutSapin = getIntent();
 		int secteurID  = intentAjoutSapin.getIntExtra("sect_id", -1);
 		int parcelleID = intentAjoutSapin.getIntExtra("parc_id", -1);
+		
 		if(secteurID == -1 || parcelleID == -1)
 			Log.e("ajoutSapinAct","Impossible de r�cup�rer les informations de l'intent, etat indetermine...");
 		
@@ -67,7 +68,15 @@ public class Ajout_sapin extends Activity {
 		
 		Log.i("ajoutSapinAct","Ajout pr�vue pour le secteur "+ secteurID +" de la parcelle "+parcelleID);
 		
-		getMaxXYsapinPosFromDB(secteurID);
+		int newSecteur = intentAjoutSapin.getIntExtra("new_secteur", -1);
+		if(newSecteur == 0)
+		{
+			int xDepart = intentAjoutSapin.getIntExtra("x", -1);
+			int yDepart = intentAjoutSapin.getIntExtra("y", -1);
+			
+		}
+		else
+			getMaxXYsapinPosFromDB(secteurID);
 		
 		fillGui();
 		
@@ -294,22 +303,27 @@ public class Ajout_sapin extends Activity {
     	cursorY.moveToFirst();
     	positionY = cursorY.getInt(0);
     	
+    	String reqMinSelectX = "SELECT MIN(SAP_LIG) FROM SAPIN WHERE SEC_ID='"+idSecteur+"' AND SAP_COL='"+positionY+"'";
+    	Cursor cursorX = db.rawQuery(reqMinSelectX, null);
+    	cursorX.moveToFirst();
+    	int minX = cursorX.getInt(0);
+    	
+    	String reqMaxSelectX = "SELECT MAX(SAP_LIG) FROM SAPIN WHERE SEC_ID='"+idSecteur+"' AND SAP_COL='"+positionY+"'";
+    	cursorX = db.rawQuery(reqMaxSelectX, null);
+    	cursorX.moveToFirst();
+    	int maxX = cursorX.getInt(0);
+    	
     	if(zigZag && positionY%2 == 1) // Y est impaire et on est en mode zigzag, donc on decremente X 
     	{
-    		String reqSelectX = "SELECT MIN(SAP_LIG) FROM SAPIN WHERE SEC_ID='"+idSecteur+"' AND SAP_COL='"+positionY+"'";
-	    	Cursor cursorX = db.rawQuery(reqSelectX, null);
-	    	cursorX.moveToFirst();
-	    	int x = cursorX.getInt(0);
-	    	positionX = (x==0) ? x : x-1;
+	    	positionX = (minX==0) ? minX : minX-1;
     		
     	}else // Y est paire ou on est pas en mode zigzag, donc on incremente X
     	{
-    		String reqSelectX = "SELECT MAX(SAP_LIG) FROM SAPIN WHERE SEC_ID='"+idSecteur+"' AND SAP_COL='"+positionY+"'";
-	    	Cursor cursorX = db.rawQuery(reqSelectX, null);
-	    	cursorX.moveToFirst();
-	    	int x = cursorX.getInt(0);
-	    	positionX = (x==0) ? x : x+1;
+	    	positionX = (maxX==0) ? maxX : maxX+1;
     	}
+    	
+    	nbSapinLigne = maxX - minX;
+    	setTextView_NbSapin_ligne(nbSapinLigne);
     	
     	if(positionX == 0 && positionY == 0)
     	{
@@ -347,8 +361,7 @@ public class Ajout_sapin extends Activity {
 			}
 	    	sapin.saveInDb(positionTrouve);
 	    	
-	    	int anneeActuelle = Calendar.getInstance().get(Calendar.YEAR);
-	    	Object_infoSapin infoSapin = new Object_infoSapin(sapin.getSapId(),anneeActuelle);
+	    	Object_infoSapin infoSapin = new Object_infoSapin(sapin.getSapId(), Calendar.getInstance().getTime());
 	    	infoSapin.status= status;
 	    	infoSapin.taille= tailleActuel;
 	    	
@@ -450,7 +463,7 @@ public class Ajout_sapin extends Activity {
     	int coordID = c.getInt(0);
     	
     	requette = "INSERT INTO SAPIN (	'SEC_ID',			'COORD_ID')"
-			   				+"VALUES(	'"+secteurID +"',	'"+coordID+")";
+			   				+"VALUES(	'"+secteurID +"',	'"+coordID+"')";
     	
     	db.execSQL(requette);
     }
