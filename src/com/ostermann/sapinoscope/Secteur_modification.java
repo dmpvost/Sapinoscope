@@ -169,38 +169,162 @@ public class Secteur_modification extends Activity
 			}
 		});
 
-
-		//Changement d'index dans le spinner ANNEE
-		spin_sect_annee.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) 
-			{
-				// Code a executer lors d'une selection d'item dans un spinner
-				
-			}
-			
-
-		});
 		
+		//********************************************* SPINNER ANNEE *********************************************
 		spin_sect_annee.setOnItemSelectedListener(new OnItemSelectedListener() {
 
 			@Override
-			public void onItemSelected(AdapterView<?> arg0, View arg1,
-					int arg2, long arg3) {
+			public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) 
+			{
 				// TODO Auto-generated method stub
+				Log.i("onItemSelected","Entrée dans la fonction onItemSelected spinner_annee");
 				
+				if ( sect_add == -1)	
+				{
+					Log.e(log_name_activity, "Impossible d'initialiser, sect_add est introuvable");
+				}
+				else if (sect_add == 1) //bool = 1 : nouveau secteur
+				{				
+					//On ne fait rien du tout
+				}
+				else // bool = 0 : modification d'un secteur
+				{
+					//on regarde dans INFO_SECTEUR si une ligne existe deja pour l'annee selectionnee
+					int annee_en_cours = Integer.parseInt(spin_sect_annee.getSelectedItem().toString());
+					boolean resultat = Retourne_si_annee_deja_existante(annee_en_cours);
+					
+					if(resultat == true)
+					{
+						Log.i(log_name_activity,"L'annee existe deja dans la BDD");
+						//On va recuperer le coeff de gel pour l'annee voulue et on l'affiche.
+						Select_spinner_coef_gel();
+					}
+					else 
+					{
+						Log.i(log_name_activity,"L'annee n'existe pas encore dans la BDD");
+						//On cree une nouvelle ligne dans la table INFO_SECTEUR de la BDD avec un coeff gel par defaut
+						SQLiteDatabase db = Sapinoscope.getDataBaseHelper().getWritableDatabase();
+						try
+						{
+							String req_secteur = "INSERT into INFO_SECTEUR (SEC_ID, ANN_ID, INF_SEC_COEF_GEL) ";
+							req_secteur += "VALUES (" + secteur.getId() + ",'" + annee_en_cours + "','1.0');";
+							db.execSQL(req_secteur);
+							Log.i(log_name_activity, req_secteur);
+						}
+						catch(SQLException e)
+						{
+							e.printStackTrace();
+						}
+						
+						//On va recuperer le coeff de gel pour l'annee voulue et on l'affiche.
+						Select_spinner_coef_gel();
+					}
+				}
 			}
 
 			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
+			public void onNothingSelected(AdapterView<?> arg0) 
+			{
 				// TODO Auto-generated method stub
-				
+				Log.i("onNothingSelected","Entrée dans la fonction onNothingSelected spinner_annee");
 			}
 		});
 		
+		
+		//********************************************* SPINNER COEFF GEL *********************************************
+		spin_sect_gel.setOnItemSelectedListener(new OnItemSelectedListener() {
 
+			@Override
+			public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) 
+			{
+				// TODO Auto-generated method stub
+				Log.i("onItemSelected","Entrée dans la fonction onItemSelected spinner_gel");
 
+				if ( sect_add == -1)	
+				{
+					Log.e(log_name_activity, "Impossible d'initialiser, sect_add est introuvable");
+				}
+				else if (sect_add == 1) //bool = 1 : nouveau secteur
+				{				
+					//On ne fait rien du tout
+				}
+				else // bool = 0 : modification d'un secteur
+				{
+					//On recupere l'annee en cours pour ensuite UPDATER son coeff gel
+					int annee_selectionnee = Integer.parseInt(spin_sect_annee.getSelectedItem().toString());
+					float nouveau_coeff_gel = Float.parseFloat(spin_sect_gel.getSelectedItem().toString());
+					
+					//On fait l'UPDATE
+					SQLiteDatabase db = Sapinoscope.getDataBaseHelper().getWritableDatabase();
+					try
+					{
+						//"UPDATE SECTEUR SET SEC_N='"+sect_name+"' , SEC_CROIS='"+spin_crois+"' WHERE SEC_ID="+secteur.getId() ;
+						String req_secteur = "UPDATE INFO_SECTEUR SET INF_SEC_COEF_GEL='" + nouveau_coeff_gel + "' ";
+						req_secteur += "WHERE ((ANN_ID="+annee_selectionnee +") AND (SEC_ID="+secteur.getId()+"))";
+						db.execSQL(req_secteur);
+						Log.i(log_name_activity, req_secteur);
+					}
+					catch(SQLException e)
+					{
+						e.printStackTrace();
+					}			
+				}
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) 
+			{
+				// TODO Auto-generated method stub
+				Log.i("onNothingSelected","Entrée dans la fonction onNothingSelected spinner_gel");
+			}
+		});
+
+		
+		//********************************************* SPINNER COEFF CROISSANCE *********************************************
+		spin_sect_crois.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) 
+			{
+				// TODO Auto-generated method stub
+				Log.i("onItemSelected","Entrée dans la fonction onItemSelected spinner_croissance");
+
+				if ( sect_add == -1)	
+				{
+					Log.e(log_name_activity, "Impossible d'initialiser, sect_add est introuvable");
+				}
+				else if (sect_add == 1) //bool = 1 : nouveau secteur
+				{				
+					//On ne fait rien du tout
+				}
+				else // bool = 0 : modification d'un secteur
+				{				
+					//On recupere le nouveau coeff de croissance du secteur
+					float nouveau_coeff_croissance = Float.parseFloat(spin_sect_crois.getSelectedItem().toString());
+					
+					//On fait l'UPDATE
+					SQLiteDatabase db = Sapinoscope.getDataBaseHelper().getWritableDatabase();
+					try
+					{
+						//"UPDATE SECTEUR SET SEC_N='"+sect_name+"' , SEC_CROIS='"+spin_crois+"' WHERE SEC_ID="+secteur.getId() ;
+						String req_secteur = "UPDATE SECTEUR SET SEC_CROIS='" + nouveau_coeff_croissance + "' WHERE SEC_ID="+secteur.getId();
+						db.execSQL(req_secteur);
+						Log.i(log_name_activity, req_secteur);
+					}
+					catch(SQLException e)
+					{
+						e.printStackTrace();
+					}			
+				}
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) 
+			{
+				// TODO Auto-generated method stub
+				Log.i("onNothingSelected","Entrée dans la fonction onNothingSelected spinner_gel");
+			}
+		});
 	}
 
 
@@ -230,6 +354,35 @@ public class Secteur_modification extends Activity
 		return value;
 	}
 
+	//*********************************************************************************
+	//Retourne vrai si la ligne de l'année sélectionnee existe dans la table
+	public boolean Retourne_si_annee_deja_existante(int annee_voulue)
+			{
+				float value=0;
+
+				SQLiteDatabase db = Sapinoscope.getDataBaseHelper().getReadableDatabase();
+				try
+				{
+					String selectQuery = "SELECT INF_SEC_COEF_GEL FROM INFO_SECTEUR WHERE ((ANN_ID="+annee_voulue +") AND (SEC_ID="+secteur.getId()+"))";
+					Log.i("requete",selectQuery);
+					Cursor c = db.rawQuery(selectQuery, null);
+					int nb_row = c.getCount();
+					if(nb_row>0)
+					{
+						return true;
+					}
+					else
+					{
+						return false;
+					}
+				}
+				catch(SQLException e)
+				{
+					e.printStackTrace();
+				}
+				return false;
+			}
+			
 	//*********************************************************************************
 	public void init_spinner_coef_croissance()
 	{
