@@ -26,7 +26,7 @@ public class DataBaseHelper extends SQLiteOpenHelper
       
     private static String DB_NAME = "Sapin_DB";
     
-    private static int DB_VERSION = 8;
+    private static int DB_VERSION = 10;
      
     private SQLiteDatabase myDataBase;
       
@@ -108,12 +108,10 @@ public class DataBaseHelper extends SQLiteOpenHelper
 	private static final String CREATE_TABLE_INFO_SAPIN =
 	  "CREATE TABLE IF NOT EXISTS INFO_SAPIN"
 	+ "(INF_SAP_ID INTEGER PRIMARY KEY AUTOINCREMENT  ,"
-	+ "ANN_ID DATE NOT NULL  ,"
 	+ "SAP_ID BIGINT(5) NOT NULL  ,"
+	+ "INF_SAP_DATE DATETIME NOT NULL  ,"
 	+ "INF_SAP_TAIL DECIMAL(10,2) NOT NULL  ," 
 	+ "INF_SAP_STATUS BIGINT(1) NOT NULL  ,"
-	+ "FOREIGN KEY (ANN_ID)"
-	+ "REFERENCES ANNEE (ANN_ID) ,"
 	+ "FOREIGN KEY (SAP_ID)"
 	+ "REFERENCES SAPIN (SAP_ID)) ;";
 	

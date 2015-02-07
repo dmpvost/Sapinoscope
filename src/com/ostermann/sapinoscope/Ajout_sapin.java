@@ -347,8 +347,7 @@ public class Ajout_sapin extends Activity {
 			}
 	    	sapin.saveInDb(positionTrouve);
 	    	
-	    	int anneeActuelle = Calendar.getInstance().get(Calendar.YEAR);
-	    	Object_infoSapin infoSapin = new Object_infoSapin(sapin.getSapId(),anneeActuelle);
+	    	Object_infoSapin infoSapin = new Object_infoSapin(sapin.getSapId(), Calendar.getInstance().getTime());
 	    	infoSapin.status= status;
 	    	infoSapin.taille= tailleActuel;
 	    	
@@ -450,7 +449,7 @@ public class Ajout_sapin extends Activity {
     	int coordID = c.getInt(0);
     	
     	requette = "INSERT INTO SAPIN (	'SEC_ID',			'COORD_ID')"
-			   				+"VALUES(	'"+secteurID +"',	'"+coordID+")";
+			   				+"VALUES(	'"+secteurID +"',	'"+coordID+"')";
     	
     	db.execSQL(requette);
     }
