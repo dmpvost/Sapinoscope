@@ -85,7 +85,7 @@ public class Varietes_Listview extends Activity {
 				btn_modif_infos.setEnabled(false);
 				btn_ajouter_variete.setEnabled(true);
 				
-				//On réinitialise les champs
+				//On reinitialise les champs
 				edittext_nom_var.setText("");
 				Select_spinner_pousse(1);
 			}
