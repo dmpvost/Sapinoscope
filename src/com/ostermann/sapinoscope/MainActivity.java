@@ -55,6 +55,17 @@ public class MainActivity extends Activity
 			}
 		});
 		
+		// Bouton modifier varietes
+			Button verietesBoutton = (Button) findViewById(R.id.button_varietes);
+			verietesBoutton.setOnClickListener(new OnClickListener() 
+			{
+				public void onClick(View v) 
+				{
+					Intent intent = new Intent(contexte, Varietes_Listview.class);
+					startActivity(intent);
+				}
+			});
+		
 		// Bouton Analyse (juste pour le test pour le moment)
 		/*Button analyseButton = (Button) findViewById(R.id.button_analyse);
 		analyseButton.setOnClickListener(new OnClickListener() 

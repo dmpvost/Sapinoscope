@@ -222,10 +222,10 @@ public class DataBaseHelper extends SQLiteOpenHelper
     public void init_db_value(SQLiteDatabase db)
     {
     	try{
-    		Log.i("DB-INIT", "Init des valeurs par défauts");
-        	db.execSQL("INSERT INTO VARIETE ('VAR_NOM','VAR_POUSSE') VALUES ('Nordmann',1)  ");
-        	db.execSQL("INSERT INTO VARIETE ('VAR_NOM','VAR_POUSSE') VALUES ('Nobilis',0.8)  ");
+    		Log.i("DB-INIT", "Init des valeurs par defauts");
         	db.execSQL("INSERT INTO VARIETE ('VAR_NOM','VAR_POUSSE') VALUES ('Epicea',1.3)  ");
+        	db.execSQL("INSERT INTO VARIETE ('VAR_NOM','VAR_POUSSE') VALUES ('Grandis',1.2)  ");
+        	db.execSQL("INSERT INTO VARIETE ('VAR_NOM','VAR_POUSSE') VALUES ('Nordmann',1)  ");
         	db.execSQL("INSERT INTO VARIETE ('VAR_NOM','VAR_POUSSE') VALUES ('Sapin Bleu',1)  ");
         	for (int i = 2015; i<30; i++) 
         	{

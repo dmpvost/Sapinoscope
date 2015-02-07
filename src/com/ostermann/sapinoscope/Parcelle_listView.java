@@ -139,7 +139,7 @@ public class Parcelle_listView extends Activity {
 				}
 			}
 		});
-		// Bouton négatif
+		// Bouton negatif
 		dialogBuilder.setNegativeButton("Non", new DialogInterface.OnClickListener() 
 		{
 			public void onClick(DialogInterface dialog, int which) 

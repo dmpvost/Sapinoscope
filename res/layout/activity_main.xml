@@ -47,6 +47,13 @@
             android:layout_margin="10dp"
             android:text="@string/synchronisation" />
 
+        <Button
+            android:id="@+id/button_varietes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="Modifier variétés" />
+
     </LinearLayout>
 
 </RelativeLayout>

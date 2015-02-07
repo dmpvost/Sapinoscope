@@ -57,6 +57,10 @@
             android:name=".Ajout_sapin3"
             android:label="@string/title_activity_ajout_sapin3" >
         </activity>
+        <activity
+            android:name=".Varietes_Listview"
+            android:label="@string/title_activity_varietes__listview" >
+        </activity>
     </application>
 
 </manifest>
