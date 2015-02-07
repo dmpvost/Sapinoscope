@@ -3,17 +3,18 @@ package com.ostermann.sapinoscope;
 
 import java.util.Arrays;
 import java.util.Stack;
+import java.util.Vector;
 
 public class GrahamScan {
     private Stack<Point2D> hull = new Stack<Point2D>();
 
-    public GrahamScan(Point2D[] pts) {
+    public GrahamScan(Vector<Point2D> pts) {
 
         // defensive copy
-        int N = pts.length;
+        int N = pts.size();
         Point2D[] points = new Point2D[N];
         for (int i = 0; i < N; i++)
-            points[i] = pts[i];
+            points[i] = pts.get(i);
 
         // preprocess so that points[0] has lowest y-coordinate; break ties by x-coordinate
         // points[0] is an extreme point of the convex hull
