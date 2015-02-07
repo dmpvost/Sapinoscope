@@ -31,8 +31,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignRight="@+id/txt_variete_nom"
-        android:entries="@array/Pousse_variete" />
+        android:layout_alignRight="@+id/txt_variete_nom" />
 
     <EditText
         android:id="@+id/txt_variete_nom"

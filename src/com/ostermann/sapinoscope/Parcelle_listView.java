@@ -59,6 +59,7 @@ public class Parcelle_listView extends Activity {
 		});
 	}
 	
+	
 	//**************************************************************************//
 	private void parcelle_listview(ListView liste_parcelle) 
 	{
@@ -97,6 +98,7 @@ public class Parcelle_listView extends Activity {
     	}
 	}
 
+	
 	//**************************************************************************//	
 	public boolean onContextItemSelected(MenuItem item) 
 	{
@@ -113,13 +115,12 @@ public class Parcelle_listView extends Activity {
 	}
 	
 	
-
-//**************************************************************************//
+	//**************************************************************************//
 	private void parcelle_delete(final int id,final String name)
 	{
 		dialogBuilder = new AlertDialog.Builder(this);
 		dialogBuilder.setTitle("ATTENTION");
-		dialogBuilder.setMessage("Voulez vous supprimer toutes les données de "+name+"?");
+		dialogBuilder.setMessage("Voulez vous supprimer toutes les donnees de "+name+"?");
 
 		// Bouton positif
 		dialogBuilder.setPositiveButton("Oui", new DialogInterface.OnClickListener() 
@@ -152,6 +153,7 @@ public class Parcelle_listView extends Activity {
 		popup_parcelle.show();
 	}
 	
+	
 	//**************************************************************************//
 	public void start_activity_parcelle_modification(int id, String name, int add_or_modify)
 	{
@@ -166,6 +168,5 @@ public class Parcelle_listView extends Activity {
 		startActivity(intent_parc_add);
 		finish();
 	}
-	
 	
 }

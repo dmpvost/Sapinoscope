@@ -46,14 +46,14 @@ public class Parcelle_modification extends Activity {
 		parcelle_id = intent_parc_modif.getIntExtra("id", 1);
 		final int parcelle_add = intent_parc_modif.getIntExtra("add", 1); 
 		
-		// on récupère le txte de l'activite si c'est une nouvelle parcelle
+		// on recupere le texte de l'activite si c'est une nouvelle parcelle
 		if ( parcelle_add == 1)
 		{
 			Log.i(log_name_activity,"->INSERT Parcelle");
 			String parcelle_name = intent_parc_modif.getStringExtra("name");
 			parcelle =  new Object_parcelle(0,parcelle_name , "", 1);
 		}
-		// on récupère le nom si c'est un UPDATE
+		// on recupere le nom si c'est un UPDATE
 		else 
 		{
 			Log.i(log_name_activity,"->UPDATE Parcelle");

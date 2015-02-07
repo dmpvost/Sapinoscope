@@ -522,7 +522,7 @@ public class Secteur_modification extends Activity
 			}
 		}
 	}
-
+	
 	//*********************************************************************************
 	public void Select_spinner_coef_croissance()
 	{
@@ -535,13 +535,18 @@ public class Secteur_modification extends Activity
 		{
 			//On recupere le coef de gel du secteur en fonction de l'annee
 			float coeff_croiss = secteur.getCoef_croissance();
+			
+			//si c'est un nouveau secteur, on choisi 1.0 par défaut
+			if(sect_add == -1) 
+			{ 
+				coeff_croiss=(float) 1.0; 
+			} 
+			
 			Log.i("DEBUG COEF","COEF:"+secteur.getCoef_croissance());
 
 			for (int i=0;i<spin_sect_crois.getCount();i++)
 			{				
 				//On check chaque item de la liste
-				//Log.i(log_name_activity, "Index for i="+i+"   : "+index_croiss+"    coeff_croiss ="+coeff_croiss);
-
 				if ( (Float.parseFloat(spin_sect_crois.getItemAtPosition(i).toString())) == coeff_croiss)
 				{
 					spin_sect_crois.setSelection(i);
