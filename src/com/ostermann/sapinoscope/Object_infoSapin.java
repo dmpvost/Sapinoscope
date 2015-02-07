@@ -10,8 +10,8 @@ import com.ostermann.sapinoscope.Object_sapin.Status_sapin;
 
 public class Object_infoSapin {
 	private int inf_sap_id;
-	private Date date;
 	private int sap_id;
+	public Date date;
 	public float taille;
 	public Status_sapin status;
 	
@@ -36,7 +36,7 @@ public class Object_infoSapin {
 			inf_sap_id = c.getInt(c.getColumnIndex("INF_SAP_ID"));
 			date = d;
 			sap_id = id_sapin;
-			taille = c.getInt(c.getColumnIndex("INF_SAP_TAIL"));
+			taille = c.getFloat(c.getColumnIndex("INF_SAP_TAIL"));
 			status = Status_sapin.fromInt(c.getInt(c.getColumnIndex("INF_SAP_STATUS")));
 		}
 		else// Nouvel object, on lui donne les valeurs par default
@@ -52,9 +52,9 @@ public class Object_infoSapin {
 	public Object_infoSapin(Cursor c) 
 	{
 		inf_sap_id = c.getInt(c.getColumnIndex("INF_SAP_ID"));
-		date = new Date(c.getLong(c.getColumnIndex("INF_SAP_ID")));
+		date = new Date(c.getLong(c.getColumnIndex("INF_SAP_DATE")));
 		sap_id = c.getInt(c.getColumnIndex("SAP_ID"));;
-		taille = c.getInt(c.getColumnIndex("INF_SAP_TAIL"));
+		taille = c.getFloat(c.getColumnIndex("INF_SAP_TAIL"));
 		status = Status_sapin.fromInt(c.getInt(c.getColumnIndex("INF_SAP_STATUS")));
 	}
 

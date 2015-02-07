@@ -57,6 +57,18 @@ public class Object_variete {
 		return var_nom+" ("+var_coef+")";
 	}
 	
+	public static String getVarieteName(int varieteID)
+	{
+		String selectQuery = "SELECT VAR_NOM FROM VARIETE WHERE VAR_ID="+varieteID;
+		SQLiteDatabase db = Sapinoscope.getDataBaseHelper().getReadableDatabase();
+		Cursor c = db.rawQuery(selectQuery, null);
+		if(c.moveToFirst())
+		{
+			return c.getString(0);
+		}
+		Log.e(log_name_activity, "Impossible de trouver le nom de la variete :+varieteID");
+		return new String();
+	}
 	
 	public static Vector<Object_variete> createListOfAllVariete()
 	{

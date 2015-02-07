@@ -24,7 +24,7 @@ public class Etat_sapin{
 								+ " WHERE SAPIN.SEC_ID="+secteurID
 								+ " AND SAPIN.SAP_LIG="+x
 								+ " AND SAPIN.SAP_COL="+y
-								+ " SORT BY INF_SAP_DATE";
+								+ " ORDER BY INF_SAP_DATE DESC";
 	
 		SQLiteDatabase db = Sapinoscope.getDataBaseHelper().getReadableDatabase();
 		
@@ -38,8 +38,9 @@ public class Etat_sapin{
 				Object_infoSapin info = new Object_infoSapin(c);
             	liste.add(new Etat_sapin(sapin, info));
             }while(c.moveToNext());
+			
+			return liste;
 		}
-		
-		return liste;
+		return null;
 	}
 }

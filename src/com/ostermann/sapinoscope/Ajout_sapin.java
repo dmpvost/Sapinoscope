@@ -1,5 +1,6 @@
 package com.ostermann.sapinoscope;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
@@ -10,6 +11,8 @@ import java.util.regex.Pattern;
 import com.ostermann.sapinoscope.Object_sapin.Status_sapin;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -68,12 +71,49 @@ public class Ajout_sapin extends Activity {
 		
 		Log.i("ajoutSapinAct","Ajout pr�vue pour le secteur "+ secteurID +" de la parcelle "+parcelleID);
 		
-		int newSecteur = intentAjoutSapin.getIntExtra("new_secteur", -1);
+		int newSecteur =0;// intentAjoutSapin.getIntExtra("new_secteur", -1);//TODO CHANGER CA POUR QUE CA MARCHE
 		if(newSecteur == 0)
 		{
-			int xDepart = intentAjoutSapin.getIntExtra("x", -1);
-			int yDepart = intentAjoutSapin.getIntExtra("y", -1);
+			int xDepart = 4;//intentAjoutSapin.getIntExtra("x", -1);//TODO CHANGER CA POUR QUE CA MARCHE
+			int yDepart = 0;//intentAjoutSapin.getIntExtra("y", -1);//TODO CHANGER CA POUR QUE CA MARCHE
 			
+			Log.i("ajoutSapinAct","Reprise de l'enregistrement a partir de x="+xDepart +" et y="+yDepart);
+			
+			Vector<Etat_sapin> etatSapin0 = Etat_sapin.createListOfInfoSapinFromXY(secteurID, xDepart, yDepart);
+			
+			int x1 = getNextStepX(xDepart, yDepart, secteurActuel.getZigzag()); 
+			Vector<Etat_sapin> etatSapin1 = Etat_sapin.createListOfInfoSapinFromXY(secteurID, x1, yDepart);
+			
+			int x2 = getNextStepX(x1, yDepart, secteurActuel.getZigzag()); 
+			Vector<Etat_sapin> etatSapin2 = Etat_sapin.createListOfInfoSapinFromXY(secteurID, x2, yDepart);
+			
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			// Add the buttons
+			builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+			           public void onClick(DialogInterface dialog, int id) {
+			               // User clicked OK button
+			           }
+			       });
+						
+			CharSequence[] infoOfLast3Sapins = new CharSequence[3];
+			
+			infoOfLast3Sapins[0] = etatSapin0!=null ? "Sapin de depart : "+(Object_variete.getVarieteName(etatSapin0.get(0).sapin.var_id) +" " +etatSapin0.get(0).infoSapin.taille +"m\n"
+														+new SimpleDateFormat("(dd/MM/yyyy)").format(etatSapin0.get(0).infoSapin.date)) : "";
+			infoOfLast3Sapins[1] = etatSapin1!=null ? "Sapin suivant 1 : "+(Object_variete.getVarieteName(etatSapin1.get(0).sapin.var_id) +" " +etatSapin1.get(0).infoSapin.taille +"m\n"
+														+new SimpleDateFormat("(dd/MM/yyyy)").format(etatSapin1.get(0).infoSapin.date)) : "";
+			infoOfLast3Sapins[2] = etatSapin2!=null ? "Sapin suivant 2 : "+(Object_variete.getVarieteName(etatSapin2.get(0).sapin.var_id) +" " +etatSapin2.get(0).infoSapin.taille +"m\n"
+														+new SimpleDateFormat("(dd/MM/yyyy)").format(etatSapin2.get(0).infoSapin.date)) : "";
+			
+			builder.setItems(infoOfLast3Sapins, null);
+
+			// Create the AlertDialog
+			AlertDialog dialog = builder.create();
+			dialog.show();
+			setAndShowActuelPositionX(xDepart);
+			setAndShowActuelPositionX(yDepart);
+			
+			nbSapinLigne = getNbSapinOnY(secteurID,xDepart,yDepart);
+			setTextView_NbSapin_ligne(nbSapinLigne);
 		}
 		else
 			getMaxXYsapinPosFromDB(secteurID);
@@ -291,6 +331,17 @@ public class Ajout_sapin extends Activity {
 		}
     }
     
+    private int getNbSapinOnY(int idSecteur, int x, int y)
+    {
+    	SQLiteDatabase db = Sapinoscope.getDataBaseHelper().getReadableDatabase();
+    	String reqMinSelectX = "SELECT MIN(SAP_LIG) FROM SAPIN WHERE SEC_ID='"+idSecteur+"' AND SAP_COL='"+positionY+"'";
+    	Cursor cursorX = db.rawQuery(reqMinSelectX, null);
+    	cursorX.moveToFirst();
+    	int minX = cursorX.getInt(0);
+    	
+    	return x-minX;
+    }
+    
     private boolean getMaxXYsapinPosFromDB(final int idSecteur)
     {
     	//On commence par recuperer Y pour savoir s'il faut prendre le maximum ou le minimum de X
@@ -367,6 +418,15 @@ public class Ajout_sapin extends Activity {
 	    	
 	    	infoSapin.saveInDb();
     	}
+    }
+    
+    // Donne quel serait le point suivant a entrer : 
+    public static int getNextStepX(int x, int y, boolean _zigzag)
+    {
+    	if(_zigzag && y%2 == 1)
+			return x-1;
+		else
+			return x+1;
     }
     
     private void goToNextPositionX()
