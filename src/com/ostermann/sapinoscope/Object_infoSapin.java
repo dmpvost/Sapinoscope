@@ -49,6 +49,15 @@ public class Object_infoSapin {
 		}
 	}
 	
+	public Object_infoSapin(Cursor c) 
+	{
+		inf_sap_id = c.getInt(c.getColumnIndex("INF_SAP_ID"));
+		date = new Date(c.getLong(c.getColumnIndex("INF_SAP_ID")));
+		sap_id = c.getInt(c.getColumnIndex("SAP_ID"));;
+		taille = c.getInt(c.getColumnIndex("INF_SAP_TAIL"));
+		status = Status_sapin.fromInt(c.getInt(c.getColumnIndex("INF_SAP_STATUS")));
+	}
+
 	public void saveInDb()
 	{
 		if(date == null || sap_id == -1 || taille == -1 || status == Status_sapin.INDEFINI)
