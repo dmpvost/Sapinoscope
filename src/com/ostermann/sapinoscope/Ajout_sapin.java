@@ -1,5 +1,6 @@
 package com.ostermann.sapinoscope;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 import java.util.Vector;
@@ -43,6 +44,7 @@ public class Ajout_sapin extends Activity {
 	private Object_variete varieteActuel;
 	private float tailleActuel;
 	private int nbIdentiqueActuel;
+	private int nbSapinLigne=0;
 	
 	boolean zigZag=true;
 		
@@ -57,13 +59,13 @@ public class Ajout_sapin extends Activity {
 		int secteurID  = intentAjoutSapin.getIntExtra("sect_id", -1);
 		int parcelleID = intentAjoutSapin.getIntExtra("parc_id", -1);
 		if(secteurID == -1 || parcelleID == -1)
-			Log.e("ajoutSapinAct","Impossible de récupérer les informations de l'intent, etat indetermine...");
+			Log.e("ajoutSapinAct","Impossible de rï¿½cupï¿½rer les informations de l'intent, etat indetermine...");
 		
 		secteurActuel = new Object_secteur(secteurID);
 		parcelleActuel = new Object_parcelle(parcelleID);
 		//zigZag=secteurActuel.getZigzag();
 		
-		Log.i("ajoutSapinAct","Ajout prévue pour le secteur "+ secteurID +" de la parcelle "+parcelleID);
+		Log.i("ajoutSapinAct","Ajout prï¿½vue pour le secteur "+ secteurID +" de la parcelle "+parcelleID);
 		
 		getMaxXYsapinPosFromDB(secteurID);
 		
@@ -140,9 +142,7 @@ public class Ajout_sapin extends Activity {
 		{
 			@Override
 			public void onClick(View v) {
-				positionY++;
-				if(!zigZag)
-					positionX=0;
+				goToNextPositionY();
 			}
 		});
 		
@@ -167,6 +167,40 @@ public class Ajout_sapin extends Activity {
 		});
 	}
 	
+	protected void onPause()
+	{
+		super.onPause();
+		Sapinoscope.getLocationHelper().stopRecherche();
+	}
+	
+	protected void onStop()
+	{
+		super.onStop();
+		Sapinoscope.getLocationHelper().stopRecherche();
+		setPositionsSecteur();
+	}
+	
+	protected void onResume()
+	{
+		super.onResume();
+		Sapinoscope.getLocationHelper().startRecherche();
+	}
+	
+	protected void onStart()
+	{
+		super.onStart();
+		Sapinoscope.getLocationHelper().startRecherche();
+	}
+	
+	protected void onDestroy()
+	{
+		super.onStart();
+		Sapinoscope.getLocationHelper().stopRecherche();
+		setPositionsSecteur();
+	}
+	
+	
+	
 	private void tryDrawing(SurfaceHolder holder) {
         Log.i("Draw", "Trying to draw...");
 
@@ -186,13 +220,13 @@ public class Ajout_sapin extends Activity {
 		Random random = new Random();
 		
 		int N = 50;
-		Point2D[] points = new Point2D[N];
+		Vector<Point2D> points = new Vector<Point2D>(N);
 		
 		for(int i=0;i<N;i++)
 		{
 			int x = random.nextInt(canvas.getWidth());
 			int y = random.nextInt(canvas.getHeight());
-			points[i] = new Point2D(x, y);
+			points.add(new Point2D(x, y));
 			canvas.drawCircle(x, y, 10, paint);
 		}
 		GrahamScan graham = new GrahamScan(points);
@@ -239,7 +273,7 @@ public class Ajout_sapin extends Activity {
 		c = db.rawQuery(reqSelectID, null);
 		if (c.getCount() == 0)
 		{
-			throw new Exception("Erreur lors de l'insertion des coordonnées :"+position.x()+", "+position.y());
+			throw new Exception("Erreur lors de l'insertion des coordonnï¿½es :"+position.x()+", "+position.y());
 		}
 		else
 		{
@@ -279,11 +313,11 @@ public class Ajout_sapin extends Activity {
     	
     	if(positionX == 0 && positionY == 0)
     	{
-    		Log.i("ajoutSapinAct","pas encore de sapin enregistré pour cette parcelle, debut à 0,0");
+    		Log.i("ajoutSapinAct","pas encore de sapin enregistrï¿½ pour cette parcelle, debut ï¿½ 0,0");
     		return false;
     	}
     	else
-			Log.i("ajoutSapinAct","Sapins trouves pour ce secteur, debut à "+ positionX +","+positionY);
+			Log.i("ajoutSapinAct","Sapins trouves pour ce secteur, debut ï¿½ "+ positionX +","+positionY);
     	
     	return true;
     }
@@ -294,9 +328,8 @@ public class Ajout_sapin extends Activity {
     	{
 	    	Object_sapin sapin = new Object_sapin();
 	    	sapin.sec_id = secteurActuel.getId();
-	    	sapin.status = status;
 	    	sapin.var_id = varieteActuel.getVar_id();
-	    	if(zigZag && positionY%2 == 1)//Les colonnes impaires sont décrémenté, les colonnes paire sont incrémenté
+	    	if(zigZag && positionY%2 == 1)//Les colonnes impaires sont dï¿½crï¿½mentï¿½, les colonnes paire sont incrï¿½mentï¿½
 	    		sapin.xLigne = positionX - i;
 	    	else
 	    		sapin.xLigne = positionX + i;
@@ -313,34 +346,62 @@ public class Ajout_sapin extends Activity {
 				Log.w("ajoutSapinAct", "Impossible de sauvegarder la position, sauvegarde du sapin sans position...");
 			}
 	    	sapin.saveInDb(positionTrouve);
+	    	
+	    	int anneeActuelle = Calendar.getInstance().get(Calendar.YEAR);
+	    	Object_infoSapin infoSapin = new Object_infoSapin(sapin.getSapId(),anneeActuelle);
+	    	infoSapin.status= status;
+	    	infoSapin.taille= tailleActuel;
+	    	
+	    	infoSapin.saveInDb();
     	}
     }
     
     private void goToNextPositionX()
     {
+   	 	nbSapinLigne++;
     	if(zigZag && positionY%2 == 1)
 			setAndShowActuelPositionX(positionX-=nbIdentiqueActuel);
 		else
 			setAndShowActuelPositionX(positionX+=nbIdentiqueActuel);
     }
     
+    private void goToNextPositionY()
+    {
+        nbSapinLigne=0;
+    	setAndShowActuelPositionY(positionY+1);
+    	if(zigZag)
+    	{
+    		if( positionY%2 == 0)
+    			setAndShowActuelPositionX(positionX+1);
+    		else
+    			setAndShowActuelPositionX(positionX-1);
+    	}else
+    		setAndShowActuelPositionX(0);
+    }
+    
     private void setAndShowActuelPositionX(int x)
     {
     	 positionX = x;
+    	 setTextView_NbSapin_ligne(nbSapinLigne);
+        
     }
     
     private void setAndShowActuelPositionY(int y)
     {
+        // Affiche 0 lors d une nouvelle ligne
+        setTextView_NbSapin_ligne(nbSapinLigne);
     	positionY = y;
+   	 	TextView txtView_getY = (TextView) findViewById(R.id.txt_addsapin_getY);
+   	 	txtView_getY.setText("Ligne :"+y);
     }
     
     private void fillGui()
     {
     	TextView textViewParcelle = (TextView) findViewById(R.id.txt_addsap_parcelle_titre);
-    	textViewParcelle.setText(parcelleActuel.getName());
+    	textViewParcelle.setText("Parcelle : "+parcelleActuel.getName());
     	
     	TextView textViewSecteur = (TextView) findViewById(R.id.txt_addsap_secteur_titre);
-    	textViewSecteur.setText(secteurActuel.getName());
+    	textViewSecteur.setText("Secteur : "+secteurActuel.getName());
     	
     	Vector<Object_variete> varietes = Object_variete.createListOfAllVariete();
     	Spinner varieteSpinner = (Spinner) findViewById(R.id.spin_addsap_variete);
@@ -356,5 +417,74 @@ public class Ajout_sapin extends Activity {
 		String[] nbIdentiques = getResources().getStringArray(R.array.nbIdentiques);
 		ArrayAdapter<String> nbIdentiquesAdapter = new ArrayAdapter<String>(this, R.layout.secteur_texte,nbIdentiques);
 		nbIdentiqueSpinner.setAdapter(nbIdentiquesAdapter);
+    }
+    
+
+    private void removeAllCoordForSecteur(int secteurID)
+    {
+    	String requette = "DELETE FROM SEC_COORD WHERE SEC_ID="+secteurID;
+    	
+    	SQLiteDatabase db = Sapinoscope.getDataBaseHelper().getWritableDatabase();
+    	db.execSQL(requette);
+    }
+    
+    private void insertPointSecteur(Point2D p, int secteurID)
+    {
+    	String requette = "SELECT COORD_ID FROM COORDONNEE WHERE COORD_LAT="+p.x()+" AND COORD_LON="+p.y();
+    	
+    	SQLiteDatabase db = Sapinoscope.getDataBaseHelper().getWritableDatabase();
+    	
+    	Cursor c = db.rawQuery(requette, null);
+    	
+    	if(c.getCount()==0)
+    	{
+    		Log.e("ajoutSapinAct","Impossible de retrouver le point : ("+p.x()+" "+p.y()+") dans la base!");
+    		return;
+    	}
+    	
+    	if(c.getCount()>1)
+    		Log.w("ajoutSapinAct","Le point : ("+p.x()+" "+p.y()+") est present 2 fois dans la base!");
+    	
+    	c.moveToFirst();
+    	
+    	int coordID = c.getInt(0);
+    	
+    	requette = "INSERT INTO SAPIN (	'SEC_ID',			'COORD_ID')"
+			   				+"VALUES(	'"+secteurID +"',	'"+coordID+")";
+    	
+    	db.execSQL(requette);
+    }
+    
+    private void setPositionsSecteur()
+    {
+    	Vector<Object_sapin> sapinList = Object_sapin.createListOfSapin(secteurActuel.getId());
+    	Vector<Point2D> positionsSapinConnus = new Vector<Point2D>();
+    	    	
+    	for(int i=0; i<sapinList.size(); ++i)
+    	{
+    		if(sapinList.get(i).coordonne != null)
+    			positionsSapinConnus.add(sapinList.get(i).coordonne);
+    	}
+    	
+    	if(positionsSapinConnus.size() <3)
+    	{
+    		Log.e("ajoutSapinAct","Pas assez de points de sapin pour definir un secteur, le secteur n'est pas defini.");
+    		return;
+    	}
+    		
+    	removeAllCoordForSecteur(secteurActuel.getId());
+    	
+    	GrahamScan graham = new GrahamScan(positionsSapinConnus);
+    	for(Point2D p : graham.hull())
+    	{
+    		insertPointSecteur(p,secteurActuel.getId());
+    	}
+    }
+
+    private void setTextView_NbSapin_ligne(int x)
+    {
+   	 TextView txtView_getX = (TextView) findViewById(R.id.txt_addsapin_getX);
+   	 txtView_getX.setText("Sapin NÂ° :"+x);
+
     }
 }

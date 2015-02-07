@@ -9,7 +9,9 @@ package com.ostermann.sapinoscope;
 
 public final class R {
     public static final class array {
-        public static final int variete_sapin=0x7f070000;
+        public static final int Pousse_variete=0x7f070002;
+        public static final int nbIdentiques=0x7f070001;
+        public static final int taille_predefini=0x7f070000;
     }
     public static final class attr {
     }
@@ -30,52 +32,71 @@ public final class R {
         public static final int pic_alerte=0x7f020001;
     }
     public static final class id {
-        public static final int action_settings=0x7f0a002d;
-        public static final int bt_add_parcelle=0x7f0a0014;
-        public static final int bt_add_secteur=0x7f0a001e;
-        public static final int bt_addsap_nouveau_sapin=0x7f0a0007;
-        public static final int bt_addsap_nouvelle_ligne=0x7f0a0009;
-        public static final int bt_addsap_sapin_existant=0x7f0a0006;
-        public static final int bt_addsap_souche=0x7f0a000a;
-        public static final int bt_messageAlerte_ok=0x7f0a0029;
-        public static final int bt_parcelle_modif_add=0x7f0a001c;
-        public static final int bt_secteur_modif_add=0x7f0a0024;
-        public static final int button1=0x7f0a0027;
-        public static final int buttonAjoutSapin=0x7f0a000c;
-        public static final int buttonNewLine=0x7f0a000d;
-        public static final int button_analyse=0x7f0a0011;
-        public static final int button_capture=0x7f0a0010;
-        public static final int button_syncrho=0x7f0a0012;
-        public static final int editText_add_parcelle=0x7f0a0015;
-        public static final int editText_add_secteur=0x7f0a0020;
-        public static final int editText_parcelle_modif_desc=0x7f0a0019;
-        public static final int editText_parcelle_modif_nom=0x7f0a0018;
-        public static final int editText_secteur_modif_nom=0x7f0a0021;
-        public static final int imageView1=0x7f0a0028;
-        public static final int listView_parcelle=0x7f0a0013;
-        public static final int listView_secteur=0x7f0a001d;
-        public static final int spin_addsap_sap_identique=0x7f0a0005;
-        public static final int spin_addsap_variete=0x7f0a0003;
-        public static final int spin_parcelle_modif=0x7f0a001b;
-        public static final int spinn_addsap_taille=0x7f0a0004;
-        public static final int spinner_annee=0x7f0a0026;
-        public static final int spinner_coef_croissance=0x7f0a0023;
-        public static final int spinner_coef_gel=0x7f0a0025;
-        public static final int surfaceView1=0x7f0a000e;
-        public static final int textView3=0x7f0a0000;
-        public static final int textView4=0x7f0a0002;
-        public static final int textView5=0x7f0a0008;
-        public static final int textView_parcelle_coef=0x7f0a001a;
-        public static final int textView_secteur_coef=0x7f0a0022;
-        public static final int text_sect_parcelle_select_name=0x7f0a000f;
-        public static final int txt_addsap_parcelle_titre=0x7f0a000b;
-        public static final int txt_addsap_secteur_titre=0x7f0a0001;
-        public static final int txt_messageAlerte_infoTxt=0x7f0a002a;
-        public static final int txt_messageAlerte_parcelleName_txt=0x7f0a002b;
-        public static final int txt_messageAlerte_secteurName_txt=0x7f0a002c;
-        public static final int txt_parcelle_modif_title=0x7f0a0016;
-        public static final int txt_secteur_modif_title=0x7f0a0017;
-        public static final int txt_secteur_select_parcelle_titre=0x7f0a001f;
+        public static final int TableLayout1=0x7f0a0000;
+        public static final int TextView01=0x7f0a0036;
+        public static final int action_settings=0x7f0a0040;
+        public static final int bt_add_parcelle=0x7f0a0020;
+        public static final int bt_add_secteur=0x7f0a002a;
+        public static final int bt_addsap_nouveau_sapin=0x7f0a0012;
+        public static final int bt_addsap_nouvelle_ligne=0x7f0a0016;
+        public static final int bt_addsap_sapin_existant=0x7f0a0011;
+        public static final int bt_addsap_souche=0x7f0a0014;
+        public static final int bt_messageAlerte_ok=0x7f0a003c;
+        public static final int bt_parcelle_modif_add=0x7f0a0028;
+        public static final int bt_secteur_modif_add=0x7f0a0030;
+        public static final int btn_variete_nouveau=0x7f0a0035;
+        public static final int buttonAjoutSapin=0x7f0a0017;
+        public static final int buttonNewLine=0x7f0a0018;
+        public static final int button_analyse=0x7f0a001c;
+        public static final int button_capture=0x7f0a001b;
+        public static final int button_modif_variete=0x7f0a003a;
+        public static final int button_syncrho=0x7f0a001d;
+        public static final int button_varietes=0x7f0a001e;
+        public static final int chek_secteur_modification_zigzag=0x7f0a0033;
+        public static final int editText_add_parcelle=0x7f0a0021;
+        public static final int editText_add_secteur=0x7f0a002c;
+        public static final int editText_parcelle_modif_desc=0x7f0a0025;
+        public static final int editText_parcelle_modif_nom=0x7f0a0024;
+        public static final int editText_secteur_modif_nom=0x7f0a002d;
+        public static final int imageView1=0x7f0a003b;
+        public static final int listView_parcelle=0x7f0a001f;
+        public static final int listView_secteur=0x7f0a0029;
+        public static final int listview_varietes=0x7f0a0034;
+        public static final int spin_addsap_sap_identique=0x7f0a000f;
+        public static final int spin_addsap_taille=0x7f0a0009;
+        public static final int spin_addsap_variete=0x7f0a000c;
+        public static final int spin_parcelle_modif=0x7f0a0027;
+        public static final int spinner_annee=0x7f0a0032;
+        public static final int spinner_coef_croissance=0x7f0a002f;
+        public static final int spinner_coef_gel=0x7f0a0031;
+        public static final int spinner_pousse=0x7f0a0037;
+        public static final int surfaceView1=0x7f0a0019;
+        public static final int tableRow1=0x7f0a0007;
+        public static final int tableRow2=0x7f0a000a;
+        public static final int tableRow3=0x7f0a0010;
+        public static final int tableRow4=0x7f0a0004;
+        public static final int tableRow5=0x7f0a000d;
+        public static final int tableRow6=0x7f0a0001;
+        public static final int tableRow7=0x7f0a0015;
+        public static final int tableRow8=0x7f0a0013;
+        public static final int textView1=0x7f0a0039;
+        public static final int textView3=0x7f0a000b;
+        public static final int textView4=0x7f0a0008;
+        public static final int textView5=0x7f0a000e;
+        public static final int textView_parcelle_coef=0x7f0a0026;
+        public static final int textView_secteur_coef=0x7f0a002e;
+        public static final int text_sect_parcelle_select_name=0x7f0a001a;
+        public static final int txt_addsap_parcelle_titre=0x7f0a0002;
+        public static final int txt_addsap_secteur_titre=0x7f0a0005;
+        public static final int txt_addsapin_getX=0x7f0a0003;
+        public static final int txt_addsapin_getY=0x7f0a0006;
+        public static final int txt_messageAlerte_infoTxt=0x7f0a003d;
+        public static final int txt_messageAlerte_parcelleName_txt=0x7f0a003e;
+        public static final int txt_messageAlerte_secteurName_txt=0x7f0a003f;
+        public static final int txt_parcelle_modif_title=0x7f0a0022;
+        public static final int txt_secteur_modif_title=0x7f0a0023;
+        public static final int txt_secteur_select_parcelle_titre=0x7f0a002b;
+        public static final int txt_variete_nom=0x7f0a0038;
     }
     public static final class layout {
         public static final int activity_ajout_sapin=0x7f030000;
@@ -85,9 +106,10 @@ public final class R {
         public static final int activity_parcelle_modification=0x7f030004;
         public static final int activity_secteur=0x7f030005;
         public static final int activity_secteur_modification=0x7f030006;
-        public static final int message_alerte=0x7f030007;
-        public static final int parcelle_texte=0x7f030008;
-        public static final int secteur_texte=0x7f030009;
+        public static final int activity_varietes_listview=0x7f030007;
+        public static final int message_alerte=0x7f030008;
+        public static final int parcelle_texte=0x7f030009;
+        public static final int secteur_texte=0x7f03000a;
     }
     public static final class menu {
         public static final int ajout_sapin=0x7f090000;
@@ -99,6 +121,7 @@ public final class R {
         public static final int parcelle_modification=0x7f090006;
         public static final int secteur_activity=0x7f090007;
         public static final int secteur_modification=0x7f090008;
+        public static final int varietes__listview=0x7f090009;
     }
     public static final class raw {
         public static final int script_generation=0x7f040000;
@@ -126,6 +149,7 @@ public final class R {
         public static final int title_activity_parcelle_modification=0x7f060013;
         public static final int title_activity_secteur_activity=0x7f06000c;
         public static final int title_activity_secteur_modification=0x7f060014;
+        public static final int title_activity_varietes__listview=0x7f060016;
     }
     public static final class style {
         /** 

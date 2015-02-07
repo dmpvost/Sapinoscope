@@ -143,24 +143,26 @@ public class Location_helper {
 	{		
 		Log.i("GPS", "Lancement de la recherche...");
 		// Register the listener with the Location Manager to receive location updates
-		boolean launched = false;
-		try{
-			locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-			launched = true;
-		}catch(Exception e)
+		if(!rechercheEnCours)
 		{
-			Log.i("GPS", "NETWORK_PROVIDER non disponible");
+			boolean launched = false;
+			try{
+				locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+				launched = true;
+			}catch(Exception e)
+			{
+				Log.i("GPS", "NETWORK_PROVIDER non disponible");
+			}
+			try{
+				locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+				launched = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);;
+			}catch(Exception e)
+			{
+				Log.i("GPS", "GPS_PROVIDER non disponible");
+			}
+			rechercheEnCours = launched;
 		}
-		try{
-			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-			launched = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);;
-		}catch(Exception e)
-		{
-			Log.i("GPS", "GPS_PROVIDER non disponible");
-		}
-		
-		rechercheEnCours = true;
-		return launched;
+		return rechercheEnCours;
 	}
 	
 	public synchronized void stopRecherche()

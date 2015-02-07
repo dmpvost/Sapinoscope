@@ -13,8 +13,19 @@
 
         <TextView
             android:id="@+id/txt_addsap_parcelle_titre"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
             android:text="Medium Text"
             android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/txt_addsapin_getX"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginLeft="50dp"
+            android:text="Sapin N°" />
+
     </TableRow>
 
     <TableRow
@@ -24,11 +35,18 @@
 
         <TextView
             android:id="@+id/txt_addsap_secteur_titre"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_gravity="center_horizontal"
             android:layout_weight="1"
             android:text="SecteurName"
             android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/txt_addsapin_getY"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:text="Ligne : " />
 
     </TableRow>
 
