@@ -154,14 +154,14 @@ public class Secteur_modification extends Activity
 					}
 
 					// GET LAST ID ADDED
-					int max_id = select_max_id("SECTEUR", "SEC_ID");
-					if (max_id != 0)
+					secteur.setId(select_max_id("SECTEUR", "SEC_ID"));
+					if (secteur.getId() != 0)
 					{
 						// INSERT INFO_SECTEUR
 						db = Sapinoscope.getDataBaseHelper().getWritableDatabase();
 						try
 						{
-							String req_info_seq = "INSERT into INFO_SECTEUR (SEC_ID,ANN_ID,INF_SEC_COEF_GEL) VALUES (  "+max_id+", "+spin_annee+", "+spin_gel+");";
+							String req_info_seq = "INSERT into INFO_SECTEUR (SEC_ID,ANN_ID,INF_SEC_COEF_GEL) VALUES (  "+secteur.getId()+", "+spin_annee+", "+spin_gel+");";
 							db.execSQL(req_info_seq);
 							Log.i(log_name_activity, req_info_seq);
 						}
@@ -173,9 +173,10 @@ public class Secteur_modification extends Activity
 				}
 				
 				Intent intent_addsapin = new Intent(contexte, Message_alerte_activity.class);
-				intent_addsapin.putExtra("id", secteur.getId_parc());
+				intent_addsapin.putExtra("id", secteur.getId());
 				Log.i(log_name_activity+"/onClick","INTENT SET : PARC_ID:"+secteur.getId());
 				startActivity(intent_addsapin);
+				finish();
 				
 				/*Intent intent_secteur_liste = new Intent(contexte, Secteur_activity.class);
 				intent_secteur_liste.putExtra("id", secteur.getId_parc());
@@ -565,7 +566,7 @@ public class Secteur_modification extends Activity
 			//On recupere le coef de gel du secteur en fonction de l'annee
 			float coeff_croiss = secteur.getCoef_croissance();
 			
-			//si c'est un nouveau secteur, on choisi 1.0 par défaut
+			//si c'est un nouveau secteur, on choisi 1.0 par dï¿½faut
 			if(sect_add == -1) 
 			{ 
 				coeff_croiss=(float) 1.0; 
@@ -576,14 +577,12 @@ public class Secteur_modification extends Activity
 			for (int i=0;i<spin_sect_crois.getCount();i++)
 			{				
 				//On check chaque item de la liste
-<<<<<<< Updated upstream
-=======
 				//Log.i(log_name_activity, "Index for i="+i+"   : "+index_croiss+"    coeff_croiss ="+coeff_croiss);
 
 				//String a = spin_sect_crois.getItemAtPosition(i).toString();
 				//a = a.substring(0, (a.length()-1));
 				//if ( (Float.parseFloat(a)/100) == coeff_croiss)
->>>>>>> Stashed changes
+
 				if ( (Float.parseFloat(spin_sect_crois.getItemAtPosition(i).toString())) == coeff_croiss)
 				{
 					spin_sect_crois.setSelection(i);

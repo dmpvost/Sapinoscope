@@ -57,7 +57,6 @@ public class Message_alerte_activity extends Activity
 			public void onClick(View v) {
 				Intent intentAjoutSapin = new Intent(contexte, Ajout_sapin.class);
 				intentAjoutSapin.putExtra("sect_id", secteurID);
-				intentAjoutSapin.putExtra("parc_id", parcelleID);
 				intentAjoutSapin.putExtra("new_secteur", 1);
 				intentAjoutSapin.putExtra("x", 0);
 				intentAjoutSapin.putExtra("y", 0);

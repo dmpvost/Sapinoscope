@@ -238,4 +238,30 @@ if(saveCoordId)requette	+=" AND COORD_ID= 	'"+ coord_id +"'";
 		}
 		return value;
 	}
+	//**************************************************************************//	
+	public static int countNbSapin( String colonne_max, String col_contrainte1, int id_where1, String col_contrainte2,int id_where2)
+	{
+		int value=0;
+
+		SQLiteDatabase db = Sapinoscope.getDataBaseHelper().getReadableDatabase();
+		try
+		{
+			String selectQuery = "SELECT COUNT("+colonne_max+") FROM SAPIN WHERE "+col_contrainte1+"="+id_where1 +" AND "+col_contrainte2+"="+id_where2;
+			Log.i("requete",selectQuery);
+			Cursor c = db.rawQuery(selectQuery, null);
+			int nb_row = c.getCount();
+			if(c.moveToFirst() && nb_row>0)
+			{
+				value=c.getInt(0);
+				Log.i("DB requete","ID:"+value+" nb_row="+nb_row);
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return value;
+	}
+	
+
 }

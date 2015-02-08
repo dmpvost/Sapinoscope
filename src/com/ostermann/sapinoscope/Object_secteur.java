@@ -122,7 +122,7 @@ public class Object_secteur {
 	}
 
 	public String toString() {
-		return this.name + " [" + this.coef_croissance + "]";
+		return this.name + "   > "+Object_sapin.countNbSapin("SEC_ID", "SEC_ID", id,"1",1)+" sapins";
 	}
 	
 	

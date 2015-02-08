@@ -60,16 +60,9 @@ public class Ajout_sapin extends Activity {
 		
 		Intent intentAjoutSapin = getIntent();
 		int secteurID  = intentAjoutSapin.getIntExtra("sect_id", -1);
-<<<<<<< Updated upstream
-		int parcelleID = intentAjoutSapin.getIntExtra("parc_id", -1);
-		
-		if(secteurID == -1 || parcelleID == -1)
-			Log.e("ajoutSapinAct","Impossible de r�cup�rer les informations de l'intent, etat indetermine...");
-=======
-		
 		if(secteurID == -1 )
 			Log.e("ajoutSapinAct","Impossible de recuperer les informations de l'intent, etat indetermine...");
->>>>>>> Stashed changes
+
 		
 		secteurActuel = new Object_secteur(secteurID);
 		parcelleActuel = new Object_parcelle(secteurActuel.getId_parc());
@@ -77,11 +70,11 @@ public class Ajout_sapin extends Activity {
 		
 		Log.i("ajoutSapinAct","Ajout prevue pour le secteur "+ secteurID +" de la parcelle "+secteurActuel.getId_parc());
 		
-		int newSecteur =0;// intentAjoutSapin.getIntExtra("new_secteur", -1);//TODO CHANGER CA POUR QUE CA MARCHE
+		int newSecteur = intentAjoutSapin.getIntExtra("new_secteur", -1);//TODO CHANGER CA POUR QUE CA MARCHE
 		if(newSecteur == 0)
 		{
-			int xDepart = 4;//intentAjoutSapin.getIntExtra("x", -1);//TODO CHANGER CA POUR QUE CA MARCHE
-			int yDepart = 0;//intentAjoutSapin.getIntExtra("y", -1);//TODO CHANGER CA POUR QUE CA MARCHE
+			int xDepart = intentAjoutSapin.getIntExtra("x", -1);//TODO CHANGER CA POUR QUE CA MARCHE
+			int yDepart = intentAjoutSapin.getIntExtra("y", -1);//TODO CHANGER CA POUR QUE CA MARCHE
 			
 			Log.i("ajoutSapinAct","Reprise de l'enregistrement a partir de x="+xDepart +" et y="+yDepart);
 			
@@ -105,9 +98,9 @@ public class Ajout_sapin extends Activity {
 			
 			infoOfLast3Sapins[0] = etatSapin0!=null ? "Sapin de depart : "+(Object_variete.getVarieteName(etatSapin0.get(0).sapin.var_id) +" " +etatSapin0.get(0).infoSapin.taille +"m\n"
 														+new SimpleDateFormat("(dd/MM/yyyy)").format(etatSapin0.get(0).infoSapin.date)) : "";
-			infoOfLast3Sapins[1] = etatSapin1!=null ? "Sapin suivant 1 : "+(Object_variete.getVarieteName(etatSapin1.get(0).sapin.var_id) +" " +etatSapin1.get(0).infoSapin.taille +"m\n"
+			infoOfLast3Sapins[1] = etatSapin1!=null ? "Sapin suivant 2 : "+(Object_variete.getVarieteName(etatSapin1.get(0).sapin.var_id) +" " +etatSapin1.get(0).infoSapin.taille +"m\n"
 														+new SimpleDateFormat("(dd/MM/yyyy)").format(etatSapin1.get(0).infoSapin.date)) : "";
-			infoOfLast3Sapins[2] = etatSapin2!=null ? "Sapin suivant 2 : "+(Object_variete.getVarieteName(etatSapin2.get(0).sapin.var_id) +" " +etatSapin2.get(0).infoSapin.taille +"m\n"
+			infoOfLast3Sapins[2] = etatSapin2!=null ? "Sapin suivant 3 : "+(Object_variete.getVarieteName(etatSapin2.get(0).sapin.var_id) +" " +etatSapin2.get(0).infoSapin.taille +"m\n"
 														+new SimpleDateFormat("(dd/MM/yyyy)").format(etatSapin2.get(0).infoSapin.date)) : "";
 			
 			builder.setItems(infoOfLast3Sapins, null);

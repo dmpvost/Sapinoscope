@@ -90,7 +90,7 @@ public class Object_parcelle {
 	}
 
 	public String toString() {
-		return this.name + " , " + this.description + " ["+getCountSecteur()+"]";
+		return this.name + " , " + this.description + " ("+getCountSecteur()+") sapins("+getCountSapin(this.id)+")";
 	}
 	
 	
@@ -117,6 +117,32 @@ public class Object_parcelle {
 		return value;
 			
 	}
+	
+	public int getCountSapin(int parc_id)
+	{
+		int value=0;
+		SQLiteDatabase db = Sapinoscope.getDataBaseHelper().getReadableDatabase();
+		try
+		{
+			String selectQuery = 	"SELECT COUNT(*) FROM SAPIN SA INNER JOIN SECTEUR SE ON SE.SEC_ID=SA.SEC_ID WHERE SE.PARC_ID="+parc_id;
+			Log.i("requette",selectQuery);
+			Cursor c = db.rawQuery(selectQuery, null);
+			int nb_row = c.getCount();
+			if(c.moveToFirst() && nb_row>0)
+			{
+				value=c.getInt(0);
+				Log.i("DB requette","ID:"+this.id);
+			}
+		}
+		catch(SQLException e)
+		{
+			e.printStackTrace();
+		}
+		return value;
+			
+	}
+	
+
 
 	public static Vector<Object_parcelle> createListOfAllParcelle()
 	{
@@ -150,5 +176,6 @@ public class Object_parcelle {
 		return liste;
 	}
 
+	
 
 }
