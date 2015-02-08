@@ -247,13 +247,13 @@ if(saveCoordId)requette	+=" AND COORD_ID= 	'"+ coord_id +"'";
 		try
 		{
 			String selectQuery = "SELECT COUNT("+colonne_max+") FROM SAPIN WHERE "+col_contrainte1+"="+id_where1 +" AND "+col_contrainte2+"="+id_where2;
-			Log.i("requete",selectQuery);
+			//Log.i("requete",selectQuery);
 			Cursor c = db.rawQuery(selectQuery, null);
 			int nb_row = c.getCount();
 			if(c.moveToFirst() && nb_row>0)
 			{
 				value=c.getInt(0);
-				Log.i("DB requete","ID:"+value+" nb_row="+nb_row);
+				//Log.i("DB requete","ID:"+value+" nb_row="+nb_row);
 			}
 		}
 		catch(SQLException e)

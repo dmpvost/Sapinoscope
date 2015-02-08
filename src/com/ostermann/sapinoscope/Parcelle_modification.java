@@ -81,7 +81,7 @@ public class Parcelle_modification extends Activity {
 					
 					if ( parcelle_add == 0 ) // Update
 					{
-						req = "UPDATE PARCELLE SET PARC_N='"+ed_parc_name.getText().toString()+"',PARC_DESC='"+ed_parc_desc.getText().toString()+"',PARC_COEF="+spin+" , WHERE PARC_ID="+parcelle_id;
+						req = "UPDATE PARCELLE SET PARC_N='"+ed_parc_name.getText().toString()+"',PARC_DESC='"+ed_parc_desc.getText().toString()+"',PARC_COEF="+spin+"  WHERE PARC_ID="+parcelle_id;
 						Log.i("DB-UPT-Parcelle", req);
 					}
 					else // INSERT
