@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources.NotFoundException;
 import android.database.Cursor;
@@ -26,11 +26,14 @@ public class DataBaseHelper extends SQLiteOpenHelper
       
     private static String DB_NAME = "Sapin_DB";
     
-    private static int DB_VERSION = 10;
+    private static int DB_VERSION = 11;
      
     private SQLiteDatabase myDataBase;
       
     private final Context myContext;
+    
+    private static final String PRAGMA =
+    		"pragma foreign_keys=on";
     
     private static final String CREATE_TABLE_EQUA =
       "CREATE TABLE IF NOT EXISTS EQUA"
@@ -48,10 +51,10 @@ public class DataBaseHelper extends SQLiteOpenHelper
     
     private static final String CREATE_TABLE_PARCELLE =
 	  "CREATE TABLE IF NOT EXISTS PARCELLE"
-	+ "( PARC_ID INTEGER PRIMARY KEY AUTOINCREMENT ,"
+	+ "( PARC_ID INTEGER PRIMARY KEY AUTOINCREMENT,"
 	+ "PARC_N CHAR(32) NOT NULL  ,"
 	+ "PARC_DESC CHAR(32) NULL  ,"
-	+ "PARC_COEF DECIMAL(10,2) NOT NULL )";
+	+ "PARC_COEF DECIMAL(10,2) NOT NULL );";
 	
 	private static final String CREATE_TABLE_SECTEUR =
 	  "CREATE TABLE IF NOT EXISTS SECTEUR"
@@ -62,7 +65,7 @@ public class DataBaseHelper extends SQLiteOpenHelper
 	+ "SEC_CROIS DECIMAL(10,2) NULL  ," 
 	+ "SEC_ZIGZAG INTEGER NULL,"  // 0:FALSE - 1:TRUE
 	+ "FOREIGN KEY (PARC_ID)"
-	+ "REFERENCES PARCELLE (PARC_ID)) ;";
+	+ "REFERENCES PARCELLE (PARC_ID) ON DELETE CASCADE) ;";
 	
 	private static final String CREATE_TABLE_VARIETE =
 	  "CREATE TABLE IF NOT EXISTS VARIETE"
@@ -87,7 +90,7 @@ public class DataBaseHelper extends SQLiteOpenHelper
 	+ "FOREIGN KEY (SEC_ID)"
 	+ "REFERENCES SECTEUR (SEC_ID) ,"
 	+ "FOREIGN KEY (ANN_ID)"
-	+ "REFERENCES ANNEE (ANN_ID)) ;";	  
+	+ "REFERENCES ANNEE (ANN_ID) ON DELETE CASCADE) ;";	  
 	
 	private static final String CREATE_TABLE_SAPIN =
 	  "CREATE TABLE IF NOT EXISTS SAPIN"
@@ -101,9 +104,9 @@ public class DataBaseHelper extends SQLiteOpenHelper
 	+ "FOREIGN KEY (VAR_ID)"
 	+ "REFERENCES VARIETE (VAR_ID) ,"
 	+ "FOREIGN KEY (SEC_ID)"
-	+ "REFERENCES SECTEUR (SEC_ID)) ;"
+	+ "REFERENCES SECTEUR (SEC_ID) ON DELETE CASCADE) ;"
 	+ "FOREIGN KEY (COORD_ID)"
-	+ "REFERENCES SECTEUR (COORD_ID)) ;";
+	+ "REFERENCES SECTEUR (COORD_ID) ON DELETE CASCADE) ;";
 	
 	private static final String CREATE_TABLE_INFO_SAPIN =
 	  "CREATE TABLE IF NOT EXISTS INFO_SAPIN"
@@ -113,7 +116,7 @@ public class DataBaseHelper extends SQLiteOpenHelper
 	+ "INF_SAP_TAIL DECIMAL(10,2) NOT NULL  ," 
 	+ "INF_SAP_STATUS BIGINT(1) NOT NULL  ,"
 	+ "FOREIGN KEY (SAP_ID)"
-	+ "REFERENCES SAPIN (SAP_ID)) ;";
+	+ "REFERENCES SAPIN (SAP_ID) ON DELETE CASCADE) ;";
 	
 	private static final String CREATE_TABLE_CROISSANCE =
 	  "CREATE TABLE IF NOT EXISTS CROISSANCE"
@@ -129,7 +132,7 @@ public class DataBaseHelper extends SQLiteOpenHelper
 	+ "FOREIGN KEY (COORD_ID) "
 	+ "REFERENCES COORDONNEE (COORD_ID) ,"
 	+ "FOREIGN KEY (SEC_ID)"
-	+ "REFERENCES SECTEUR (SEC_ID)) ;";
+	+ "REFERENCES SECTEUR (SEC_ID) ON DELETE CASCADE) ;";
     
     /**
       * Constructor
@@ -159,6 +162,7 @@ public class DataBaseHelper extends SQLiteOpenHelper
     	Log.i("DB","onCreate fonction");
     	try 
     	{
+    		db.execSQL(PRAGMA);
     		db.execSQL(CREATE_TABLE_EQUA);
     		db.execSQL(CREATE_TABLE_ANNEE);
     		db.execSQL(CREATE_TABLE_PARCELLE);
@@ -220,10 +224,11 @@ public class DataBaseHelper extends SQLiteOpenHelper
     {
     	try{
     		Log.i("DB-INIT", "Init des valeurs par defauts");
+        	db.execSQL("INSERT INTO VARIETE ('VAR_NOM','VAR_POUSSE') VALUES ('Nordmann',1.0)  ");
+        	db.execSQL("INSERT INTO VARIETE ('VAR_NOM','VAR_POUSSE') VALUES ('Nobilis',0.8)  ");
         	db.execSQL("INSERT INTO VARIETE ('VAR_NOM','VAR_POUSSE') VALUES ('Epicea',1.3)  ");
         	db.execSQL("INSERT INTO VARIETE ('VAR_NOM','VAR_POUSSE') VALUES ('Grandis',1.2)  ");
-        	db.execSQL("INSERT INTO VARIETE ('VAR_NOM','VAR_POUSSE') VALUES ('Nordmann',1)  ");
-        	db.execSQL("INSERT INTO VARIETE ('VAR_NOM','VAR_POUSSE') VALUES ('Sapin Bleu',1)  ");
+        	db.execSQL("INSERT INTO VARIETE ('VAR_NOM','VAR_POUSSE') VALUES ('Sapin Bleu',1.0)  ");
         	for (int i = 2015; i<30; i++) 
         	{
         		db.execSQL("INSERT INTO ANNEE ('ANN_ID') VALUES ("+i+")  ");
@@ -237,5 +242,6 @@ public class DataBaseHelper extends SQLiteOpenHelper
     	}
     }
 
+    
     
 }
