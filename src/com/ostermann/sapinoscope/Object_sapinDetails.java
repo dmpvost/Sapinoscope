@@ -16,7 +16,7 @@ public class Object_sapinDetails {
 	int colonne;
 	int status;
 	String variete;
-	int taille;
+	Float taille;
 	int numero;
 	
 	
@@ -27,7 +27,7 @@ public class Object_sapinDetails {
 		colonne=0;
 		status=0;
 		variete="null";
-		taille=0;
+		taille= null;
 		numero=0;
 	}
 
@@ -92,12 +92,12 @@ public class Object_sapinDetails {
 	}
 
 
-	public int getTaille() {
+	public float getTaille() {
 		return taille;
 	}
 
 
-	public void setTaille(int taille) {
+	public void setTaille(float taille) {
 		this.taille = taille;
 	}
 
@@ -129,11 +129,9 @@ public class Object_sapinDetails {
 	public static Vector<Object_sapinDetails> createListOfSapin_Y(int secteur_id, int y, int limit)
 	{
 		Vector<Object_sapinDetails> L_sapinD = new Vector<Object_sapinDetails>();
-
 		SQLiteDatabase db = Sapinoscope.getDataBaseHelper().getReadableDatabase();
 		try
 		{
-			 
 			String selectQuery =  " SELECT						"
 								+ "   S.SAP_ID 			AS ID 	"
 								+ "	 ,S.SAP_LIG 		AS X 	"
@@ -176,7 +174,7 @@ public class Object_sapinDetails {
 					sapin.setColonne(c.getInt(c.getColumnIndex("Y")));
 					sapin.setStatus(c.getInt(c.getColumnIndex("ST")));
 					sapin.setVariete(c.getString(c.getColumnIndex("VAR")));
-					sapin.setTaille(c.getInt(c.getColumnIndex("TAILLE")));
+					sapin.setTaille(c.getFloat(c.getColumnIndex("TAILLE")));
 					sapin.setNumero(i);
 					L_sapinD.add(sapin);
 					i++;
