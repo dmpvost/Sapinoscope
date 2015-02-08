@@ -72,8 +72,8 @@ public class Choix_depart_sapin extends Activity {
 			public void onClick(View v) {
 				Intent intent = new Intent(contexte, Ajout_sapin.class);
 				intent.putExtra("sect_id", secteur.getId());
-				intent.putExtra("x", (spin_ligneX.getSelectedItemPosition()+1));
-				intent.putExtra("y", (spin_colonneY.getSelectedItemPosition()+1));
+				intent.putExtra("x", (spin_ligneX.getSelectedItemPosition()));
+				intent.putExtra("y", (spin_colonneY.getSelectedItemPosition()));
 				intent.putExtra("new_secteur", 0); // 0 : secteur existant
 				Log.i("ChoixDepartSapin/buttonOK","INTENT SEND SEC_ID:"+secteur.getId()+
 						" x:"+(spin_ligneX.getSelectedItemPosition()+1)+

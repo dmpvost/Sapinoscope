@@ -413,7 +413,22 @@ public class Ajout_sapin extends Activity {
 	    	
 	    	Object_infoSapin infoSapin = new Object_infoSapin(sapin.getSapId(), Calendar.getInstance().getTime());
 	    	infoSapin.status= status;
-	    	infoSapin.taille= tailleActuel;
+	    	switch (status)
+	    	{
+	    		case NOUVEAU:
+		    		infoSapin.taille= 40;
+		    		break;
+	    		
+	    		case OK:
+	    			infoSapin.taille= tailleActuel;
+	    			break;
+	    			
+	    		case TOC:
+	    		case VIDE:
+	    		case INDEFINI:
+	    			infoSapin.taille = 0;
+	    			break;
+	    	}
 	    	
 	    	infoSapin.saveInDb();
     	}
