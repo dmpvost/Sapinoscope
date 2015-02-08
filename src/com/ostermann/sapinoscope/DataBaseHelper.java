@@ -214,7 +214,6 @@ public class DataBaseHelper extends SQLiteOpenHelper
     		e.printStackTrace();
     	}
     	onCreate(db);
-    	init_db_value(db);
     } 
     
     public void init_db_value(SQLiteDatabase db)
