@@ -10,7 +10,7 @@ import com.ostermann.sapinoscope.Object_sapin.Status_sapin;
 
 public class Object_infoSapin {
 	private int inf_sap_id;
-	private int sap_id;
+	public int sap_id;
 	public Date date;
 	public float taille;
 	public Status_sapin status;
@@ -20,7 +20,16 @@ public class Object_infoSapin {
 		return inf_sap_id;
 	}
 	
-	public Object_infoSapin(int id_sapin, Date d)
+	public Object_infoSapin(Date d)
+	{
+		inf_sap_id=-1;
+		date=d;
+		sap_id=-1;
+		taille=-1;
+		status = status.INDEFINI;
+	}
+	
+	public Object_infoSapin(int id_sapin, Date d,int e)
 	{
 		String requetteSelect = "SELECT * FROM INFO_SAPIN WHERE SAP_ID="+id_sapin+" AND INF_SAP_DATE="+d.getTime();
 		

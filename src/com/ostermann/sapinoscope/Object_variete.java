@@ -1,6 +1,9 @@
 package com.ostermann.sapinoscope;
 
+import java.util.Date;
 import java.util.Vector;
+
+import com.ostermann.sapinoscope.Object_sapin.Status_sapin;
 
 import android.database.Cursor;
 import android.database.SQLException;
@@ -26,6 +29,12 @@ public class Object_variete {
 		this.var_id = var_id;
 		this.var_nom = var_nom;
 		this.var_coef = var_coef;
+	}
+	public Object_variete(Cursor c) 
+	{
+		var_id = c.getInt(c.getColumnIndex("VAR_ID"));
+		var_nom = c.getString(c.getColumnIndex("VAR_NOM"));
+		var_coef = c.getFloat(c.getColumnIndex("VAR_POUSSE"));
 	}
 
 	public int getVar_id() {
@@ -55,6 +64,13 @@ public class Object_variete {
 	public String toString()
 	{
 		return var_nom+" ("+var_coef+")";
+	}
+	
+	public boolean equals(Object_variete other)
+	{
+		if(var_nom.toLowerCase().equals(other.var_nom.toLowerCase()))
+			return true;
+		return false;
 	}
 	
 	public static String getVarieteName(int varieteID)

@@ -390,6 +390,7 @@ public class Ajout_sapin extends Activity {
     {
     	for(int i=0; i<nbIdentique; ++i)
     	{
+	    	// sapin qui contient les infos que l'utilisateur souhaite enregistrer
 	    	Object_sapin sapin = new Object_sapin();
 	    	sapin.sec_id = secteurActuel.getId();
 	    	sapin.var_id = varieteActuel.getVar_id();
@@ -399,19 +400,8 @@ public class Ajout_sapin extends Activity {
 	    		sapin.xLigne = positionX + i;
 	    	sapin.yColonne = positionY;
 	    	
-	    	boolean positionTrouve=false;
-	    	try 
-	    	{
-	    		int idCoord = insertCoord(Sapinoscope.getLocationHelper().getLocation());
-	    		sapin.coord_id=idCoord;
-	    		positionTrouve=true;
-			} catch (Exception e) 
-	    	{
-				Log.w("ajoutSapinAct", "Impossible de sauvegarder la position, sauvegarde du sapin sans position...");
-			}
-	    	sapin.saveInDb(positionTrouve);
-	    	
-	    	Object_infoSapin infoSapin = new Object_infoSapin(sapin.getSapId(), Calendar.getInstance().getTime());
+	    	// infoSapin qui contient les infos que l'utilisateur souhaite enregistrer
+	    	Object_infoSapin infoSapin = new Object_infoSapin(Calendar.getInstance().getTime());
 	    	infoSapin.status= status;
 	    	switch (status)
 	    	{
@@ -430,6 +420,51 @@ public class Ajout_sapin extends Activity {
 	    			break;
 	    	}
 	    	
+	    	
+	    	Etat_sapin etatActuel = new Etat_sapin(sapin, infoSapin, varieteActuel);
+	    	
+	    	//On recupere les infos enregistrees dans la base sur cet emplacement :
+	    	Vector<Etat_sapin> precedentEregitrements = Etat_sapin.createListOfInfoSapinFromXY(secteurActuel.getId(), sapin.xLigne, sapin.yColonne);
+	    	
+	    	boolean informationsTrouve = false;
+	    	
+	    	//On prend le dernier etat sapin enregistre :
+	    	if(precedentEregitrements != null && precedentEregitrements.size()>0)
+	    	{
+		    	Etat_sapin dernierEtatSapinEregistre = precedentEregitrements.get(0);
+		    	
+		    	if(estUneEvolutionProbable(dernierEtatSapinEregistre, etatActuel))
+		    	{
+		    		// Le sapin que l'utilisateur souhaite enregistre est le meme que celui qui est deja en place, 
+		    		// on va donc reutiliser ce sapin, et n'ajouter que l'infoSapin dans la base
+		    		
+		    		infoSapin.sap_id = dernierEtatSapinEregistre.sapin.getSapId();
+		    		informationsTrouve =true;
+		    		
+		    		Log.i("ajoutSapinAct", "Utilisation d'un ancien sapin(id="+dernierEtatSapinEregistre.sapin.getSapId()+") a la position : "+sapin.xLigne+","+sapin.yColonne);
+		    	}
+	    	}
+	    	if (!informationsTrouve) 
+	    	{
+	    		// Il n'y a aucune information sur cet emplacement, ou
+	    		// Le sapin que l'utilisateur souhaite enregistre n'est pas le meme que celui qui est deja en place, 
+	    		// on va donc enregistrer un nouveau sapin et son premier infoSapin dans la base. 
+	    		// Ainsi que sa position GPS
+	    		
+	    		boolean positionTrouve=false;
+		    	try 
+		    	{
+		    		int idCoord = insertCoord(Sapinoscope.getLocationHelper().getLocation());
+		    		sapin.coord_id=idCoord;
+		    		positionTrouve=true;
+				} catch (Exception e) 
+		    	{
+					Log.w("ajoutSapinAct", "Impossible de sauvegarder la position, sauvegarde du sapin sans position...");
+				}
+		    	sapin.saveInDb(positionTrouve);// L'enregistrement dans la base du sapin, met a jour son id.
+		    	Log.i("ajoutSapinAct", "Ajout d'un nouveau sapin(id="+sapin.getSapId()+") a la position : "+sapin.xLigne+","+sapin.yColonne);
+		    	infoSapin.sap_id = sapin.getSapId();
+	    	}
 	    	infoSapin.saveInDb();
     	}
     }
@@ -573,5 +608,49 @@ public class Ajout_sapin extends Activity {
    	 TextView txtView_getX = (TextView) findViewById(R.id.txt_addsapin_getX);
    	 txtView_getX.setText("Sapin NÂ° :"+x);
 
+    }
+    
+    // Renvoi true si le sapin evolution pourrait etre la source apres quelque temps, utilise toutes les infos disponible, sauf l'id 
+    private boolean estUneEvolutionProbable(Etat_sapin source, Etat_sapin evolution)
+    {
+    	if(!source.variete.equals(evolution.variete))
+    		return false;
+    	if(source.sapin.xLigne != evolution.sapin.xLigne)
+    		return false;
+    	if(source.sapin.yColonne != evolution.sapin.yColonne)
+    		return false;
+    	
+    	if(source.infoSapin.status == Status_sapin.NOUVEAU || source.infoSapin.status == Status_sapin.OK)
+    		if(evolution.infoSapin.status == Status_sapin.OK || evolution.infoSapin.status == Status_sapin.TOC)
+    		{
+    			long msEntreDeuxMesures = evolution.infoSapin.date.getTime() - source.infoSapin.date.getTime();
+    			if(msEntreDeuxMesures < 0)// evolution doit etre apres la source
+    				return false;
+    			
+    			double jourEntreDeuxMesures = msEntreDeuxMesures/86400000.0f;// 86400000.0f = nb de ms dans une journée
+    			
+    			double elevationEntreDeuxMesures = evolution.infoSapin.taille - source.infoSapin.taille;
+    			/*
+    			 * TODO : test sur la taille dont un sapin peut reduire (taille)
+    			if( elevationEntreDeuxMesures < -0.50 )
+    				return false;
+    				*/
+    			
+    			// La taille doit etre stocke en cm pour que les calculs marche
+    			double elevationMoyenneEntreDeuxMesuresParCmParJour = elevationEntreDeuxMesures / jourEntreDeuxMesures;  
+    			
+    			// Etimation de Vincent : un sapin prend un maximum de 60cm/an :
+    			double elevationMaxParCmParAn = 60.0f;// 60.0f == 60.0 le f est la pour limiter les erreurs de calcul sur les flotants. google pour plus d'info
+    			double elevationMaxParCmParJour = elevationMaxParCmParAn / 365.0f;
+    			
+    			// Le sapin ne doit pas avoir grandi de plus de 60cm/an pour etre valide
+    			if( elevationMoyenneEntreDeuxMesuresParCmParJour > elevationMaxParCmParJour)
+    				return false;
+    			
+    			// Si aucun if jusqu'ici n'a retourne false, c'est que l'evolution est probablement celle de la source
+    			return true;
+    		}
+    	
+    	return false;
     }
 }

@@ -2,6 +2,8 @@ package com.ostermann.sapinoscope;
 
 import java.util.Vector;
 
+import com.ostermann.sapinoscope.Object_sapin.Status_sapin;
+
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -14,7 +16,7 @@ public class Object_sapinDetails {
 	int id;
 	int ligne;
 	int colonne;
-	int status;
+	Status_sapin status;
 	String variete;
 	Float taille;
 	int numero;
@@ -25,7 +27,7 @@ public class Object_sapinDetails {
 		id=0;
 		ligne=0;
 		colonne=0;
-		status=0;
+		status=Status_sapin.INDEFINI;
 		variete="null";
 		taille= null;
 		numero=0;
@@ -72,12 +74,12 @@ public class Object_sapinDetails {
 	}
 
 
-	public int getStatus() {
+	public Status_sapin getStatus() {
 		return status;
 	}
 
 
-	public void setStatus(int status) {
+	public void setStatus(Status_sapin status) {
 		this.status = status;
 	}
 
@@ -110,15 +112,15 @@ public class Object_sapinDetails {
 
 		
 		String s = "";
-		if( status == 0)
+		if( status == Status_sapin.INDEFINI || status == Status_sapin.VIDE)
 		{
 			s = numero+": Erreur "+status+" l:"+ligne+" c;"+colonne;
 		}
-		else if ( status == 1)
+		else if ( status == Status_sapin.NOUVEAU)
 		{
 			s = numero+": Jeune plant - "+variete;
 		}
-		else if ( status == 2)
+		else if ( status == Status_sapin.OK)
 		{
 			if( taille < 1)
 			{
@@ -133,7 +135,7 @@ public class Object_sapinDetails {
 			}
 			
 		}
-		else if (status ==3)
+		else if (status ==Status_sapin.TOC)
 		{
 			s = numero+": Souche";
 		}
@@ -190,7 +192,7 @@ public class Object_sapinDetails {
 					sapin.setId(c.getInt(c.getColumnIndex("ID")));
 					sapin.setLigne(c.getInt(c.getColumnIndex("X")));
 					sapin.setColonne(c.getInt(c.getColumnIndex("Y")));
-					sapin.setStatus(c.getInt(c.getColumnIndex("ST")));
+					sapin.setStatus(Status_sapin.fromInt(c.getInt(c.getColumnIndex("ST"))));
 					sapin.setVariete(c.getString(c.getColumnIndex("VAR")));
 					sapin.setTaille(c.getFloat(c.getColumnIndex("TAILLE")));
 					sapin.setNumero(i);
