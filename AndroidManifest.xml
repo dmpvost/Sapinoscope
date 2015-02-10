@@ -18,10 +18,11 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name" 
-            android:screenOrientation="portrait">
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -74,6 +75,10 @@
             android:name=".Choix_depart_sapin"
             android:label="@string/title_activity_choix_depart_sapin"
             android:screenOrientation="portrait" >
+        </activity>
+        <activity
+            android:name=".Graham_graphe"
+            android:label="@string/title_activity_graham_graphe" >
         </activity>
     </application>
 

@@ -167,7 +167,8 @@ public class MainActivity extends Activity
 			@Override
 			public void onClick(View v) 
 			{
-
+				Intent intent = new Intent(contexte, Graham_graphe.class);
+				startActivity(intent);
 			}
 		});
 	}

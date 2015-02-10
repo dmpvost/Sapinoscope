@@ -105,6 +105,10 @@ public class Object_sapinDetails {
 	@Override
 	public String toString() {
 		
+		float hight=taille;
+		String unite="m";
+
+		
 		String s = "";
 		if( status == 0)
 		{
@@ -116,12 +120,24 @@ public class Object_sapinDetails {
 		}
 		else if ( status == 2)
 		{
-			s = numero+": "+taille+"m "+variete;
+			if( taille < 1)
+			{
+				hight = taille * 100  ;
+				int a = (int) hight ;
+				unite="cm";
+				s = numero+":   "+a+" "+unite+" "+variete;
+			}
+			else
+			{
+				s = numero+":   "+hight+" "+unite+" "+variete;
+			}
+			
 		}
 		else if (status ==3)
 		{
 			s = numero+": Souche";
 		}
+		
 		return s;
 	}
 	 
@@ -142,6 +158,8 @@ public class Object_sapinDetails {
 								+ "			INF.INF_SAP_TAIL 	"
 								+ "		FROM					"
 								+ "			INFO_SAPIN INF 		"
+								+ "		WHERE					"
+								+ "			INF.SAP_ID=S.SAP_ID	"
 								+ "		ORDER BY 				"
 								+ "			INF.INF_SAP_DATE DESC "
 								+ "		LIMIT 1					"
