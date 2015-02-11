@@ -1,5 +1,6 @@
 package com.ostermann.sapinoscope;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import android.database.Cursor;
@@ -67,6 +68,44 @@ public class Object_infoSapin {
 		status = Status_sapin.fromInt(c.getInt(c.getColumnIndex("INF_SAP_STATUS")));
 	}
 
+	
+	public String toString() {
+		
+		float height=taille;
+		String s = "";
+		String unite="m";
+		if ( status == Status_sapin.NOUVEAU)
+		{
+			s = "Jeune plant";
+		}
+		else if ( status == Status_sapin.OK)
+		{
+			if( taille < 1)
+			{
+				height = taille * 100  ;
+				int a = (int) height ;
+				unite="cm";
+				s = a+unite;
+			}
+			else
+			{
+				s = taille+unite;
+			}
+			
+		}
+		else if (status ==Status_sapin.TOC)
+		{
+			s = "Souche";
+		}
+		
+		return s;
+	}
+	
+	public String getFormatedDate(String format)
+	{
+		return new SimpleDateFormat(format).format(date);
+	}
+	
 	public void saveInDb()
 	{
 		if(date == null || sap_id == -1 || taille == -1 || status == Status_sapin.INDEFINI)

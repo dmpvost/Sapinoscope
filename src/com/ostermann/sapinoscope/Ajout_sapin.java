@@ -50,7 +50,15 @@ public class Ajout_sapin extends Activity {
 	private int nbSapinLigne=0;
 	
 	boolean zigZag=true;
+	
+	private TextView textViewParcelle ;
+	private TextView textViewSecteur ;
+	private Spinner varieteSpinner ;
+	private Spinner tailleSpinner ;
+	private Spinner nbIdentiqueSpinner ;
 		
+	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -58,19 +66,29 @@ public class Ajout_sapin extends Activity {
 		
 		Log.i("ajoutSapinAct","Initialisation de l'ajout de sapin...");
 		
+		 textViewParcelle = (TextView) findViewById(R.id.txt_addsap_parcelle_titre);
+		 textViewSecteur = (TextView) findViewById(R.id.txt_addsap_secteur_titre);
+		 varieteSpinner = (Spinner) findViewById(R.id.spin_addsap_variete);
+		 tailleSpinner = (Spinner) findViewById(R.id.spin_addsap_taille);
+		 nbIdentiqueSpinner = (Spinner) findViewById(R.id.spin_addsap_sap_identique);
+			
+		
 		Intent intentAjoutSapin = getIntent();
 		int secteurID  = intentAjoutSapin.getIntExtra("sect_id", -1);
 		if(secteurID == -1 )
 			Log.e("ajoutSapinAct","Impossible de recuperer les informations de l'intent, etat indetermine...");
-
 		
 		secteurActuel = new Object_secteur(secteurID);
 		parcelleActuel = new Object_parcelle(secteurActuel.getId_parc());
-		//zigZag=secteurActuel.getZigzag();
+		zigZag=secteurActuel.getZigzag();
 		
 		Log.i("ajoutSapinAct","Ajout prevue pour le secteur "+ secteurID +" de la parcelle "+secteurActuel.getId_parc());
 		
+		Etat_sapin etatsapin_actuel = null;
+		
 		int newSecteur = intentAjoutSapin.getIntExtra("new_secteur", -1);//TODO CHANGER CA POUR QUE CA MARCHE
+		
+		// Secteur Existant
 		if(newSecteur == 0)
 		{
 			int xDepart = intentAjoutSapin.getIntExtra("x", -1);//TODO CHANGER CA POUR QUE CA MARCHE
@@ -78,13 +96,17 @@ public class Ajout_sapin extends Activity {
 			
 			Log.i("ajoutSapinAct","Reprise de l'enregistrement a partir de x="+xDepart +" et y="+yDepart);
 			
-			Vector<Etat_sapin> etatSapin0 = Etat_sapin.createListOfInfoSapinFromXY(secteurID, xDepart, yDepart);
+			int xMoins1 = getPreviousStepX( xDepart, 	yDepart, secteurActuel.getZigzag() );
+			int xMoins2 = getPreviousStepX( xMoins1, 	yDepart, secteurActuel.getZigzag() );
+			int xPlus1 =  getNextStepX(		xDepart, 	yDepart, secteurActuel.getZigzag() );
+			int xPlus2 =  getNextStepX( 	xPlus1, 	yDepart, secteurActuel.getZigzag() );
 			
-			int x1 = getNextStepX(xDepart, yDepart, secteurActuel.getZigzag()); 
-			Vector<Etat_sapin> etatSapin1 = Etat_sapin.createListOfInfoSapinFromXY(secteurID, x1, yDepart);
-			
-			int x2 = getNextStepX(x1, yDepart, secteurActuel.getZigzag()); 
-			Vector<Etat_sapin> etatSapin2 = Etat_sapin.createListOfInfoSapinFromXY(secteurID, x2, yDepart);
+			Vector<Etat_sapin> etatSapinMoins2 = Etat_sapin.createListOfInfoSapinFromXY(secteurID, xMoins2, yDepart);
+			Vector<Etat_sapin> etatSapinMoins1 = Etat_sapin.createListOfInfoSapinFromXY(secteurID, xMoins1, yDepart);
+			Vector<Etat_sapin> etatSapinDepart = Etat_sapin.createListOfInfoSapinFromXY(secteurID, xDepart, yDepart);
+			Vector<Etat_sapin> etatSapinPlus1 = Etat_sapin.createListOfInfoSapinFromXY(secteurID, xPlus1, yDepart);
+			Vector<Etat_sapin> etatSapinPlus2 = Etat_sapin.createListOfInfoSapinFromXY(secteurID, xPlus2, yDepart);
+			etatsapin_actuel = etatSapinDepart.get(0);
 			
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			// Add the buttons
@@ -92,18 +114,46 @@ public class Ajout_sapin extends Activity {
 			           public void onClick(DialogInterface dialog, int id) {
 			               // User clicked OK button
 			           }
-			       });
-						
-			CharSequence[] infoOfLast3Sapins = new CharSequence[3];
+			});
 			
-			infoOfLast3Sapins[0] = etatSapin0!=null ? "Sapin de depart : "+(Object_variete.getVarieteName(etatSapin0.get(0).sapin.var_id) +" " +etatSapin0.get(0).infoSapin.taille +"m\n"
-														+new SimpleDateFormat("(dd/MM/yyyy)").format(etatSapin0.get(0).infoSapin.date)) : "";
-			infoOfLast3Sapins[1] = etatSapin1!=null ? "Sapin suivant 2 : "+(Object_variete.getVarieteName(etatSapin1.get(0).sapin.var_id) +" " +etatSapin1.get(0).infoSapin.taille +"m\n"
-														+new SimpleDateFormat("(dd/MM/yyyy)").format(etatSapin1.get(0).infoSapin.date)) : "";
-			infoOfLast3Sapins[2] = etatSapin2!=null ? "Sapin suivant 3 : "+(Object_variete.getVarieteName(etatSapin2.get(0).sapin.var_id) +" " +etatSapin2.get(0).infoSapin.taille +"m\n"
-														+new SimpleDateFormat("(dd/MM/yyyy)").format(etatSapin2.get(0).infoSapin.date)) : "";
-			
-			builder.setItems(infoOfLast3Sapins, null);
+			CharSequence[] infoAffiche;
+			if(etatSapinDepart != null && etatSapinMoins1 != null && etatSapinPlus1 != null)
+			{
+				infoAffiche = new CharSequence[3];
+				infoAffiche[0] = "Precedant : "+(etatSapinMoins1.get(0).toString() + "\n"
+						+new SimpleDateFormat("MM/yyyy").format(etatSapinMoins1.get(0).infoSapin.date));
+				infoAffiche[1] = "Depart : "+(etatSapinDepart.get(0).toString() + "\n"
+						+new SimpleDateFormat("MM/yyyy").format(etatSapinDepart.get(0).infoSapin.date));
+				infoAffiche[2] = "Suivant : "+(etatSapinPlus1.get(0).toString() + "\n"
+						+new SimpleDateFormat("MM/yyyy").format(etatSapinDepart.get(0).infoSapin.date));
+			}
+			else if(etatSapinPlus1 == null && etatSapinMoins1 != null && etatSapinMoins2 != null )
+			{
+				infoAffiche = new CharSequence[3];
+				infoAffiche[0] = "Precedant 2: "+(etatSapinMoins2.get(0).toString() + "\n"
+						+etatSapinMoins2.get(0).infoSapin.getFormatedDate("MM/yyyy"));
+				infoAffiche[1] = "Precedant 1: "+(etatSapinMoins1.get(0).toString() + "\n"
+						+etatSapinMoins1.get(0).infoSapin.getFormatedDate("MM/yyyy"));
+				infoAffiche[2] = "Depart: "+(etatSapinDepart.get(0).toString() + "\n"
+						+etatSapinDepart.get(0).infoSapin.getFormatedDate("MM/yyyy"));
+			}
+			else if(etatSapinMoins1 == null && etatSapinPlus1 != null && etatSapinPlus2 != null)
+			{
+				infoAffiche = new CharSequence[3];
+				infoAffiche[0] = "Depart: "+(etatSapinDepart.get(0).toString() + "\n"
+						+etatSapinDepart.get(0).infoSapin.getFormatedDate("MM/yyyy"));
+				infoAffiche[1] = "Suivant 1: "+(etatSapinPlus1.get(0).toString() + "\n"
+						+etatSapinPlus1.get(0).infoSapin.getFormatedDate("MM/yyyy"));
+				infoAffiche[2] = "Suivant 2: "+(etatSapinPlus2.get(0).toString() + "\n"
+						+etatSapinPlus2.get(0).infoSapin.getFormatedDate("MM/yyyy"));
+			}
+			else
+			{
+				infoAffiche = new CharSequence[1];
+				infoAffiche[0] = "Depart: "+(etatSapinDepart.get(0).toString() + "\n"
+					+etatSapinDepart.get(0).infoSapin.getFormatedDate("MM/yyyy"));
+			}
+			builder.setItems(infoAffiche, null);
 
 			// Create the AlertDialog
 			AlertDialog dialog = builder.create();
@@ -117,7 +167,10 @@ public class Ajout_sapin extends Activity {
 		else
 			getMaxXYsapinPosFromDB(secteurID);
 		
+		
+		//Init interface
 		fillGui();
+		set_spinner_value(etatsapin_actuel);
 		
 		Sapinoscope.getLocationHelper().startRecherche();
 		
@@ -132,8 +185,6 @@ public class Ajout_sapin extends Activity {
 
 			@Override
 			public void onNothingSelected(AdapterView<?> arg0) {
-				// TODO Auto-generated method stub
-				
 			}
 		});
 		
@@ -142,19 +193,11 @@ public class Ajout_sapin extends Activity {
 
 			@Override
 			public void onItemSelected(AdapterView<?> adapter, View view,int position, long id) {
-				//transformation de la string "1,2m" en 1,2 lisible par un float :
-				String  tailleString = (String) adapter.getItemAtPosition(position);
-				Pattern p = Pattern.compile("(\\d+[,.]?\\d*)");
-				Matcher m = p.matcher(tailleString);
-				if(!m.find())
-					Log.e("ajoutSapinAct", "impossible de lire le spinner de taille!");
-				tailleActuel = Float.parseFloat(m.group(1).replace(",", "."));
+				//transformation de la string "1,2m" en 1.2 lisible par un float :
+				tailleActuel = stringTailleToFloat((String) adapter.getItemAtPosition(position));
 			}
 
-			@Override
 			public void onNothingSelected(AdapterView<?> arg0) {
-				// TODO Auto-generated method stub
-				
 			}
 		});
 		
@@ -168,8 +211,6 @@ public class Ajout_sapin extends Activity {
 
 			@Override
 			public void onNothingSelected(AdapterView<?> arg0) {
-				// TODO Auto-generated method stub
-				
 			}
 		});
 		
@@ -197,7 +238,6 @@ public class Ajout_sapin extends Activity {
 		Button newSapinBtn = (Button) findViewById(R.id.bt_addsap_nouveau_sapin);
 		newSapinBtn.setOnClickListener(new OnClickListener() 
 		{
-			@Override
 			public void onClick(View v) {
 				addSapinAtCurrentPosInDb(Status_sapin.NOUVEAU, nbIdentiqueActuel);
 				goToNextPositionX();
@@ -207,7 +247,6 @@ public class Ajout_sapin extends Activity {
 		Button newSoucheBtn = (Button) findViewById(R.id.bt_addsap_souche);
 		newSoucheBtn.setOnClickListener(new OnClickListener() 
 		{
-			@Override
 			public void onClick(View v) {
 				addSapinAtCurrentPosInDb(Status_sapin.TOC, nbIdentiqueActuel);
 				goToNextPositionX();
@@ -321,7 +360,7 @@ public class Ajout_sapin extends Activity {
 		c = db.rawQuery(reqSelectID, null);
 		if (c.getCount() == 0)
 		{
-			throw new Exception("Erreur lors de l'insertion des coordonnï¿½es :"+position.x()+", "+position.y());
+			throw new Exception("Erreur lors de l'insertion des coordonnees :"+position.x()+", "+position.y());
 		}
 		else
 		{
@@ -333,12 +372,19 @@ public class Ajout_sapin extends Activity {
     private int getNbSapinOnY(int idSecteur, int x, int y)
     {
     	SQLiteDatabase db = Sapinoscope.getDataBaseHelper().getReadableDatabase();
-    	String reqMinSelectX = "SELECT MIN(SAP_LIG) FROM SAPIN WHERE SEC_ID='"+idSecteur+"' AND SAP_COL='"+positionY+"'";
+    	String a;
+    	if( zigZag && y%2==1 )
+    		a="MAX";
+    	else
+    		a="MIN";
+    	
+    	String reqMinSelectX = "SELECT "+a+"(SAP_LIG) FROM SAPIN WHERE SEC_ID='"+idSecteur+"' AND SAP_COL='"+positionY+"'";
     	Cursor cursorX = db.rawQuery(reqMinSelectX, null);
-    	cursorX.moveToFirst();
+    	if( !cursorX.moveToFirst() )
+    		return 0;
     	int minX = cursorX.getInt(0);
     	
-    	return x-minX;
+    	return x-minX+1;
     }
     
     private boolean getMaxXYsapinPosFromDB(final int idSecteur)
@@ -406,7 +452,7 @@ public class Ajout_sapin extends Activity {
 	    	switch (status)
 	    	{
 	    		case NOUVEAU:
-		    		infoSapin.taille= 40;
+		    		infoSapin.taille= 0.4f;
 		    		break;
 	    		
 	    		case OK:
@@ -466,6 +512,8 @@ public class Ajout_sapin extends Activity {
 		    	infoSapin.sap_id = sapin.getSapId();
 	    	}
 	    	infoSapin.saveInDb();
+	    	Spinner nbIdentiqueSpinner = (Spinner) findViewById(R.id.spin_addsap_sap_identique);
+	    	nbIdentiqueSpinner.setSelection(0);
     	}
     }
     
@@ -478,6 +526,14 @@ public class Ajout_sapin extends Activity {
 			return x+1;
     }
     
+    public static int getPreviousStepX(int x, int y, boolean _zigzag)
+    {
+    	if(_zigzag && y%2 == 1)
+			return x+1;
+		else
+			return x-1;
+    }
+    
     private void goToNextPositionX()
     {
    	 	nbSapinLigne++;
@@ -485,6 +541,11 @@ public class Ajout_sapin extends Activity {
 			setAndShowActuelPositionX(positionX-=nbIdentiqueActuel);
 		else
 			setAndShowActuelPositionX(positionX+=nbIdentiqueActuel);
+    	
+    	Vector<Etat_sapin> list_etatsapins = Etat_sapin.createListOfInfoSapinFromXY(secteurActuel.getId(), positionX, positionY);
+    	
+    	if(list_etatsapins != null)
+    		set_spinner_value(list_etatsapins.get(0));
     }
     
     private void goToNextPositionY()
@@ -519,28 +580,61 @@ public class Ajout_sapin extends Activity {
     
     private void fillGui()
     {
-    	TextView textViewParcelle = (TextView) findViewById(R.id.txt_addsap_parcelle_titre);
     	textViewParcelle.setText("Parcelle : "+parcelleActuel.getName());
     	
-    	TextView textViewSecteur = (TextView) findViewById(R.id.txt_addsap_secteur_titre);
     	textViewSecteur.setText("Secteur : "+secteurActuel.getName());
     	
     	Vector<Object_variete> varietes = Object_variete.createListOfAllVariete();
-    	Spinner varieteSpinner = (Spinner) findViewById(R.id.spin_addsap_variete);
 		ArrayAdapter<Object_variete> adapterVariete = new ArrayAdapter<Object_variete>(this,R.layout.secteur_texte,varietes); 
 		varieteSpinner.setAdapter(adapterVariete);	
 		
-		Spinner tailleSpinner = (Spinner) findViewById(R.id.spin_addsap_taille);
 		String[] tailles = getResources().getStringArray(R.array.taille_predefini);
 		ArrayAdapter<String> adapterTaille = new ArrayAdapter<String>(this, R.layout.secteur_texte,tailles);
 		tailleSpinner.setAdapter(adapterTaille);
 		
-		Spinner nbIdentiqueSpinner = (Spinner) findViewById(R.id.spin_addsap_sap_identique);
 		String[] nbIdentiques = getResources().getStringArray(R.array.nbIdentiques);
 		ArrayAdapter<String> nbIdentiquesAdapter = new ArrayAdapter<String>(this, R.layout.secteur_texte,nbIdentiques);
 		nbIdentiqueSpinner.setAdapter(nbIdentiquesAdapter);
+		
     }
     
+    private void set_spinner_value(Etat_sapin etatsapin_actuel)
+    {
+		if(etatsapin_actuel != null)
+		{
+			ArrayAdapter<String> tailles = (ArrayAdapter<String>) tailleSpinner.getAdapter();
+			ArrayAdapter<Object_variete> adapterVariete = (ArrayAdapter<Object_variete>) varieteSpinner.getAdapter();
+			
+	    	for (int i = 0; i< tailles.getCount() ; i++) 
+			{
+	    		float tailleDansLaListe = stringTailleToFloat(tailles.getItem(i));
+				if(tailleDansLaListe == etatsapin_actuel.infoSapin.taille)
+				{
+					tailleSpinner.setSelection(i);
+					break;
+				}
+			}
+	    	
+	    	for (int i = 0; i<adapterVariete.getCount() ; i++) 
+			{
+				if(etatsapin_actuel.variete.equals(adapterVariete.getItem(i)))
+				{
+					varieteSpinner.setSelection(i);
+					break;
+				}
+			}
+		}
+    }
+    
+    private float stringTailleToFloat(String s)
+    {
+    	Pattern p = Pattern.compile("(\\d+[,.]?\\d*)");
+		Matcher m = p.matcher(s);
+		if(!m.find())
+			Log.e("ajoutSapinAct", "impossible de lire le spinner de taille!");
+		return Float.parseFloat(m.group(1).replace(",", "."));
+		
+    }
 
     private void removeAllCoordForSecteur(int secteurID)
     {
@@ -627,24 +721,24 @@ public class Ajout_sapin extends Activity {
     			if(msEntreDeuxMesures < 0)// evolution doit etre apres la source
     				return false;
     			
-    			double jourEntreDeuxMesures = msEntreDeuxMesures/86400000.0f;// 86400000.0f = nb de ms dans une journée
+    			double jourEntreDeuxMesures = msEntreDeuxMesures/86400000.0f;// 86400000.0f = nb de ms dans une journï¿½e
     			
     			double elevationEntreDeuxMesures = evolution.infoSapin.taille - source.infoSapin.taille;
-    			/*
-    			 * TODO : test sur la taille dont un sapin peut reduire (taille)
-    			if( elevationEntreDeuxMesures < -0.50 )
+    			
+    			// le sapin ne doit pas avoir reduit de plus de 20%
+    			if( elevationEntreDeuxMesures < -(evolution.infoSapin.taille*0.20) )
     				return false;
-    				*/
+    				
     			
     			// La taille doit etre stocke en cm pour que les calculs marche
-    			double elevationMoyenneEntreDeuxMesuresParCmParJour = elevationEntreDeuxMesures / jourEntreDeuxMesures;  
+    			double elevationMoyenneEntreDeuxMesuresParMParJour = elevationEntreDeuxMesures / jourEntreDeuxMesures;  
     			
     			// Etimation de Vincent : un sapin prend un maximum de 60cm/an :
-    			double elevationMaxParCmParAn = 60.0f;// 60.0f == 60.0 le f est la pour limiter les erreurs de calcul sur les flotants. google pour plus d'info
-    			double elevationMaxParCmParJour = elevationMaxParCmParAn / 365.0f;
+    			double elevationMaxParMParAn = 60.0f/100;// 60.0f == 60.0 le f est la pour limiter les erreurs de calcul sur les flotants. google pour plus d'info
+    			double elevationMaxParMParJour = elevationMaxParMParAn / 365.0f ;
     			
     			// Le sapin ne doit pas avoir grandi de plus de 60cm/an pour etre valide
-    			if( elevationMoyenneEntreDeuxMesuresParCmParJour > elevationMaxParCmParJour)
+    			if( elevationMoyenneEntreDeuxMesuresParMParJour > elevationMaxParMParJour)
     				return false;
     			
     			// Si aucun if jusqu'ici n'a retourne false, c'est que l'evolution est probablement celle de la source

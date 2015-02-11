@@ -1,6 +1,9 @@
 package com.ostermann.sapinoscope;
 
+import java.text.SimpleDateFormat;
 import java.util.Vector;
+
+import com.ostermann.sapinoscope.Object_sapin.Status_sapin;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -49,5 +52,15 @@ public class Etat_sapin{
 		return null;
 	}
 	
-	
+	public String toString()
+	{
+		if ( infoSapin.status== Status_sapin.TOC)
+		{
+			return infoSapin.toString();
+		}
+		else
+		{
+			return infoSapin.toString() + " " + variete.toString();
+		}
+	}
 }

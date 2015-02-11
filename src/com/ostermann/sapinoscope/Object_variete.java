@@ -63,7 +63,7 @@ public class Object_variete {
 	
 	public String toString()
 	{
-		return var_nom+" ("+var_coef+")";
+		return var_nom;
 	}
 	
 	public boolean equals(Object_variete other)

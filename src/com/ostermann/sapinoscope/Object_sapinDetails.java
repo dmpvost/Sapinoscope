@@ -110,7 +110,6 @@ public class Object_sapinDetails {
 		float hight=taille;
 		String unite="m";
 
-		
 		String s = "";
 		if( status == Status_sapin.INDEFINI || status == Status_sapin.VIDE)
 		{
@@ -118,7 +117,7 @@ public class Object_sapinDetails {
 		}
 		else if ( status == Status_sapin.NOUVEAU)
 		{
-			s = numero+": Jeune plant - "+variete;
+			s = numero+".  Jeune plant - "+variete;
 		}
 		else if ( status == Status_sapin.OK)
 		{
@@ -127,17 +126,17 @@ public class Object_sapinDetails {
 				hight = taille * 100  ;
 				int a = (int) hight ;
 				unite="cm";
-				s = numero+":   "+a+" "+unite+" "+variete;
+				s = numero+".  "+a+unite+" - "+variete;
 			}
 			else
 			{
-				s = numero+":   "+hight+" "+unite+" "+variete;
+				s = numero+".  "+hight+" "+unite+" "+variete;
 			}
 			
 		}
 		else if (status ==Status_sapin.TOC)
 		{
-			s = numero+": Souche";
+			s = numero+".  Souche";
 		}
 		
 		return s;

@@ -32,6 +32,7 @@ public class Choix_depart_sapin extends Activity {
 	private Spinner spin_colonneY;
 	private Spinner spin_ligneX;
 	private Vector<Object_sapinDetails> L_sapinD;
+	private Object_sapinDetails sapin;
 	
 	protected void onCreate(Bundle savedInstanceState) 
 	{
@@ -65,6 +66,18 @@ public class Choix_depart_sapin extends Activity {
 			}
 		});
 		
+		spin_ligneX.setOnItemSelectedListener(new OnItemSelectedListener() 
+		{
+			public void onItemSelected(AdapterView<?> adapter, View view, int position, long arg3) 
+			{
+				sapin = (Object_sapinDetails) adapter.getItemAtPosition(position);
+				Log.i("ChoixDepartSapin", sapin.toString());
+			}
+
+			public void onNothingSelected(AdapterView<?> parent) {}
+		});
+		
+		
 		// Validation du choix
 		Button button_ok = (Button) findViewById(R.id.bt_choixSapin_ok);
 		button_ok.setOnClickListener(new OnClickListener() {
@@ -72,12 +85,12 @@ public class Choix_depart_sapin extends Activity {
 			public void onClick(View v) {
 				Intent intent = new Intent(contexte, Ajout_sapin.class);
 				intent.putExtra("sect_id", secteur.getId());
-				intent.putExtra("x", (spin_ligneX.getSelectedItemPosition()));
-				intent.putExtra("y", (spin_colonneY.getSelectedItemPosition()));
+				intent.putExtra("x", sapin.getLigne());
+				intent.putExtra("y", sapin.getColonne());
 				intent.putExtra("new_secteur", 0); // 0 : secteur existant
 				Log.i("ChoixDepartSapin/buttonOK","INTENT SEND SEC_ID:"+secteur.getId()+
-						" x:"+(spin_ligneX.getSelectedItemPosition()+1)+
-						" y:"+(spin_colonneY.getSelectedItemPosition()+1));
+						" x:"+(sapin.getLigne())+
+						" y:"+(sapin.getColonne()));
 				startActivity(intent);
 				finish();
 				

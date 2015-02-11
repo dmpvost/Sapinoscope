@@ -34,7 +34,7 @@ public final class R {
     public static final class id {
         public static final int TableLayout1=0x7f0a0000;
         public static final int TextView01=0x7f0a003b;
-        public static final int action_settings=0x7f0a0044;
+        public static final int action_settings=0x7f0a0045;
         public static final int bt_add_parcelle=0x7f0a0025;
         public static final int bt_add_secteur=0x7f0a002f;
         public static final int bt_addsap_nouveau_sapin=0x7f0a0012;
@@ -63,6 +63,7 @@ public final class R {
         public static final int listView_parcelle=0x7f0a0024;
         public static final int listView_secteur=0x7f0a002e;
         public static final int listview_varietes=0x7f0a0039;
+        public static final int scrollView1=0x7f0a0044;
         public static final int spin_addsap_sap_identique=0x7f0a000f;
         public static final int spin_addsap_taille=0x7f0a0009;
         public static final int spin_addsap_variete=0x7f0a000c;
@@ -106,28 +107,31 @@ public final class R {
         public static final int activity_ajout_sapin=0x7f030000;
         public static final int activity_ajout_sapin_test_graham=0x7f030001;
         public static final int activity_choix_depart_sapin=0x7f030002;
-        public static final int activity_main=0x7f030003;
-        public static final int activity_parcelle_listview=0x7f030004;
-        public static final int activity_parcelle_modification=0x7f030005;
-        public static final int activity_secteur=0x7f030006;
-        public static final int activity_secteur_modification=0x7f030007;
-        public static final int activity_varietes_listview=0x7f030008;
-        public static final int message_alerte=0x7f030009;
-        public static final int parcelle_texte=0x7f03000a;
-        public static final int secteur_texte=0x7f03000b;
+        public static final int activity_graham_graphe=0x7f030003;
+        public static final int activity_main=0x7f030004;
+        public static final int activity_parcelle_listview=0x7f030005;
+        public static final int activity_parcelle_modification=0x7f030006;
+        public static final int activity_secteur=0x7f030007;
+        public static final int activity_secteur_modification=0x7f030008;
+        public static final int activity_varietes_listview=0x7f030009;
+        public static final int message_alerte=0x7f03000a;
+        public static final int parcelle_texte=0x7f03000b;
+        public static final int secteur_texte=0x7f03000c;
+        public static final int test=0x7f03000d;
     }
     public static final class menu {
         public static final int ajout_sapin=0x7f090000;
         public static final int ajout_sapin3=0x7f090001;
         public static final int choix_depart_sapin=0x7f090002;
-        public static final int main=0x7f090003;
-        public static final int message_alerte=0x7f090004;
-        public static final int parcelle=0x7f090005;
-        public static final int parcelle_list_view=0x7f090006;
-        public static final int parcelle_modification=0x7f090007;
-        public static final int secteur_activity=0x7f090008;
-        public static final int secteur_modification=0x7f090009;
-        public static final int varietes__listview=0x7f09000a;
+        public static final int graham_graphe=0x7f090003;
+        public static final int main=0x7f090004;
+        public static final int message_alerte=0x7f090005;
+        public static final int parcelle=0x7f090006;
+        public static final int parcelle_list_view=0x7f090007;
+        public static final int parcelle_modification=0x7f090008;
+        public static final int secteur_activity=0x7f090009;
+        public static final int secteur_modification=0x7f09000a;
+        public static final int varietes__listview=0x7f09000b;
     }
     public static final class raw {
         public static final int script_generation=0x7f040000;
@@ -150,6 +154,7 @@ public final class R {
         public static final int title_activity_ajout_sapin=0x7f060010;
         public static final int title_activity_ajout_sapin3=0x7f060015;
         public static final int title_activity_choix_depart_sapin=0x7f060017;
+        public static final int title_activity_graham_graphe=0x7f060018;
         public static final int title_activity_message_alerte=0x7f06000d;
         public static final int title_activity_parcelle=0x7f060006;
         public static final int title_activity_parcelle_list_view=0x7f060011;
