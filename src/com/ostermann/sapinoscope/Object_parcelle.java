@@ -2,6 +2,8 @@ package com.ostermann.sapinoscope;
 
 import java.util.Vector;
 
+import com.ostermann.sapinoscope.Object_sapin.Status_sapin;
+
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -90,7 +92,7 @@ public class Object_parcelle {
 	}
 
 	public String toString() {
-		return this.name + " , " + this.description + " ("+getCountSecteur()+") sapins("+getCountSapin(this.id)+")";
+		return this.name + " , " + this.description + "\n\tSecteurs\t: "+getCountSecteur()+"\n\tSapins\t\t\t: "+getCountSapin(this.id);
 	}
 	
 	
@@ -124,7 +126,33 @@ public class Object_parcelle {
 		SQLiteDatabase db = Sapinoscope.getDataBaseHelper().getReadableDatabase();
 		try
 		{
-			String selectQuery = 	"SELECT COUNT(*) FROM SAPIN SA INNER JOIN SECTEUR SE ON SE.SEC_ID=SA.SEC_ID WHERE SE.PARC_ID="+parc_id;
+			//String selectQuery = 	"SELECT COUNT(*) FROM SAPIN SA INNER JOIN SECTEUR SE ON SE.SEC_ID=SA.SEC_ID WHERE SE.PARC_ID="+parc_id;
+			
+			String selectQuery =	 " SELECT COUNT(*) "
+					+" FROM ( "
+					+" SELECT * "
+					+" FROM "
+					+"	SAPIN SAP "
+					+"	INNER JOIN INFO_SAPIN INF "
+					+" 	USING(SAP_ID) "
+					+"  INNER JOIN SECTEUR SEC "
+					+"  USING(SEC_ID) "
+					+"	INNER JOIN PARCELLE PAR "
+					+"	USING (PARC_ID) "
+					+" WHERE "
+					+"	PAR.PARC_ID="+parc_id
+					+" GROUP BY "
+					+"	SAP.SAP_LIG, SAP.SAP_COL, SEC.SEC_ID "
+					+" ORDER BY "
+					+"	SAP.SAP_LIG ASC , INF.INF_SAP_DATE DESC)"
+					+" WHERE "
+					+"	INF_SAP_STATUS !="+Status_sapin.TOC;
+			
+			
+			
+			
+			
+			
 			Log.i("requette",selectQuery);
 			Cursor c = db.rawQuery(selectQuery, null);
 			int nb_row = c.getCount();

@@ -115,7 +115,9 @@ public class Choix_depart_sapin extends Activity {
 		List<String> liste_colonneY = new ArrayList<String>();
 		for (int j = 0; j <= max_y; j++) 
 		{
-			liste_colonneY.add("Ligne "+(j+1)+"   : "+Object_sapin.countNbSapin("SAP_COL", "SAP_COL", j,"SEC_ID",secteur.getId())+" sapins");
+			/*L_sapinD = Object_sapinDetails.createListOfSapin_Y(secteur.getId(), j, 0);
+			L_sapinD.size();*/
+			liste_colonneY.add("Ligne "+(j+1)+"   : "+Object_sapin.countNbSapin("SAP_COL", j,"SEC_ID",secteur.getId())+" sapins");
 			Log.i(log_name_activity+"/initialisation", "liste_colonneY add:"+(j+1));
 		}	
 

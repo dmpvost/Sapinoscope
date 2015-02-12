@@ -239,19 +239,33 @@ if(saveCoordId)requette	+=" AND COORD_ID= 	'"+ coord_id +"'";
 		return value;
 	}
 	//**************************************************************************//	
-	public static int countNbSapin( String colonne_max, String col_contrainte1, int id_where1, String col_contrainte2,int id_where2)
+	public static int countNbSapin(String col_contrainte1, int id_where1, String col_contrainte2,int id_where2)
 	{
 		int value=0;
 
 		SQLiteDatabase db = Sapinoscope.getDataBaseHelper().getReadableDatabase();
 		try
 		{
-			String selectQuery = "SELECT COUNT("+colonne_max+") "
-								+"FROM SAPIN "
-								+"WHERE "
-								+col_contrainte1+"="+id_where1 
-								+" AND "
-								+col_contrainte2+ "="+id_where2;
+			String selectQuery =	 " SELECT COUNT(*) "
+							+" FROM ( "
+							+" SELECT * "
+							+" FROM "
+							+"	SAPIN SAP "
+							+"	INNER JOIN INFO_SAPIN INF "
+							+" 	USING(SAP_ID) "
+							+"	INNER JOIN VARIETE VAR "
+							+"	USING (VAR_ID) "
+							+" WHERE "
+							+"	"+col_contrainte1+"="+id_where1
+							+" AND "
+							+"	"+col_contrainte2+"="+id_where2
+							+" GROUP BY "
+							+"	SAP.SAP_LIG , SAP.SAP_COL"
+							+" ORDER BY "
+							+"	SAP.SAP_LIG ASC , INF.INF_SAP_DATE DESC)"
+							+" WHERE "
+							+"	INF_SAP_STATUS !="+Status_sapin.TOC;
+
 
 			//Log.i("requete",selectQuery);
 			Cursor c = db.rawQuery(selectQuery, null);

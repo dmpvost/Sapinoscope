@@ -52,7 +52,7 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/textView3"
         android:layout_marginTop="20dp"
-        android:text="sélectionner une rangée de sapin"
+        android:text="sélectionner une ligne de sapin"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textSize="16sp" />
 
@@ -63,7 +63,7 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/spin_choixSapin_colonneY"
         android:layout_marginTop="20dp"
-        android:text="Selectionner un sapin repere;"
+        android:text="Selectionner un point de départ"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textSize="16sp" />
 

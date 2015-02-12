@@ -31,28 +31,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
+            android:minHeight="70dp"
             android:text="@string/capture" />
-
-        <Button
-            android:id="@+id/button_analyse"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="@string/analyse" />
-
-        <Button
-            android:id="@+id/button_syncrho"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:text="@string/synchronisation" />
 
         <Button
             android:id="@+id/button_varietes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:text="Modifier variétés" />
+            android:minHeight="70dp"
+            android:text="Modifications des variétés" />
 
     </LinearLayout>
 
