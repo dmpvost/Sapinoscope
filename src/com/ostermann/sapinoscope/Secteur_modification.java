@@ -24,6 +24,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class Secteur_modification extends Activity 
 {
@@ -107,86 +108,94 @@ public class Secteur_modification extends Activity
 		Button bt_add_secteur = (Button) findViewById(R.id.bt_secteur_modif_add);
 		bt_add_secteur.setOnClickListener(new OnClickListener() 
 		{
-
+			
 			public void onClick(View v) 
 			{
-				if ( zigzag.isChecked() )
-					zigzag_value=1;
-				else
-					zigzag_value=0;
-				
-				Log.i(log_name_activity, "Clic - VALIDER");
-				String sect_name = ed_sect_desc.getText().toString();
-				String spin_annee = spin_sect_annee.getSelectedItem().toString();
-				float spin_crois = Float.parseFloat(spin_sect_crois.getSelectedItem().toString());
-				float spin_gel =   Float.parseFloat(spin_sect_gel.getSelectedItem().toString());
 
-				if ( sect_add == 0 ) // Update
+				if (ed_sect_desc.getText().length() >0 )
 				{
-					// UPDATE SECTEUR
-					Log.i(log_name_activity, "UPDATE Secteur");
-					SQLiteDatabase db = Sapinoscope.getDataBaseHelper().getWritableDatabase();
-					try
+					if ( zigzag.isChecked() )
+						zigzag_value=1;
+					else
+						zigzag_value=0;
+					
+					Log.i(log_name_activity, "Clic - VALIDER");
+					String sect_name = ed_sect_desc.getText().toString();
+					String spin_annee = spin_sect_annee.getSelectedItem().toString();
+					float spin_crois = Float.parseFloat(spin_sect_crois.getSelectedItem().toString());
+					float spin_gel =   Float.parseFloat(spin_sect_gel.getSelectedItem().toString());
+	
+					if ( sect_add == 0 ) // Update
 					{
-						String req_secteur = "UPDATE SECTEUR SET SEC_N='"+sect_name+"' , SEC_CROIS='"+spin_crois+"' , SEC_ZIGZAG="+zigzag_value+" WHERE SEC_ID="+secteur.getId() ;
-						db.execSQL(req_secteur);
-						Log.i(log_name_activity, "req_secteur");
-					}
-					catch(SQLException e)
-					{
-						e.printStackTrace();
-					}
-				}
-				else
-				{
-					// INSERT SECTEUR
-					Log.i(log_name_activity, "INSERT SECTEUR");
-					SQLiteDatabase db = Sapinoscope.getDataBaseHelper().getWritableDatabase();
-					try
-					{
-						String req_secteur = "INSERT into SECTEUR (PARC_ID,SEC_N,SEC_ANGLE,SEC_CROIS,SEC_ZIGZAG)  VALUES ( "+secteur.getId_parc()+",'"+sect_name+"', 0 , "+spin_crois+","+zigzag_value+" ) ;" ;
-						db.execSQL(req_secteur);
-						Log.i(log_name_activity, "req_secteur");
-					}
-					catch(SQLException e)
-					{
-						e.printStackTrace();
-					}
-
-					// GET LAST ID ADDED
-					secteur.setId(select_max_id("SECTEUR", "SEC_ID"));
-					if (secteur.getId() != 0)
-					{
-						// INSERT INFO_SECTEUR
-						db = Sapinoscope.getDataBaseHelper().getWritableDatabase();
+						// UPDATE SECTEUR
+						Log.i(log_name_activity, "UPDATE Secteur");
+						SQLiteDatabase db = Sapinoscope.getDataBaseHelper().getWritableDatabase();
 						try
 						{
-							String req_info_seq = "INSERT into INFO_SECTEUR (SEC_ID,ANN_ID,INF_SEC_COEF_GEL) VALUES (  "+secteur.getId()+", "+spin_annee+", "+spin_gel+");";
-							db.execSQL(req_info_seq);
-							Log.i(log_name_activity, req_info_seq);
+							String req_secteur = "UPDATE SECTEUR SET SEC_N='"+sect_name+"' , SEC_CROIS='"+spin_crois+"' , SEC_ZIGZAG="+zigzag_value+" WHERE SEC_ID="+secteur.getId() ;
+							db.execSQL(req_secteur);
+							Log.i(log_name_activity, "req_secteur");
 						}
 						catch(SQLException e)
 						{
 							e.printStackTrace();
 						}
 					}
+					else
+					{
+						// INSERT SECTEUR
+						Log.i(log_name_activity, "INSERT SECTEUR");
+						SQLiteDatabase db = Sapinoscope.getDataBaseHelper().getWritableDatabase();
+						try
+						{
+							String req_secteur = "INSERT into SECTEUR (PARC_ID,SEC_N,SEC_ANGLE,SEC_CROIS,SEC_ZIGZAG)  VALUES ( "+secteur.getId_parc()+",'"+sect_name+"', 0 , "+spin_crois+","+zigzag_value+" ) ;" ;
+							db.execSQL(req_secteur);
+							Log.i(log_name_activity, "req_secteur");
+						}
+						catch(SQLException e)
+						{
+							e.printStackTrace();
+						}
+	
+						// GET LAST ID ADDED
+						secteur.setId(select_max_id("SECTEUR", "SEC_ID"));
+						if (secteur.getId() != 0)
+						{
+							// INSERT INFO_SECTEUR
+							db = Sapinoscope.getDataBaseHelper().getWritableDatabase();
+							try
+							{
+								String req_info_seq = "INSERT into INFO_SECTEUR (SEC_ID,ANN_ID,INF_SEC_COEF_GEL) VALUES (  "+secteur.getId()+", "+spin_annee+", "+spin_gel+");";
+								db.execSQL(req_info_seq);
+								Log.i(log_name_activity, req_info_seq);
+							}
+							catch(SQLException e)
+							{
+								e.printStackTrace();
+							}
+						}
+					}
+					
+					Intent intent_addsapin = new Intent(contexte, Message_alerte_activity.class);
+					intent_addsapin.putExtra("id", secteur.getId());
+					Log.i(log_name_activity+"/onClick","INTENT SET : PARC_ID:"+secteur.getId());
+					startActivity(intent_addsapin);
+					finish();
+					
+					/*Intent intent_secteur_liste = new Intent(contexte, Secteur_activity.class);
+					intent_secteur_liste.putExtra("id", secteur.getId_parc());
+					Log.i(log_name_activity,"INTENT SET : PARC_ID:"+secteur.getId_parc()+" SECT_N:"+sect_name+"SECT_ID:"+secteur.getId());
+					startActivity(intent_secteur_liste);
+					finish();*/
 				}
-				
-				Intent intent_addsapin = new Intent(contexte, Message_alerte_activity.class);
-				intent_addsapin.putExtra("id", secteur.getId());
-				Log.i(log_name_activity+"/onClick","INTENT SET : PARC_ID:"+secteur.getId());
-				startActivity(intent_addsapin);
-				finish();
-				
-				/*Intent intent_secteur_liste = new Intent(contexte, Secteur_activity.class);
-				intent_secteur_liste.putExtra("id", secteur.getId_parc());
-				Log.i(log_name_activity,"INTENT SET : PARC_ID:"+secteur.getId_parc()+" SECT_N:"+sect_name+"SECT_ID:"+secteur.getId());
-				startActivity(intent_secteur_liste);
-				finish();*/
+				else
+				{
+					Toast.makeText(getApplicationContext(), "Saisissez un nom", Toast.LENGTH_SHORT).show();
+				}
 			}
 		});
 
-		
+
 		//********************************************* SPINNER ANNEE *********************************************
 		spin_sect_annee.setOnItemSelectedListener(new OnItemSelectedListener() {
 

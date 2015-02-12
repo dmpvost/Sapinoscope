@@ -36,6 +36,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class Ajout_sapin extends Activity {
 
@@ -159,7 +160,7 @@ public class Ajout_sapin extends Activity {
 			AlertDialog dialog = builder.create();
 			dialog.show();
 			setAndShowActuelPositionX(xDepart);
-			setAndShowActuelPositionX(yDepart);
+			setAndShowActuelPositionY(yDepart);
 			
 			nbSapinLigne = getNbSapinOnY(secteurID,xDepart,yDepart);
 			setTextView_NbSapin_ligne(nbSapinLigne);
@@ -423,11 +424,11 @@ public class Ajout_sapin extends Activity {
     	
     	if(positionX == 0 && positionY == 0)
     	{
-    		Log.i("ajoutSapinAct","pas encore de sapin enregistr� pour cette parcelle, debut � 0,0");
+    		Log.i("ajoutSapinAct","pas encore de sapin enregistre pour cette parcelle, debut a 0,0");
     		return false;
     	}
     	else
-			Log.i("ajoutSapinAct","Sapins trouves pour ce secteur, debut � "+ positionX +","+positionY);
+			Log.i("ajoutSapinAct","Sapins trouves pour ce secteur, debut a "+ positionX +","+positionY);
     	
     	return true;
     }
@@ -440,7 +441,7 @@ public class Ajout_sapin extends Activity {
 	    	Object_sapin sapin = new Object_sapin();
 	    	sapin.sec_id = secteurActuel.getId();
 	    	sapin.var_id = varieteActuel.getVar_id();
-	    	if(zigZag && positionY%2 == 1)//Les colonnes impaires sont d�cr�ment�, les colonnes paire sont incr�ment�
+	    	if(zigZag && positionY%2 == 1)//Les colonnes impaires sont decremente, les colonnes paire sont incremente
 	    		sapin.xLigne = positionX - i;
 	    	else
 	    		sapin.xLigne = positionX + i;
@@ -512,9 +513,10 @@ public class Ajout_sapin extends Activity {
 		    	infoSapin.sap_id = sapin.getSapId();
 	    	}
 	    	infoSapin.saveInDb();
-	    	Spinner nbIdentiqueSpinner = (Spinner) findViewById(R.id.spin_addsap_sap_identique);
-	    	nbIdentiqueSpinner.setSelection(0);
     	}
+    	nbSapinLigne += nbIdentique;
+    	Spinner nbIdentiqueSpinner = (Spinner) findViewById(R.id.spin_addsap_sap_identique);
+    	nbIdentiqueSpinner.setSelection(0);
     }
     
     // Donne quel serait le point suivant a entrer : 
@@ -536,7 +538,6 @@ public class Ajout_sapin extends Activity {
     
     private void goToNextPositionX()
     {
-   	 	nbSapinLigne++;
     	if(zigZag && positionY%2 == 1)
 			setAndShowActuelPositionX(positionX-=nbIdentiqueActuel);
 		else
@@ -575,7 +576,7 @@ public class Ajout_sapin extends Activity {
         setTextView_NbSapin_ligne(nbSapinLigne);
     	positionY = y;
    	 	TextView txtView_getY = (TextView) findViewById(R.id.txt_addsapin_getY);
-   	 	txtView_getY.setText("Ligne :"+y);
+   	 	txtView_getY.setText("Ligne :"+(y+1));
     }
     
     private void fillGui()

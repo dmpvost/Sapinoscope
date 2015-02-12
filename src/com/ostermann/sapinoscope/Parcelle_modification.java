@@ -18,6 +18,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class Parcelle_modification extends Activity {
 
@@ -72,35 +73,41 @@ public class Parcelle_modification extends Activity {
 			
 			public void onClick(View v) 
 			{
-				
-				SQLiteDatabase db = Sapinoscope.getDataBaseHelper().getWritableDatabase();
-				try
+				if ( ed_parc_name.getText().length() > 0)
 				{
-					String req ="";
-					float spin = Float.parseFloat(spin_parc_coef.getSelectedItem().toString());
-					
-					if ( parcelle_add == 0 ) // Update
+					SQLiteDatabase db = Sapinoscope.getDataBaseHelper().getWritableDatabase();
+					try
 					{
-						req = "UPDATE PARCELLE SET PARC_N='"+ed_parc_name.getText().toString()+"',PARC_DESC='"+ed_parc_desc.getText().toString()+"',PARC_COEF="+spin+"  WHERE PARC_ID="+parcelle_id;
-						Log.i("DB-UPT-Parcelle", req);
+						String req ="";
+						float spin = Float.parseFloat(spin_parc_coef.getSelectedItem().toString());
+						
+						if ( parcelle_add == 0 ) // Update
+						{
+							req = "UPDATE PARCELLE SET PARC_N='"+ed_parc_name.getText().toString()+"',PARC_DESC='"+ed_parc_desc.getText().toString()+"',PARC_COEF="+spin+"  WHERE PARC_ID="+parcelle_id;
+							Log.i("DB-UPT-Parcelle", req);
+						}
+						else // INSERT
+						{
+							req = "INSERT INTO PARCELLE ('PARC_N','PARC_DESC','PARC_COEF') VALUES ('"+ed_parc_name.getText().toString()+"','"+ed_parc_desc.getText().toString()+"',"+spin+")";
+							Log.i("DB-ADD-Parcelle", req);
+						}
+						db.execSQL(req);
+						Log.i("DB-New-Parcelle", "test insert sans errors");
 					}
-					else // INSERT
+					catch(SQLException e)
 					{
-						req = "INSERT INTO PARCELLE ('PARC_N','PARC_DESC','PARC_COEF') VALUES ('"+ed_parc_name.getText().toString()+"','"+ed_parc_desc.getText().toString()+"',"+spin+")";
-						Log.i("DB-ADD-Parcelle", req);
+						e.printStackTrace();
 					}
-					db.execSQL(req);
-					Log.i("DB-New-Parcelle", "test insert sans errors");
+					ed_parc_desc.setText("");
+					ed_parc_name.setText("");
+					Intent intent_parcelle_liste = new Intent(contexte, Parcelle_listView.class);
+					startActivity(intent_parcelle_liste);
+					finish();
 				}
-				catch(SQLException e)
+				else
 				{
-					e.printStackTrace();
+					Toast.makeText(getApplicationContext(), "Saisissez un nom", Toast.LENGTH_SHORT).show();
 				}
-			ed_parc_desc.setText("");
-			ed_parc_name.setText("");
-			Intent intent_parcelle_liste = new Intent(contexte, Parcelle_listView.class);
-			startActivity(intent_parcelle_liste);
-			finish();
 		}
 		});
 	}

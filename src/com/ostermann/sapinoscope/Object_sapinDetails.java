@@ -155,28 +155,22 @@ public class Object_sapinDetails {
 								+ "  ,S.SAP_COL  		AS Y 	"
 								+ "	 ,I.INF_SAP_STATUS 	AS ST	"
 								+ "	 ,V.VAR_NOM 		AS VAR 	"
-								+ "	 ,(SELECT 					"
-								+ "			INF.INF_SAP_TAIL 	"
-								+ "		FROM					"
-								+ "			INFO_SAPIN INF 		"
-								+ "		WHERE					"
-								+ "			INF.SAP_ID=S.SAP_ID	"
-								+ "		ORDER BY 				"
-								+ "			INF.INF_SAP_DATE DESC "
-								+ "		LIMIT 1					"
-								+ "	  ) AS TAILLE	 			"				
+								+ "	 ,I.INF_SAP_TAIL AS TAILLE	"				
 								+ "	FROM						"
 								+ "		SAPIN S 				"
-								+ "		INNER JOIN VARIETE V 	"
-								+ "			ON S.VAR_ID=V.VAR_ID"
 								+ "		INNER JOIN INFO_SAPIN I "
-								+ " 		ON I.SAP_ID=S.SAP_ID"
+								+ "			USING(SAP_ID)		"
+								+ "		INNER JOIN VARIETE V 	"
+								+ " 		USING(VAR_ID)		"
 								+ " WHERE 						"
-								+ "		SEC_ID="+secteur_id
+								+ "		S.SEC_ID="+secteur_id
 								+ "	AND							"
-								+ "		SAP_COL="+y
+								+ "		S.SAP_COL="+y
+								+ " GROUP BY 					"
+								+ "		S.SAP_LIG				"
 								+ "	ORDER BY					"
-								+ "		S.SAP_LIG ASC";
+								+ "		S.SAP_LIG ASC			"
+								+"		,I.INF_SAP_DATE DESC";
 			if (limit!=0)
 				selectQuery = selectQuery+ "LIMIT "+limit;
 			

@@ -246,7 +246,13 @@ if(saveCoordId)requette	+=" AND COORD_ID= 	'"+ coord_id +"'";
 		SQLiteDatabase db = Sapinoscope.getDataBaseHelper().getReadableDatabase();
 		try
 		{
-			String selectQuery = "SELECT COUNT("+colonne_max+") FROM SAPIN WHERE "+col_contrainte1+"="+id_where1 +" AND "+col_contrainte2+"="+id_where2;
+			String selectQuery = "SELECT COUNT("+colonne_max+") "
+								+"FROM SAPIN "
+								+"WHERE "
+								+col_contrainte1+"="+id_where1 
+								+" AND "
+								+col_contrainte2+ "="+id_where2;
+
 			//Log.i("requete",selectQuery);
 			Cursor c = db.rawQuery(selectQuery, null);
 			int nb_row = c.getCount();
