@@ -78,19 +78,4 @@ public class GrahamScan {
         return true;
     }
 
-    // test client
-    /*
-    public static void main(String[] args) {
-        int N = StdIn.readInt();
-        Point2D[] points = new Point2D[N];
-        for (int i = 0; i < N; i++) {
-            int x = StdIn.readInt();
-            int y = StdIn.readInt();
-            points[i] = new Point2D(x, y);
-        }
-        GrahamScan graham = new GrahamScan(points);
-        for (Point2D p : graham.hull())
-            StdOut.println(p);
-    }
-	*/
 }

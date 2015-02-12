@@ -1,23 +1,7 @@
 package com.ostermann.sapinoscope;
 
-import java.util.Arrays;
 import java.util.Comparator;
 
-
-/**
- *  The <tt>Point</tt> class is an immutable data type to encapsulate a
- *  two-dimensional point with real-value coordinates.
- *  <p>
- *  Note: in order to deal with the difference behavior of double and 
- *  Double with respect to -0.0 and +0.0, the Point2D constructor converts
- *  any coordinates that are -0.0 to +0.0.
- *  
- *  For additional documentation, see <a href="/algs4/12oop">Section 1.2</a> of
- *  <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
- *
- *  @author Robert Sedgewick
- *  @author Kevin Wayne
- */
 
 public class Point2D implements Comparable<Point2D> {
 
